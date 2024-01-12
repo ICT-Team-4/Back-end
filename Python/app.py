@@ -15,7 +15,7 @@ from api.upload import Upload
 #OCR서비용
 from api.ocr import OCR
 #크롤링
-from api.crawling.crawling import Crawling
+from api.crawling import Crawling
 
 #플라스크 앱 생성
 app = Flask(__name__)
