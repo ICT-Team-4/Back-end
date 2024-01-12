@@ -12,10 +12,10 @@ import os
 #내가 만든 RESTFul API서비스용 클래스 모듈들
 from api.upload import Upload
 
-#네이버 속보 뉴스 서비스
-from api.naver_news import Naver
 #OCR서비용
 from api.ocr import OCR
+#크롤링
+from api.crawling.crawling import Crawling
 
 #플라스크 앱 생성
 app = Flask(__name__)
@@ -39,15 +39,12 @@ api = Api(app)
 api.add_resource(Upload,'/fileupload')
 
 '''
-5.네이버 속보 뉴스 크롤링
-GET /naver
-'''
-api.add_resource(Naver,'/naver')
-'''
 6.OCR
 POST /ocr
 '''
 api.add_resource(OCR,'/ocr')
+#크롤링 네이버 구글
+api.add_resource(Crawling,'/crawling')
 
 if __name__ == '__main__':
     app.run(debug=True)
