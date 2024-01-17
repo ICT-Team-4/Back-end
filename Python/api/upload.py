@@ -16,6 +16,12 @@ class Upload(Resource):
         self.parser.add_argument('name', location='form')
         self.upload_path= os.path.join(os.getcwd(),'uploads')
     # post오버라이딩
+    def get(self):
+        try:
+            args = self.parser.parse_args()
+            print(args)
+        except:
+            return "실패"
     def post(self):
 
         try:
