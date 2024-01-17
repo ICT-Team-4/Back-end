@@ -16,6 +16,8 @@ from api.upload import Upload
 from api.ocr import OCR
 #크롤링
 from api.crawling import Crawling
+#식단 데이타 보내기
+from api.diet import Diet
 
 #플라스크 앱 생성
 app = Flask(__name__)
@@ -31,20 +33,14 @@ app.config['MAX_CONTENT_LENGTH']= 1* 1024 * 1024
 #라우팅 즉 @app.route('/todos/<todo_id>')와 같다
 api = Api(app)
 
-
-'''
-4.파일 업로드
-    POST /uploads
-'''
 api.add_resource(Upload,'/fileupload')
 
-'''
-6.OCR
-POST /ocr
-'''
 api.add_resource(OCR,'/ocr')
 #크롤링 네이버 구글
 api.add_resource(Crawling,'/crawling')
+#식단 데이타 보내기
+api.add_resource(Diet,'/diet/<user_id>')
+# api.add_resource(Diet,'/diet')
 
 if __name__ == '__main__':
     app.run(debug=True)
