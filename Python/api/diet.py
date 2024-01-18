@@ -1,6 +1,7 @@
 from flask_restful import Resource,reqparse
 from flask import jsonify
 from flask import make_response
+from model.oracledb.model import Oracle
 # import json
 
 class Diet(Resource):
@@ -8,7 +9,7 @@ class Diet(Resource):
         try:
             lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange']
             num = [12, 19, 3, 5, 2, 3]
-            
+
             #맘에 안듬
             j=[]
             for index in range(len(lis)):
@@ -19,3 +20,4 @@ class Diet(Resource):
             print("error")
         # print(user_id)
         # return user_id
+
