@@ -6,7 +6,7 @@ from flask import make_response
 class Diet(Resource):
     def get(self,user_id):
         try:
-            lis = ['asdasdasd', 'Blsssue', 'Yellow', 'Green', 'Purple', 'Orange']
+            lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange']
             num = [12, 19, 3, 5, 2, 3]
             
             #맘에 안듬
