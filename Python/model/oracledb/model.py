@@ -2,6 +2,9 @@ from configparser import ConfigParser
 from  cx_Oracle import connect
 import os
 
+'''
+    명진형님 작업장(될예정)
+'''
 def connectDatabase():#데이타베이스 연결
     config = ConfigParser()
     # print(os.path.abspath('.'))
