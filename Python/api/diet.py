@@ -37,4 +37,4 @@ class Diet(Resource):
         args = self.parser.parse_args()
         # print(type(args))
         conn = oracle.connectDatabase()
-        oracle.insert(conn,user_id,args)
+        return oracle.insert(conn,user_id,args)

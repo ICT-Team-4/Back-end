@@ -27,24 +27,21 @@ def selectAll(conn):
         
 # 식단 추가
 def insert(conn,user_id,list_):
-    print(user_id,":",list_['DESCRIPTION'],":",list_['MEMO'])
-    test = []
+    print(user_id,":",list_)
+    test = [] #캘린더 테이블
     test.append(user_id)
     test.append(list_['DESCRIPTION'])
     test.append(list_['MEMO'])
+    test.append(list_['DIET_IMAGE'])
+    test.append(list_['FOOD'])
+    test.append(list_['FOOD_WEIGHT'])
+
     with conn.cursor() as cursor:
         try:
 
-            cursor.execute('INSERT INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval,:1,:2,:3,DEFAULT,DEFAULT)',test)
-            cursor.execute('SELECT max(calendar_no) FROM calendar')
-            num =cursor.fetchall()
-            print(num)
-            # cursor.execute('SELECT max(calendar_no) FROM calendar')
+            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,DEFAULT,default) INTO diet VALUES((SELECT max(calendar_no+1) FROM calendar), :4, :5, :6) SELECT * FROM DUAL',test)
             conn.commit()
-
             return cursor.rowcount
-            pass
-            # SELECT max(calendar_no) FROM calendar;
             '''
                 CALENDAR_NO    NOT NULL NUMBER  필요없고       
                 ACCOUNT_NO     NOT NULL NUMBER  넌 뭔데 no로 왔냐? user_id를 ACCOUNT_NO로 받아오자  
@@ -58,22 +55,22 @@ def insert(conn,user_id,list_):
                 FOOD        NOT NULL NVARCHAR2(100)     음식 예시:닭갈비
                 FOOD_WEIGHT NOT NULL NUMBER             음식 용량 예시: 100
             
-                INSERT INTO calendar VALUES(
-                    SEQ_CALENDAR_CALENDAR_NO.nextval,
-                    3,
-                    'test식단',
-                    '볶음밥',
-                    DEFAULT,
-                    default  
-                );
-                
-                INSERT INTO diet VALUES(
-                    2,
-                    null,
-                    '김치볶음밥',
-                    100
-                );
-                SELECT * FROM diet;
+                INSERT ALL
+                    INTO calendar VALUES(
+                        SEQ_CALENDAR_CALENDAR_NO.nextval,
+                        3,
+                        '다중 insert2',
+                        '볶음밥',
+                        DEFAULT,
+                        default  
+                    )
+                    INTO diet VALUES(
+                        (SELECT max(calendar_no) FROM calendar),
+                        null,
+                        '김치볶음밥1',
+                        100
+                        )
+                    SELECT * FROM DUAL;
             '''
 
         except Exception as e:
