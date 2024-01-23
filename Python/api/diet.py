@@ -1,5 +1,5 @@
 from flask_restful import Resource,reqparse
-from flask import jsonify
+from flask import jsonify , request
 from flask import make_response
 import model.oracledb.model as oracle
 import json
@@ -14,12 +14,17 @@ class Diet(Resource):
         self.parser.add_argument('FOOD', location='form')
         self.parser.add_argument('FOOD_WEIGHT', location='form')
     def get(self,user_id):
+        args = self.parser.parse_args()
+        print(args)
         try:
-            print(user_id)
-            conn = oracle.connectDatabase()
-            # print("test",conn)
-            print(oracle.selectAll(conn))
-            oracle.close(conn)
+            #겟 파라미터 받아오는 법(http://localhost:5000/diet/3?param1=23)
+            # dof = request.args.get('param1')
+            # print(dof)
+            
+            # conn = oracle.connectDatabase()
+            # # print("test",conn)
+            # print(oracle.selectAll(conn))
+            # oracle.close(conn)
             lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
             num = [12, 19, 3, 5, 2, 3]
         #
