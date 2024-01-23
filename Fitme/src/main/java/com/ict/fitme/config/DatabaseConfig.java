@@ -15,13 +15,13 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 public class DatabaseConfig {
 	
-	@Value("${spring.datasource.driver-class-name}")
+	@Value("${driver-class-name}")
 	private String driver;
-	@Value("${spring.datasource.url}")
+	@Value("${oracle-url}")
 	private String url;
-	@Value("${spring.datasource.username}")
+	@Value("${user}")
 	private String user;
-	@Value("${spring.datasource.password}")
+	@Value("${password}")
 	private String password;
 	
 	@Bean
