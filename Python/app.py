@@ -18,6 +18,8 @@ from api.ocr import OCR
 from api.crawling import Crawling
 #식단 데이타 보내기
 from api.diet import Diet
+#account
+from api.account import Account
 
 #플라스크 앱 생성
 app = Flask(__name__)
@@ -41,6 +43,8 @@ api.add_resource(Crawling,'/crawling')
 #식단 데이타 보내기
 api.add_resource(Diet,'/diet/<user_id>')
 # api.add_resource(Diet,'/diet')
+#어카운트 정보 받아오기
+api.add_resource(Account,'/account/<user_id>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
