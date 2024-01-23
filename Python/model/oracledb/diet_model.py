@@ -3,7 +3,7 @@ from cx_Oracle import connect
 import os
 
 
-def connectDatabase():  # 데이타베이스 연결
+def diet_connectDatabase():  # 데이타베이스 연결
     config = ConfigParser()
     # print(os.path.abspath('.'))
     # 데이터 절대경로 찾아주기
@@ -16,21 +16,21 @@ def connectDatabase():  # 데이타베이스 연결
                    dsn=config['ORACLE']['URL'], encoding="UTF-8")
 
 
-def close(conn):  # 커넥션객체 닫기
+def diet_close(conn):  # 커넥션객체 닫기
     if conn:
         conn.close()
 
 
 # 식단 추가
-def insert(conn, user_id, list_):
+def diet_insert(conn, user_id, list_):
     print(user_id, ":", list_)
     test = []  # 캘린더 테이블
     test.append(user_id)
-    test.append(list_['DESCRIPTION'])
-    test.append(list_['MEMO'])
-    test.append(list_['DIET_IMAGE'])
-    test.append(list_['FOOD'])
-    test.append(list_['FOOD_WEIGHT'])
+    test.append(list_['DESCRIPTION']) #제목
+    test.append(list_['MEMO']) #메모,내용
+    test.append(list_['DIET_IMAGE']) #음식 사진
+    test.append(list_['FOOD']) #음식 이름
+    test.append(list_['FOOD_WEIGHT']) #음식 용량
 
     with conn.cursor() as cursor:
         try:
@@ -73,13 +73,13 @@ def insert(conn, user_id, list_):
             return 0
 
 
-def selectOne(conn, date):
+def diet_selectOne(conn, date):
     with conn.cursor() as cursor:
         try:
             date_ = []
             date_.append(date['START_POSTDATE'])
             cursor.execute(
-                f'SELECT diet_image,food,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(start_postdate=:1);',
+                f'SELECT c.calendar_no,description,memo,food,to_char(start_postdate,"YYYY-MM-DD HH24:MI:SS") time,diet_image,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(start_postdate=:1) ORDER by time',
                 [date_])
             return cursor.fetchone()
         except Exception as e:
@@ -87,14 +87,14 @@ def selectOne(conn, date):
             return None
 
 
-def selectAll(conn, date):
+def diet_selectAll(conn, date):
     with conn.cursor() as cursor:
         try:
             date_ = []
             date_.append(date['START_POSTDATE'])
             date_.append(date['END_POSTDATE'])
             cursor.execute(
-                f'SELECT diet_image,food,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(:1) and TRUNC(end_postdate) = to_date(:2);',
+                f'SELECT c.calendar_no,description,memo,food,to_char(start_postdate,"YYYY-MM-DD HH24:MI:SS") time,diet_image,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(:1) and TRUNC(end_postdate) = to_date(:2) ORDER by time',
                 date_)
             return cursor.fetchall()
         except Exception as e:

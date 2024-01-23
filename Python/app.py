@@ -43,8 +43,11 @@ api.add_resource(Crawling,'/crawling')
 #식단 데이타 보내기
 api.add_resource(Diet,'/diet/<user_id>')
 # api.add_resource(Diet,'/diet')
+#운동 데이터 보내기
+api.add_resource(Excercise,'/excercise/<user_id>')
 #어카운트 정보 받아오기
 api.add_resource(Account,'/account/<user_id>')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)

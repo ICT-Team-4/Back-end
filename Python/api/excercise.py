@@ -1,18 +1,19 @@
 from flask_restful import Resource,reqparse
 from flask import jsonify , request
 from flask import make_response
-import model.oracledb.diet_model as oracle
+import model.oracledb.excercise_model as oracle
 import json
 
-class Diet(Resource):
+class Excercise(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         # 아래는 공통 파라미터 설정(key=value로 받기)
         self.parser.add_argument('DESCRIPTION',location='form')
         self.parser.add_argument('MEMO', location='form')
-        self.parser.add_argument('DIET_IMAGE', location='form')
-        self.parser.add_argument('FOOD', location='form')
-        self.parser.add_argument('FOOD_WEIGHT', location='form')
+        self.parser.add_argument('CATEGORY', location='form')
+        self.parser.add_argument('ACCURACY', location='form')
+        self.parser.add_argument('COUNTS', location='form')
+        self.parser.add_argument('WEIGHT', location='form')
     def get(self,user_id):
         args = self.parser.parse_args()
         print(args)
@@ -41,12 +42,12 @@ class Diet(Resource):
         # print(user_id)
         args = self.parser.parse_args()
         # print(type(args))
-        conn = oracle.diet_connectDatabase()
-        return oracle.diet_insert(conn,user_id,args) #테이블 2개여서 성공이면 2이다
+        conn = oracle.excercise_connectDatabase()
+        return oracle.excercise_insert(conn,user_id,args) #테이블 2개여서 성공이면 2이다
 
     def get(self,user_id): #사용자가 날짜를 클릭하는데 date값도 같이 받아야하는거 아닌가...?ㅠㅠ
         try:
-            conn = oracle.diet_connectDatabase()
-            return make_response(json.dumps(oracle.diet_selectOne(conn,user_id),ensure_ascii=False))
+            conn = oracle.excercise_connectDatabase()
+            return make_response(json.dumps(oracle.excercise_selectOne(conn,user_id),ensure_ascii=False))
         except:
             print("error")
