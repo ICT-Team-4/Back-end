@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-from  cx_Oracle import connect
+from cx_Oracle import connect
 import os
 
 '''
@@ -13,21 +13,13 @@ def connectDatabase():#데이타베이스 연결
     # print(path)
     config.read(path+'/oracle.ini', encoding='utf8')
     # 데이타베이스 연결
-    return connect(user=config['ORACLE']['USER'],
-                   password=config['ORACLE']['PASSWORD'],
+    return connect(user=config['ORACLE']['user'],
+                   password=config['ORACLE']['password'],
                    dsn=config['ORACLE']['URL'],encoding="UTF-8")
 def close(conn):#커넥션객체 닫기
     if conn:
         conn.close()
-def selectAll(conn):
-    # SELECT c.calendar_no,c.account_no,DESCRIPTION,MEMO,START_POSTDATE,DIET_IMAGE,FOOD,FOOD_WEIGHT FROM calendar c INNER JOIN diet d ON c.calendar_no = d.calendar_no WHERE c.calendar_no = 105;
-    with conn.cursor() as cursor:
-        try:
-            cursor.execute('SELECT * FROM account')
-            return cursor.fetchall()
-        except Exception as e:
-            print('모든 데이타 조회시 오류:',e)
-            return None
+
 
 # 식단 추가
 def insert(conn,user_id,list_):
@@ -79,30 +71,26 @@ def insert(conn,user_id,list_):
         except Exception as e:
             print("error:",e)
             return 0
-# def update(conn,user_id,list_): # user_id를 넣어야 하나 말아야 하나 캘린더 일련번호로 체크? 아니면 일련번호 + 사용자 번호까지?
-#     '''CALENDAR_NO 추가
-#         넌 왜 업데이트 2번해야하니?
-#         인설트는 하나로 되던데? 모질이인가?
-#     '''
-#     # UPDATE (SELECT c.calendar_no,account_no,description,MEMO,START_POSTDATE,DIET_IMAGE,FOOD,FOOD_WEIGHT FROM calendar c INNER JOIN diet d ON c.calendar_no = d.calendar_no ) a SET (description,MEMO,DIET_IMAGE,FOOD,FOOD_WEIGHT) = (:1,:2,:3,:4,:5) WHERE a.calendar_no = :6;
-#     list_cal =[]
-#     list_cal.append(list_['DESCRIPTION'])
-#     list_cal.append(list_['MEMO'])
-#     list_cal.append(list_['CALENDAR_NO'])
-#
-#     list_diet = []
-#     list_diet.append(list_['DIET_IMAGE'])
-#     list_diet.append(list_['FOOD'])
-#     list_diet.append(list_['FOOD_WEIGHT'])
-#     list_diet.append(list_['CALENDAR_NO'])
-#     print(list_diet)
-#     with conn.cursor() as cursor:
-#         try:
-#             cursor.execute('',list_cal)
-#             cursor.execute('', list_diet)
-#             conn.commit()
-#             return cursor.rowcount
-#         except Exception as e:
-#             print("에러")
-#             return 0
-#     return 0
+
+def selectOne(conn,date):
+    with conn.cursor() as cursor:
+        try:
+            date_ = []
+            date_.append(date['START_POSTDATE'])
+            cursor.execute(f'SELECT diet_image,food,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(start_postdate=:1);',[date_])
+            return cursor.fetchone()
+        except Exception as e:
+            print('레코드 하나 조회시 오류:',e)
+            return None
+
+def selectAll(conn,date):
+    with conn.cursor() as cursor:
+        try:
+            date_ = []
+            date_.append(date['START_POSTDATE'])
+            date_.append(date['END_POSTDATE'])
+            cursor.execute(f'SELECT diet_image,food,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(:1) and TRUNC(end_postdate) = to_date(:2);',date_)
+            return cursor.fetchall()
+        except Exception as e:
+            print('모든 데이터 조회시 오류:',e)
+            return None
