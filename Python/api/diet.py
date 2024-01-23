@@ -20,7 +20,7 @@ class Diet(Resource):
             # print("test",conn)
             print(oracle.selectAll(conn))
             oracle.close(conn)
-            lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange']
+            lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
             num = [12, 19, 3, 5, 2, 3]
         #
         #     #맘에 안듬

@@ -48,7 +48,7 @@ def insert(conn, user_id, list_):
                 CALENDAR_NO NOT NULL NUMBER             SELECT max(calendar_no) FROM calendar; 로 받아오자
                 DIET_IMAGE           NVARCHAR2(50)      사진
                 FOOD        NOT NULL NVARCHAR2(100)     음식 예시:닭갈비
-                FOOD_WEIGHT NOT NULL NUMBER             음식 용량 예시: 100
+                FOOD_WEIGHT NOT NULL NUMBER             음식 용량 예시: 1001
 
                 INSERT ALL
                     INTO calendar VALUES(
