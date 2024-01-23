@@ -2,7 +2,7 @@ from flask_restful import Resource,reqparse
 from flask import jsonify
 from flask import make_response
 import model.oracledb.model as oracle
-# import json
+import json
 
 class Diet(Resource):
     def __init__(self):
@@ -20,7 +20,7 @@ class Diet(Resource):
             # print("test",conn)
             print(oracle.selectAll(conn))
             oracle.close(conn)
-            lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange']
+            lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
             num = [12, 19, 3, 5, 2, 3]
         #
         #     #맘에 안듬
@@ -38,3 +38,10 @@ class Diet(Resource):
         # print(type(args))
         conn = oracle.connectDatabase()
         return oracle.insert(conn,user_id,args) #테이블 2개여서 성공이면 2이다
+
+    # def get(self,user_id): #사용자가 날짜를 클릭하는데 date값도 같이 받아야하는거 아닌가...?ㅠㅠ
+    #     try:
+    #         conn = oracle.connectDatabase()
+    #         return make_response(json.dumps(oracle.selectOne(conn,user_id),ensure_ascii=False))
+    #     except:
+    #         print("error")
