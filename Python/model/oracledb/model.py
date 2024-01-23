@@ -2,25 +2,29 @@ from configparser import ConfigParser
 from cx_Oracle import connect
 import os
 
-def connectDatabase():#데이타베이스 연결
+
+def connectDatabase():  # 데이타베이스 연결
     config = ConfigParser()
     # print(os.path.abspath('.'))
     # 데이터 절대경로 찾아주기
     path = os.path.dirname(os.path.abspath(__file__))
     # print(path)
-    config.read(path+'/oracle.ini', encoding='utf8')
+    config.read(path + '/oracle.ini', encoding='utf8')
     # 데이타베이스 연결
     return connect(user=config['ORACLE']['user'],
                    password=config['ORACLE']['password'],
-                   dsn=config['ORACLE']['URL'],encoding="UTF-8")
-def close(conn):#커넥션객체 닫기
+                   dsn=config['ORACLE']['URL'], encoding="UTF-8")
+
+
+def close(conn):  # 커넥션객체 닫기
     if conn:
         conn.close()
 
+
 # 식단 추가
-def insert(conn,user_id,list_):
-    print(user_id,":",list_)
-    test = [] #캘린더 테이블
+def insert(conn, user_id, list_):
+    print(user_id, ":", list_)
+    test = []  # 캘린더 테이블
     test.append(user_id)
     test.append(list_['DESCRIPTION'])
     test.append(list_['MEMO'])
@@ -30,8 +34,7 @@ def insert(conn,user_id,list_):
 
     with conn.cursor() as cursor:
         try:
-
-            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,DEFAULT,default) INTO diet VALUES((SELECT max(calendar_no+1) FROM calendar), :4, :5, :6) SELECT * FROM DUAL',test)
+            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,DEFAULT,default) INTO diet VALUES((SEQ_CALENDAR_CALENDAR_NO.nextval), :4, :5, :6) SELECT * FROM DUAL', test)
             conn.commit()
             return cursor.rowcount
             '''
@@ -45,8 +48,8 @@ def insert(conn,user_id,list_):
                 CALENDAR_NO NOT NULL NUMBER             SELECT max(calendar_no) FROM calendar; 로 받아오자
                 DIET_IMAGE           NVARCHAR2(50)      사진
                 FOOD        NOT NULL NVARCHAR2(100)     음식 예시:닭갈비
-                FOOD_WEIGHT NOT NULL NUMBER             음식 용량 예시: 100
-            
+                FOOD_WEIGHT NOT NULL NUMBER             음식 용량 예시: 1001
+
                 INSERT ALL
                     INTO calendar VALUES(
                         SEQ_CALENDAR_CALENDAR_NO.nextval,
@@ -66,28 +69,34 @@ def insert(conn,user_id,list_):
             '''
 
         except Exception as e:
-            print("error:",e)
+            print("error:", e)
             return 0
 
-def selectOne(conn,date):
+
+def selectOne(conn, date):
     with conn.cursor() as cursor:
         try:
             date_ = []
             date_.append(date['START_POSTDATE'])
-            cursor.execute(f'SELECT diet_image,food,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(start_postdate=:1);',[date_])
+            cursor.execute(
+                f'SELECT diet_image,food,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(start_postdate=:1);',
+                [date_])
             return cursor.fetchone()
         except Exception as e:
-            print('레코드 하나 조회시 오류:',e)
+            print('레코드 하나 조회시 오류:', e)
             return None
 
-def selectAll(conn,date):
+
+def selectAll(conn, date):
     with conn.cursor() as cursor:
         try:
             date_ = []
             date_.append(date['START_POSTDATE'])
             date_.append(date['END_POSTDATE'])
-            cursor.execute(f'SELECT diet_image,food,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(:1) and TRUNC(end_postdate) = to_date(:2);',date_)
+            cursor.execute(
+                f'SELECT diet_image,food,food_weight FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = to_date(:1) and TRUNC(end_postdate) = to_date(:2);',
+                date_)
             return cursor.fetchall()
         except Exception as e:
-            print('모든 데이터 조회시 오류:',e)
+            print('모든 데이터 조회시 오류:', e)
             return None
