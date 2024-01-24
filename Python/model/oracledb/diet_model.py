@@ -82,7 +82,6 @@ def diet_selectOne(conn,user_id,date): #합치기 귀찮아서...
             date_ = []
             date_.append(date)
             date_.append(user_id)
-
             cursor.execute(f'SELECT c.calendar_no,description,memo,food,to_char(start_postdate,"YYYY-MM-DD HH24:MI:SS") time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = :1 AND account_no = :2 ORDER by time',
                 date_)
             return cursor.fetchone()
@@ -110,8 +109,10 @@ def diet_selectAll(conn,user_id, date): #합치기 귀찮아서...
             #     date_)
             #"가 아니라 '로 작성
             cursor.execute(f"SELECT c.calendar_no,description,memo,food,to_char(start_postdate,'YYYY-MM-DD HH24:MI:SS') s_time, to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') e_time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = :1 AND account_no = :2 ORDER by s_time",
+
                 date_)
             return cursor.fetchall()
         except Exception as e:
             print('모든 데이터 조회시 오류:', e)
             return None
+
