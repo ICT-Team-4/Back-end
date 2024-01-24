@@ -44,9 +44,9 @@ class Diet(Resource):
         conn = oracle.diet_connectDatabase()
         return oracle.diet_insert(conn,user_id,args) #테이블 2개여서 성공이면 2이다
 
-    def get(self,user_id): #사용자가 날짜를 클릭하는데 date값도 같이 받아야하는거 아닌가...?ㅠㅠ
-        try:
-            conn = oracle.diet_connectDatabase()
-            return make_response(json.dumps(oracle.diet_selectOne(conn,user_id),ensure_ascii=False))
-        except:
-            print("error")
+    # def get(self,user_id): #사용자가 날짜를 클릭하는데 date값도 같이 받아야하는거 아닌가...?ㅠㅠ
+    #     try:
+    #         conn = oracle.diet_connectDatabase()
+    #         return make_response(json.dumps(oracle.diet_selectOne(conn,user_id),ensure_ascii=False))
+    #     except:
+    #         print("error")
