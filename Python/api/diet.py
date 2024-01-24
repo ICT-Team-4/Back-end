@@ -15,25 +15,35 @@ class Diet(Resource):
         self.parser.add_argument('FOOD_WEIGHT', location='form')
     def get(self,user_id):
         args = self.parser.parse_args()
-        print(args)
+        # print(args)
         try:
             #겟 파라미터 받아오는 법(http://localhost:5000/diet/3?param1=23)
-            # dof = request.args.get('param1')
-            # print(dof)
+            dof = request.args.get('date')
+            print(dof)
+
+            list_ = ['chart1','mealTime'] #리액트로 보내줄 헤더
             
-            # conn = oracle.connectDatabase()
-            # # print("test",conn)
-            # print(oracle.selectAll(conn))
-            # oracle.close(conn)
+            conn = oracle.diet_connectDatabase()
+            # # # print("test",conn)
+            meal_all = oracle.diet_selectAll(conn,user_id,dof)
+            oracle.diet_close(conn)
             lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
             num = [12, 19, 3, 5, 2, 3]
-        #
+
+            # headers = []
+            # body = []
+            # for index in range(len(meal_all)):
+            #     headers.append(meal_all[index][0])
+            #     body.append(meal_all[index][1:])
+            # test = dict(zip(headers,body))
+
         #     #맘에 안듬
             j=[]
             for index in range(len(lis)):
                 j.append({'name':lis[index],'size':num[index]})
                 # print(lis[index])
-            return jsonify(j)
+
+            return jsonify(dict(zip(list_,(j,meal_all))))
         except:
             print("error")
 
