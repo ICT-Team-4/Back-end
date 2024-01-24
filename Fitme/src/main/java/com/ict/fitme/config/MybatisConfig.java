@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-@MapperScan(value = {"com.ict.fitme.account.dao"},sqlSessionFactoryRef ="sqlSessionFactory" )
+@MapperScan(value = {"com.ict.fitme.account.dao", "com.ict.fitme.board.dao"},sqlSessionFactoryRef ="sqlSessionFactory" )
 public class MybatisConfig {
 	
 	private final ApplicationContext applicationContext;

@@ -66,19 +66,27 @@
 		</dependency>
 		
 		<!--스프링 씨큐리티-->
+		<!--
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		
+		-->
 		
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-client -->
+		<!--
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-oauth2-client</artifactId>
 		    <version>3.2.0</version>
 		</dependency>
+		-->
 		
+		<!-- WebSocket 라이브러리 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

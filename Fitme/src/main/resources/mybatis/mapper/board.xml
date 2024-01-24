@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 매퍼파일 -->
+<mapper namespace="com.ict.fitme.board.dao.BoardMapper">
+
+	<resultMap id="BoardResult" type="BoardDto">
+        <id property="bno" column="BNO"/>
+        <result property="accountNo" column="ACCOUNT_NO"/>
+        <result property="postDate" column="POSTDATE"/>
+        <result property="title" column="TITLE"/>
+        <result property="hitCount" column="HIT_COUNT"/>
+        <result property="boardCategory" column="BOARD_CATEGORY"/>
+        <result property="boardComment" column="BOARD_COMMENT"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="editDate" column="EDITDATE"/>
+    </resultMap>
+
+	<select id="findByAll" resultType="BoardDto" resultMap="BoardResult">
+		SELECT * FROM BOARD
+	</select>
+	
+	<select id="findByNo" parameterType="Long" resultType="BoardDto" resultMap="BoardResult">
+		SELECT *
+		FROM BOARD 
+		WHERE BNO = #{bno}
+	</select>
+	
+	
+	<insert id="save" parameterType="BoardDto">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="Long">
+				SELECT SEQ_BOARD.NEXTVAL
+				FROM DUAL
+		</selectKey>
+		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_CATEGORY, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
+    	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardCategory}, #{boardComment}, #{address}, null)
+	</insert>
+	
+	<update id="">
+		UPDATE BOARD SET TITLE=#{title}, BOARD_COMMENT=#{boardComment}, EDIT_DATE=#{editDate} WHERE BNO=#{bno} 
+	</update>
+</mapper>
