@@ -21,9 +21,15 @@ public class BoardDto {
 	private Long accountNo;
 	private Date postDate;
 	private String title;
-	private String hitCount;
+	private int hitCount;
 	private String boardCategory;
 	private String boardComment;
 	private String address;
 	private Date editDate;
+	//좋아요 수 가져오기 위한 변수
+	private int likes;
+	//스크랩 수 가져오기 위한 변수
+	private int scraps;
+	//사용자 이름 가져오기 위한 변수
+	private String name;
 }
