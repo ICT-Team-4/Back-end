@@ -19,14 +19,31 @@ class Diet(Resource):
         try:
             #겟 파라미터 받아오는 법(http://localhost:5000/diet/3?param1=23)
             dof = request.args.get('date')
-            # print(dof)
 
-            list_ = ['chart1','mealTime','chart2','chart3'] #리액트로 보내줄 헤더
-            
+
+
+            meal_all=[]
+            cal = request.args.get('calId')
+            if(cal != None):
+                #
+                # print(cal)
+                # # # print("test",conn)
+                conn = oracle.diet_connectDatabase()
+                str1 = oracle.diet_selectOne(conn, cal)
+                oracle.diet_close(conn)
+                print(str1)
+
+                return str1
+
+
+            # print(dof)
             conn = oracle.diet_connectDatabase()
             # # # print("test",conn)
-            meal_all = oracle.diet_selectAll(conn,user_id,dof)
+            meal_all = oracle.diet_selectAll(conn, user_id, dof)
             oracle.diet_close(conn)
+            list_ = ['chart1','mealTime','chart2','chart3'] #리액트로 보내줄 헤더
+
+
             lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
             num = [12, 19, 3, 5, 2, 3]
 
@@ -57,7 +74,10 @@ class Diet(Resource):
         data = oracle.diet_insert(conn, user_id, args)
         # print('post',data)
         return data #테이블 2개여서 성공이면 2이다
-
+    def put(self,cal_id):
+        pass
+    def delete(self,cal_id):
+        pass
     # def get(self,user_id): #사용자가 날짜를 클릭하는데 date값도 같이 받아야하는거 아닌가...?ㅠㅠ
     #     try:
     #         conn = oracle.diet_connectDatabase()

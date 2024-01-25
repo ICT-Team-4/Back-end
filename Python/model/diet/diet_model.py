@@ -76,13 +76,15 @@ def diet_insert(conn, user_id, list_):
 
 #켈린더 일정(ex:2024.02.01) 하나 읽기
 # def diet_selectOne(conn, date):
-def diet_selectOne(conn,user_id): #합치기 귀찮아서...
+def diet_selectOne(conn, cal_id):  # 합치기 귀찮아서...
     with conn.cursor() as cursor:
         try:
-            date_ = []
-            date_.append(user_id)
-            cursor.execute(f"SELECT c.calendar_no,description,memo,food,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE calendar_no = :1 ORDER by time",
-                date_)
+            # print(cal_id == 'undefined')
+            data =cal_id if cal_id != 'undefined' else 0
+            data = data if data != 'false' else 0
+            print(data)
+            cursor.execute(
+                f"SELECT c.calendar_no,description,memo,food,to_char(start_postdate,'YYYY-MM-DD HH24:MI:SS') s_time,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') e_time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE c.calendar_no = {data}")
             return cursor.fetchone()
         except Exception as e:
             print('레코드 하나 조회시 오류:', e)
