@@ -18,22 +18,11 @@ class Excercise(Resource):
         args = self.parser.parse_args()
         print(args)
         try:
-            #겟 파라미터 받아오는 법(http://localhost:5000/diet/3?param1=23)
-            # dof = request.args.get('param1')
-            # print(dof)
-            
-            # conn = oracle.connectDatabase()
-            # # print("test",conn)
-            # print(oracle.selectAll(conn))
-            # oracle.close(conn)
             lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
             num = [12, 19, 3, 5, 2, 3]
-        #
-        #     #맘에 안듬
             j=[]
             for index in range(len(lis)):
                 j.append({'name':lis[index],'size':num[index]})
-                # print(lis[index])
             return jsonify(j)
         except:
             print("error")

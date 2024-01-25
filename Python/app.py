@@ -19,6 +19,8 @@ from api.crawling import Crawling
 #식단 데이타 보내기
 from api.diet import Diet
 from api.calendarLike import CalendarLike
+#운동 데이터 보내기
+from api.excercise import Excercise
 
 #public
 from api.account import Account
@@ -47,7 +49,7 @@ api.add_resource(Diet,'/diet/<user_id>')
 api.add_resource(CalendarLike,'/calendarLike/<cal_id>')
 # api.add_resource(Diet,'/diet')
 #운동 데이터 보내기
-# api.add_resource(Excercise,'/excercise/<user_id>')
+api.add_resource(Excercise,'/exercise/<user_id>')
 #어카운트 정보 받아오기
 api.add_resource(Account,'/public/<user_id>')
 

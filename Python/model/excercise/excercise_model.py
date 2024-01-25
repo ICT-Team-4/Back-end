@@ -49,22 +49,23 @@ def excercise_selectOne(conn, date):
             date_ = []
             date_.append(date['START_POSTDATE'])
             cursor.execute(
-                f'',
-                [date_])
+                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN exercise e ON c.calendar_no = e.calendar_no WHERE calendar_no = :1 ORDER by time",
+                date_)
             return cursor.fetchone()
         except Exception as e:
             print('레코드 하나 조회시 오류:', e)
             return None
 
 
-def excercise_selectAll(conn, date):
+def excercise_selectAll(conn, user_id, date):
     with conn.cursor() as cursor:
         try:
             date_ = []
-            date_.append(date['START_POSTDATE'])
-            date_.append(date['END_POSTDATE'])
+            now = dt.datetime.now()
+            date_.append(date if date != None else now.strftime('%Y-%m-%d'))
+            date_.append(user_id)
             cursor.execute(
-                f'',
+                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN exercise e ON c.calendar_no = e.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER by time",
                 date_)
             return cursor.fetchall()
         except Exception as e:

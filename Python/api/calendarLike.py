@@ -1,6 +1,6 @@
 from flask_restful import Resource,reqparse
 from flask import jsonify , request
-import model.account.calendar_model as oracle
+import model.public.calendar_model as oracle
 
 
 class CalendarLike(Resource):
