@@ -27,7 +27,11 @@ public class MybatisConfig {
 			SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 			factoryBean.setDataSource(dataSource);
 			factoryBean.setTypeAliasesPackage("com.ict.fitme");
-			factoryBean.setMapperLocations(applicationContext.getResources("classpath:mybatis/mapper/**/*.xml"));			
+			factoryBean.setMapperLocations(applicationContext.getResources("classpath:mybatis/mapper/**/*.xml"));
+			org.apache.ibatis.session.Configuration configuration =
+			          new org.apache.ibatis.session.Configuration();
+			      configuration.setMapUnderscoreToCamelCase(true);
+			      factoryBean.setConfiguration(configuration);
 			factory=factoryBean.getObject();
 		}
 		catch(Exception e) {e.printStackTrace();}
