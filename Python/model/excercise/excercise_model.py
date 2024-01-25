@@ -6,9 +6,9 @@ def excercise_connectDatabase():  # 데이타베이스 연결
     config = ConfigParser()
     # print(os.path.abspath('.'))
     # 데이터 절대경로 찾아주기
-    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.dirname(os.path.dirname(__file__))
     # print(path)
-    config.read(path + '../public/oracle.ini', encoding='utf8')
+    config.read(path + '/public/oracle.ini', encoding='utf8')
     # 데이타베이스 연결
     return connect(user=config['ORACLE']['user'],
                    password=config['ORACLE']['password'],
@@ -30,7 +30,7 @@ def excercise_insert(conn, user_id, list_):
     test.append(list_['CATEGORY']) #운동 종류
     test.append(list_['ACCURACY']) #평균 정확도
     test.append(list_['COUNTS']) #운동 횟수
-    est.append(list_['WEIGHT']) #무게
+    test.append(list_['WEIGHT']) #무게
 
     with conn.cursor() as cursor:
         try:
@@ -49,22 +49,23 @@ def excercise_selectOne(conn, date):
             date_ = []
             date_.append(date['START_POSTDATE'])
             cursor.execute(
-                f'',
-                [date_])
+                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN exercise e ON c.calendar_no = e.calendar_no WHERE calendar_no = :1 ORDER by time",
+                date_)
             return cursor.fetchone()
         except Exception as e:
             print('레코드 하나 조회시 오류:', e)
             return None
 
 
-def excercise_selectAll(conn, date):
+def excercise_selectAll(conn, user_id, date):
     with conn.cursor() as cursor:
         try:
             date_ = []
-            date_.append(date['START_POSTDATE'])
-            date_.append(date['END_POSTDATE'])
+            now = dt.datetime.now()
+            date_.append(date if date != None else now.strftime('%Y-%m-%d'))
+            date_.append(user_id)
             cursor.execute(
-                f'',
+                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN exercise e ON c.calendar_no = e.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER by time",
                 date_)
             return cursor.fetchall()
         except Exception as e:

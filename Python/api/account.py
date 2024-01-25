@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import jsonify
 import numpy as np
-import model.account.accountModel as oracle
+import model.public.accountModel as oracle
 
 class Account(Resource):
     def get(self,user_id):

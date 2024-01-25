@@ -8,9 +8,9 @@ def diet_connectDatabase():  # 데이타베이스 연결
     config = ConfigParser()
     # print(os.path.abspath('.'))
     # 데이터 절대경로 찾아주기
-    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.dirname(os.path.dirname(__file__))
     # print(path)
-    config.read(path + '../public/oracle.ini', encoding='utf8')
+    config.read(path + '/public/oracle.ini', encoding='utf8')
     # 데이타베이스 연결
     return connect(user=config['ORACLE']['user'],
                    password=config['ORACLE']['password'],
@@ -108,7 +108,6 @@ def diet_selectAll(conn,user_id, date): #합치기 귀찮아서...
             #     date_)
             #"가 아니라 '로 작성
             cursor.execute(f"SELECT c.calendar_no,description,food,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time, diet_image,food_weight,like_date FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER BY time",
-
                 date_)
             return cursor.fetchall()
         except Exception as e:
