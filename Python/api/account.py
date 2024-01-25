@@ -1,8 +1,7 @@
-from flask_restful import Resource,reqparse
-from flask import jsonify , request
+from flask_restful import Resource
+from flask import jsonify
 import numpy as np
-from flask import make_response
-import model.oracledb.accountModel as oracle
+import model.diet.accountModel as oracle
 
 class Account(Resource):
     def get(self,user_id):
