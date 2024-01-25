@@ -10,7 +10,7 @@ def diet_connectDatabase():  # 데이타베이스 연결
     # 데이터 절대경로 찾아주기
     path = os.path.dirname(os.path.abspath(__file__))
     # print(path)
-    config.read(path + '/oracle.ini', encoding='utf8')
+    config.read(path + '../public/oracle.ini', encoding='utf8')
     # 데이타베이스 연결
     return connect(user=config['ORACLE']['user'],
                    password=config['ORACLE']['password'],
@@ -76,13 +76,12 @@ def diet_insert(conn, user_id, list_):
 
 #켈린더 일정(ex:2024.02.01) 하나 읽기
 # def diet_selectOne(conn, date):
-def diet_selectOne(conn,user_id,date): #합치기 귀찮아서...
+def diet_selectOne(conn,user_id): #합치기 귀찮아서...
     with conn.cursor() as cursor:
         try:
             date_ = []
-            date_.append(date)
             date_.append(user_id)
-            cursor.execute(f'SELECT c.calendar_no,description,memo,food,to_char(start_postdate,"YYYY-MM-DD HH24:MI:SS") time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = :1 AND account_no = :2 ORDER by time',
+            cursor.execute(f"SELECT c.calendar_no,description,memo,food,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE calendar_no = :1 ORDER by time",
                 date_)
             return cursor.fetchone()
         except Exception as e:
