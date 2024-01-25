@@ -8,9 +8,9 @@ def diet_connectDatabase():  # 데이타베이스 연결
     config = ConfigParser()
     # print(os.path.abspath('.'))
     # 데이터 절대경로 찾아주기
-    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.dirname(os.path.dirname(__file__))
     # print(path)
-    config.read(path + '../public/oracle.ini', encoding='utf8')
+    config.read(path + '/public/oracle.ini', encoding='utf8')
     # 데이타베이스 연결
     return connect(user=config['ORACLE']['user'],
                    password=config['ORACLE']['password'],

@@ -6,9 +6,9 @@ def excercise_connectDatabase():  # 데이타베이스 연결
     config = ConfigParser()
     # print(os.path.abspath('.'))
     # 데이터 절대경로 찾아주기
-    path = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.dirname(os.path.dirname(__file__))
     # print(path)
-    config.read(path + '../public/oracle.ini', encoding='utf8')
+    config.read(path + '/public/oracle.ini', encoding='utf8')
     # 데이타베이스 연결
     return connect(user=config['ORACLE']['user'],
                    password=config['ORACLE']['password'],
@@ -30,7 +30,7 @@ def excercise_insert(conn, user_id, list_):
     test.append(list_['CATEGORY']) #운동 종류
     test.append(list_['ACCURACY']) #평균 정확도
     test.append(list_['COUNTS']) #운동 횟수
-    est.append(list_['WEIGHT']) #무게
+    test.append(list_['WEIGHT']) #무게
 
     with conn.cursor() as cursor:
         try:
