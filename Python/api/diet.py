@@ -21,7 +21,7 @@ class Diet(Resource):
             dof = request.args.get('date')
             # print(dof)
 
-            list_ = ['chart1','mealTime'] #리액트로 보내줄 헤더
+            list_ = ['chart1','mealTime','chart2','chart3'] #리액트로 보내줄 헤더
             
             conn = oracle.diet_connectDatabase()
             # # # print("test",conn)
@@ -34,17 +34,18 @@ class Diet(Resource):
             pub_data = []
             if len(meal_all) > 0:
                 for i in range(len(meal_all)):
-                    data = meal_all[i][3]
+                    data = meal_all[i][2]
                     pub_data1 = pub.line(data)
-                    print(pub_data1)
+                    # print(pub_data1)
                     pub_data.append(pub_data1[0] if len(pub_data1) > 0 else [])
+            # print(pub_data[0][1:-1])
 
             j=[]
             for index in range(len(lis)):
                 j.append({'name':lis[index],'size':num[index]})
                 # print(lis[index])
-
-            return jsonify(dict(zip(list_,(j,meal_all))))
+            print(meal_all)
+            return jsonify(dict(zip(list_,(j,meal_all,j,j))))
         except:
             print("error")
 

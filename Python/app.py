@@ -18,6 +18,8 @@ from api.ocr import OCR
 from api.crawling import Crawling
 #식단 데이타 보내기
 from api.diet import Diet
+from api.calendarLike import CalendarLike
+
 #account
 from api.account import Account
 
@@ -42,6 +44,7 @@ api.add_resource(OCR,'/ocr')
 api.add_resource(Crawling,'/crawling')
 #식단 데이타 보내기
 api.add_resource(Diet,'/diet/<user_id>')
+api.add_resource(CalendarLike,'/calendarLike/<cal_id>')
 # api.add_resource(Diet,'/diet')
 #운동 데이터 보내기
 # api.add_resource(Excercise,'/excercise/<user_id>')
