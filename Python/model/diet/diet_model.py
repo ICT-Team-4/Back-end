@@ -35,7 +35,7 @@ def diet_insert(conn, user_id, list_):
 
     with conn.cursor() as cursor:
         try:
-            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,DEFAULT,default) INTO diet VALUES((SEQ_CALENDAR_CALENDAR_NO.nextval), :4, :5, :6) SELECT * FROM DUAL', test)
+            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR.nextval, :1, :2, :3,DEFAULT,default) INTO diet VALUES((SEQ_CALENDAR.nextval), :4, :5, :6) SELECT * FROM DUAL', test)
             conn.commit()
             return cursor.rowcount
             '''
@@ -108,7 +108,7 @@ def diet_selectAll(conn,user_id, date): #합치기 귀찮아서...
             # cursor.execute(f'SELECT c.calendar_no,description,memo,food,to_char(start_postdate,"YYYY-MM-DD HH24:MI:SS") s_time, to_char(end_postdate,"YYYY-MM-DD HH24:MI:SS") e_time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = :1 AND account_no = :3 ORDER by s_time',
             #     date_)
             #"가 아니라 '로 작성
-            cursor.execute(f"SELECT c.calendar_no,description,memo,food,to_char(start_postdate,'YYYY-MM-DD HH24:MI:SS') s_time, to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') e_time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = :1 AND account_no = :2 ORDER by s_time",
+            cursor.execute(f"SELECT c.calendar_no,description,memo,food,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') e_time, to_char(start_postdate,'YYYY-MM-DD HH24:MI:SS') s_time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER by s_time",
 
                 date_)
             return cursor.fetchall()

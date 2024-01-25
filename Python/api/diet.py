@@ -1,6 +1,7 @@
 from flask_restful import Resource,reqparse
 from flask import jsonify , request
 import model.diet.diet_model as oracle
+import model.diet.publicData_model as pub
 
 
 class Diet(Resource):
@@ -18,7 +19,7 @@ class Diet(Resource):
         try:
             #겟 파라미터 받아오는 법(http://localhost:5000/diet/3?param1=23)
             dof = request.args.get('date')
-            print(dof)
+            # print(dof)
 
             list_ = ['chart1','mealTime'] #리액트로 보내줄 헤더
             
@@ -29,14 +30,15 @@ class Diet(Resource):
             lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
             num = [12, 19, 3, 5, 2, 3]
 
-            # headers = []
-            # body = []
-            # for index in range(len(meal_all)):
-            #     headers.append(meal_all[index][0])
-            #     body.append(meal_all[index][1:])
-            # test = dict(zip(headers,body))
+            # print(meal_all[0]) # (21, 'fdads', '3ㅇㄴㅁㅇ', '순대', '2024-01-25 00:03:23', '2024-01-25 00:03:23', None, 300, 4)
+            pub_data = []
+            if len(meal_all) > 0:
+                for i in range(len(meal_all)):
+                    data = meal_all[i][3]
+                    pub_data1 = pub.line(data)
+                    print(pub_data1)
+                    pub_data.append(pub_data1[0] if len(pub_data1) > 0 else [])
 
-        #     #맘에 안듬
             j=[]
             for index in range(len(lis)):
                 j.append({'name':lis[index],'size':num[index]})
@@ -51,7 +53,9 @@ class Diet(Resource):
         args = self.parser.parse_args()
         # print(type(args))
         conn = oracle.diet_connectDatabase()
-        return oracle.diet_insert(conn,user_id,args) #테이블 2개여서 성공이면 2이다
+        data = oracle.diet_insert(conn, user_id, args)
+        # print('post',data)
+        return data #테이블 2개여서 성공이면 2이다
 
     # def get(self,user_id): #사용자가 날짜를 클릭하는데 date값도 같이 받아야하는거 아닌가...?ㅠㅠ
     #     try:
