@@ -20,7 +20,7 @@ from api.crawling import Crawling
 from api.diet import Diet
 from api.calendarLike import CalendarLike
 
-#account
+#public
 from api.account import Account
 
 #플라스크 앱 생성
@@ -49,7 +49,7 @@ api.add_resource(CalendarLike,'/calendarLike/<cal_id>')
 #운동 데이터 보내기
 # api.add_resource(Excercise,'/excercise/<user_id>')
 #어카운트 정보 받아오기
-api.add_resource(Account,'/account/<user_id>')
+api.add_resource(Account,'/public/<user_id>')
 
 
 if __name__ == '__main__':

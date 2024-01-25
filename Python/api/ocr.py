@@ -32,7 +32,7 @@ class OCR(Resource):
                  OCR은 텍스트 반환
         '''
         # 인증
-        # Authenticate with service account credentials
+        # Authenticate with service public credentials
         credentials = self.authenticate_service_account()
 
         # 이미지 데이터 디코딩(즉 바이너리 데이타:bytes타입)

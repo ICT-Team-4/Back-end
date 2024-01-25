@@ -8,7 +8,7 @@ def excercise_connectDatabase():  # 데이타베이스 연결
     # 데이터 절대경로 찾아주기
     path = os.path.dirname(os.path.abspath(__file__))
     # print(path)
-    config.read(path + '/oracle.ini', encoding='utf8')
+    config.read(path + '../public/oracle.ini', encoding='utf8')
     # 데이타베이스 연결
     return connect(user=config['ORACLE']['user'],
                    password=config['ORACLE']['password'],
@@ -34,7 +34,7 @@ def excercise_insert(conn, user_id, list_):
 
     with conn.cursor() as cursor:
         try:
-            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,DEFAULT,default) INTO diet VALUES((SEQ_CALENDAR_CALENDAR_NO.nextval), :4, :5, :6) SELECT * FROM DUAL', test)
+            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,DEFAULT,default) INTO excercise VALUES((SEQ_CALENDAR_CALENDAR_NO.nextval), :4, :5, :6, :7) SELECT * FROM DUAL', test)
             conn.commit()
             return cursor.rowcount
 
