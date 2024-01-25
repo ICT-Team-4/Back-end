@@ -1,7 +1,7 @@
 from flask_restful import Resource,reqparse
-from flask import jsonify , request
+from flask import jsonify
 from flask import make_response
-import model.oracledb.excercise_model as oracle
+import model.excercise.excercise_model as oracle
 import json
 
 class Excercise(Resource):

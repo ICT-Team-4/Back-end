@@ -1,8 +1,7 @@
 from flask_restful import Resource,reqparse
 from flask import jsonify , request
-from flask import make_response
-import model.oracledb.diet_model as oracle
-import json
+import model.diet.diet_model as oracle
+
 
 class Diet(Resource):
     def __init__(self):
