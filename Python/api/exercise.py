@@ -32,8 +32,8 @@ class Exercise(Resource):
         # print(user_id)
         args = self.parser.parse_args()
         # print(type(args))
-        conn = oracle.excercise_connectDatabase()
-        data = oracle.excercise_insert(conn, user_id, args)
+        conn = oracle.exercise_connectDatabase()
+        data = oracle.exercise_insert(conn, user_id, args)
         return data #테이블 2개여서 성공이면 2이다
 
     # def get(self,user_id): #사용자가 날짜를 클릭하는데 date값도 같이 받아야하는거 아닌가...?ㅠㅠ

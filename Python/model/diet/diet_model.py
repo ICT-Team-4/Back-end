@@ -116,3 +116,24 @@ def diet_selectAll(conn,user_id, date): #합치기 귀찮아서...
             print('모든 데이터 조회시 오류:', e)
             return None
 
+def diet_delete(conn,cal_id):
+    print(cal_id,"diet_delete")
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute(f"delete calendar where calendar_no = {cal_id}")
+            conn.commit()
+            return cursor.rowcount
+        except Exception as e:
+            print('모든 데이터 조회시 오류:', e)
+            return None
+
+def diet_update(conn,cal_id,data):
+    print(cal_id, "diet_update :",data)
+    # with conn.cursor() as cursor:
+    #     try:
+    #         cursor.execute(f"delete calendar where calendar_no = {cal_id}")
+    #         conn.commit()
+    #         return cursor.rowcount
+    #     except Exception as e:
+    #         print('모든 데이터 조회시 오류:', e)
+    #         return None
