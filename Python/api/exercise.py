@@ -1,10 +1,10 @@
 from flask_restful import Resource,reqparse
 from flask import jsonify, request
 from flask import make_response
-import model.excercise.excercise_model as oracle
+import model.exercise.exercise_model as oracle
 
 
-class Excercise(Resource):
+class Exercise(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         # 아래는 공통 파라미터 설정(key=value로 받기)
