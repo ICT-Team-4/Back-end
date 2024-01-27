@@ -31,7 +31,7 @@ def diet_calendar(conn, user_id):
     with conn.cursor() as cursor:
         try:
             cursor.execute(
-                f"SELECT DISTINCT to_char(TRUNC(start_postdate),'YYYY-MM-DD') time FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE account_no = :1",
+                f"SELECT DISTINCT to_char(TRUNC(end_postdate),'YYYY-MM-DD') time FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE account_no = :1",
                 user_id)
             return cursor.fetchall()
         except Exception as e:
