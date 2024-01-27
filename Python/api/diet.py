@@ -25,7 +25,7 @@ class Diet(Resource):
 
 
 
-            meal_all=[]
+            food_all=[]
             cal = request.args.get('calId')
             if(cal != None):
                 #
@@ -42,9 +42,9 @@ class Diet(Resource):
             # print(dof)
             conn = oracle.diet_connectDatabase()
             # # # print("test",conn)
-            meal_all = oracle.diet_selectAll(conn, user_id, dof)
+            food_all = oracle.diet_selectAll(conn, user_id, dof)
             oracle.diet_close(conn)
-            list_ = ['chart1','mealTime','chart2','chart3'] #리액트로 보내줄 헤더
+            list_ = ['chart1','foodDiary','chart2','chart3'] #리액트로 보내줄 헤더
 
 
             lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
@@ -52,9 +52,9 @@ class Diet(Resource):
 
             # print(meal_all[0]) # (21, 'fdads', '3ㅇㄴㅁㅇ', '순대', '2024-01-25 00:03:23', '2024-01-25 00:03:23', None, 300, 4)
             pub_data = []
-            if len(meal_all) > 0:
-                for i in range(len(meal_all)):
-                    data = meal_all[i][2]
+            if len(food_all) > 0:
+                for i in range(len(food_all)):
+                    data = food_all[i][2]
                     pub_data1 = pub.line(data)
                     # print(pub_data1)
                     pub_data.append(pub_data1[0] if len(pub_data1) > 0 else [])
@@ -64,8 +64,8 @@ class Diet(Resource):
             for index in range(len(lis)):
                 j.append({'name':lis[index],'size':num[index]})
                 # print(lis[index])
-            print(meal_all)
-            return jsonify(dict(zip(list_,(j,meal_all,j,j))))
+            print(food_all)
+            return jsonify(dict(zip(list_,(j,food_all,j,j))))
         except:
             print("error")
 
