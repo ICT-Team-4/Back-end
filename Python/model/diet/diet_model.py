@@ -24,21 +24,18 @@ def diet_close(conn):  # 커넥션객체 닫기
 
 # 식단 추가
 def diet_insert(conn, user_id, list_):
+    print(user_id, ":", list_)
     test = []  # 캘린더 테이블
     test.append(user_id)
     test.append(list_['DESCRIPTION']) #제목
     test.append(list_['MEMO']) #메모,내용
-    # test.append(None if list_['DIET_IMAGE'] == '' else list_['DIET_IMAGE']) #음식 사진
     test.append(list_['DIET_IMAGE']) #음식 사진
     test.append(list_['FOOD']) #음식 이름
     test.append(list_['FOOD_WEIGHT']) #음식 용량
-    test.append(list_['END_DATE']) #식사 시간
-    print(user_id, ":", test)
-    sql = f"INSERT ALL INTO calendar VALUES(SEQ_CALENDAR.nextval, {user_id}, '{list_['DESCRIPTION']}', '{list_['MEMO']}',DEFAULT,TO_DATE('{list_['END_DATE']}' , 'YYYY-MM-DD HH24:MI')) INTO diet VALUES((SEQ_CALENDAR.nextval), '{list_['DIET_IMAGE']}', '{list_['FOOD']}', {list_['FOOD_WEIGHT']}) SELECT * FROM DUAL"
+
     with conn.cursor() as cursor:
         try:
-            print(sql)
-            cursor.execute(sql)
+            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR.nextval, :1, :2, :3,DEFAULT,default) INTO diet VALUES((SEQ_CALENDAR.nextval), :4, :5, :6) SELECT * FROM DUAL', test)
             conn.commit()
             return cursor.rowcount
             '''
@@ -119,24 +116,3 @@ def diet_selectAll(conn,user_id, date): #합치기 귀찮아서...
             print('모든 데이터 조회시 오류:', e)
             return None
 
-def diet_delete(conn,cal_id):
-    print(cal_id,"diet_delete")
-    with conn.cursor() as cursor:
-        try:
-            cursor.execute(f"delete calendar where calendar_no = {cal_id}")
-            conn.commit()
-            return cursor.rowcount
-        except Exception as e:
-            print('모든 데이터 조회시 오류:', e)
-            return None
-
-def diet_update(conn,cal_id,data):
-    print(cal_id, "diet_update :",data)
-    # with conn.cursor() as cursor:
-    #     try:
-    #         cursor.execute(f"delete calendar where calendar_no = {cal_id}")
-    #         conn.commit()
-    #         return cursor.rowcount
-    #     except Exception as e:
-    #         print('모든 데이터 조회시 오류:', e)
-    #         return None
