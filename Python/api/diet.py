@@ -13,6 +13,9 @@ class Diet(Resource):
         self.parser.add_argument('DIET_IMAGE', location='form')
         self.parser.add_argument('FOOD', location='form')
         self.parser.add_argument('FOOD_WEIGHT', location='form')
+        self.parser.add_argument('END_DATE', location='form')
+        #END_DATE
+
     def get(self,user_id):
         args = self.parser.parse_args()
         # print(args)
@@ -69,7 +72,7 @@ class Diet(Resource):
     def post(self,user_id):
         # print(user_id)
         args = self.parser.parse_args()
-        # print(type(args))
+        print(args)
         conn = oracle.diet_connectDatabase()
         data = oracle.diet_insert(conn, user_id, args)
         # print('post',data)
