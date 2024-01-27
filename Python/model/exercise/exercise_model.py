@@ -3,7 +3,7 @@ from cx_Oracle import connect
 import datetime as dt
 import os
 
-def workout_connectDatabase():  # 데이타베이스 연결
+def exercise_connectDatabase():  # 데이타베이스 연결
     config = ConfigParser()
     # print(os.path.abspath('.'))
     # 데이터 절대경로 찾아주기
@@ -16,13 +16,13 @@ def workout_connectDatabase():  # 데이타베이스 연결
                    dsn=config['ORACLE']['URL'], encoding="UTF-8")
 
 
-def workout_close(conn):  # 커넥션객체 닫기
+def exercise_close(conn):  # 커넥션객체 닫기
     if conn:
         conn.close()
 
 
 # 운동 추가
-def workout_insert(conn, user_id, list_):
+def exercise_insert(conn, user_id, list_):
     print(user_id, ":", list_)
     test = []  # 캘린더 테이블
     test.append(user_id)
@@ -35,7 +35,7 @@ def workout_insert(conn, user_id, list_):
 
     with conn.cursor() as cursor:
         try:
-            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,DEFAULT,default) INTO workout VALUES((SEQ_CALENDAR_CALENDAR_NO.nextval), :4, :5, :6, :7) SELECT * FROM DUAL', test)
+            cursor.execute('INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,DEFAULT,default) INTO exercise VALUES((SEQ_CALENDAR_CALENDAR_NO.nextval), :4, :5, :6, :7) SELECT * FROM DUAL', test)
             conn.commit()
             return cursor.rowcount
 
@@ -44,13 +44,13 @@ def workout_insert(conn, user_id, list_):
             return 0
 
 
-def workout_selectOne(conn, date):
+def exercise_selectOne(conn, date):
     with conn.cursor() as cursor:
         try:
             date_ = []
             date_.append(date['START_POSTDATE'])
             cursor.execute(
-                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN workout w ON c.calendar_no = e.calendar_no WHERE calendar_no = :1 ORDER by time",
+                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN exercise e ON c.calendar_no = e.calendar_no WHERE calendar_no = :1 ORDER by time",
                 date_)
             return cursor.fetchone()
         except Exception as e:
@@ -58,7 +58,7 @@ def workout_selectOne(conn, date):
             return None
 
 
-def workout_selectAll(conn, user_id, date):
+def exercise_selectAll(conn, user_id, date):
     with conn.cursor() as cursor:
         try:
             date_ = []
@@ -66,7 +66,7 @@ def workout_selectAll(conn, user_id, date):
             date_.append(date if date != None else now.strftime('%Y-%m-%d'))
             date_.append(user_id)
             cursor.execute(
-                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN workout w ON c.calendar_no = e.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER by time",
+                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN exercise e ON c.calendar_no = e.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER by time",
                 date_)
             return cursor.fetchall()
         except Exception as e:
