@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 매퍼파일 -->
+<mapper namespace="com.security.board.dao.CommentMapper">
+    
+    <!-- 특정 게시물에 대한 모든 댓글 조회 -->
+    <select id="findAllByNo" parameterType="Long" resultType="BoardCommentDto">
+    	SELECT
+    	 C.* ,
+    	 (SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=C.ACCOUNT_NO) as NAME
+    	FROM BOARD_COMMENT C 
+    	WHERE BNO=#{bno}
+    </select>
+    
+    <!-- 특정 댓글 하나 조화 -->
+    <select id="findByOne" parameterType="Long" resultType="BoardCommentDto">
+    	SELECT * FROM BOARD_COMMENT WHERE BCNO=#{bcno}
+    </select>
+    
+    <!-- 댓글 등록 -->
+    <insert id="insert" parameterType="BoardCommentDto">
+    	<selectKey keyProperty="bcno" order="BEFORE" resultType="Long">
+				SELECT SEQ_BOARD_COMMENT.NEXTVAL
+				FROM DUAL
+		</selectKey>
+    	INSERT INTO 
+    	BOARD_COMMENT(BCNO, BNO, ACCOUNT_NO, POST_DATE, BC_COMMENT, REPLY_NO, EDIT_DATE) 
+    	VALUES(#{bcno}, #{bno}, #{accountNo}, SYSDATE, #{bcComment}, null, null)
+    </insert>
+    
+    <!-- 댓글 삭제 -->
+    <delete id="delete" parameterType="Long">
+    	DELETE BOARD_COMMENT WHERE BCNO=#{bcno}
+    </delete>
+    
+    <!--댓글 수정 -->
+    <update id="update" parameterType="BoardCommentDto">
+    	UPDATE BOARD_COMMENT SET BC_COMMENT =#{bcComment}, EDIT_DATE=SYSDATE WHERE BCNO=#{BCNO}
+    </update>
+    
+
+</mapper>
