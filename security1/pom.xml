@@ -50,13 +50,6 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>			
 			<version>3.0.3</version>			
 		</dependency>
-		
-		<!-- mysql -->
-		<dependency>
-	        <groupId>mysql</groupId>
-	        <artifactId>mysql-connector-java</artifactId>
-	        <version>8.0.30</version>
-	    </dependency>
 	   
 	    <!-- jdbc -->
 	    <dependency>
@@ -98,6 +91,14 @@
 			<artifactId>ojdbc8</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
+		<!-- WebSocket 라이브러리 -->
+		<!--
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+		</dependency>
+		-->
 	</dependencies>
 
 	<build>
