@@ -4,33 +4,20 @@
 <!-- 매퍼파일 -->
 <mapper namespace="com.ict.fitme.board.dao.BoardMapper">
 
-	<resultMap id="BoardResult" type="BoardDto">
-        <id property="bno" column="BNO"/>
-        <result property="accountNo" column="ACCOUNT_NO"/>
-        <result property="postDate" column="POSTDATE"/>
-        <result property="title" column="TITLE"/>
-        <result property="hitCount" column="HIT_COUNT"/>
-        <result property="boardCategory" column="BOARD_CATEGORY"/>
-        <result property="boardComment" column="BOARD_COMMENT"/>
-        <result property="address" column="ADDRESS"/>
-        <result property="editDate" column="EDITDATE"/>
-        <result property="likes" column="LIKES"/>
-        <result property="scraps" column="SCRAPS"/>
-        <result property="name" column="NAME"/>
-    </resultMap>
-
 	<!-- 전체 게시물 조회(사용자명+좋아요+스크랩) -->
-	<select id="findByAll" resultType="BoardDto" resultMap="BoardResult">
+	<select id="findByAll" resultType="BoardDto">
 		SELECT 
 			B.*,
 			(SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as NAME,
 			(SELECT COUNT(BNO) FROM BOARD_LIKES L WHERE L.BNO=B.BNO) AS LIKES,
-			(SELECT COUNT(BNO) FROM BOARD_SCRAPS S WHERE S.BNO=B.BNO) AS SCRAPS 
+			(SELECT COUNT(BNO) FROM BOARD_SCRAPS S WHERE S.BNO=B.BNO) AS SCRAPS,
+			(SELECT COUNT(BC_COMMENT) FROM BOARD_COMMENT C WHERE C.BNO=B.BNO) AS BCCOMMENT
 		FROM BOARD B
+		ORDER BY BNO DESC
 	</select>
 	
 	<!-- 특정 게시물 조회 -->
-	<select id="findByNo" parameterType="Long" resultType="BoardDto" resultMap="BoardResult">
+	<select id="findByNo" parameterType="Long" resultType="BoardDto">
 		SELECT 
 			B.*,
 			(SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as NAME

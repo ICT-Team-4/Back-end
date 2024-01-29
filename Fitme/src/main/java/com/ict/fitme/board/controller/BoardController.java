@@ -9,11 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ict.fitme.board.dto.BoardDto;
 import com.ict.fitme.board.service.BoardService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -31,7 +36,6 @@ public class BoardController {
 	public ResponseEntity<List<BoardDto>> boardAllList() {
 		
 		List<BoardDto> allList = boardService.findByAll();
-		System.out.println(allList);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(allList);
 	}
@@ -42,15 +46,13 @@ public class BoardController {
 		
 		BoardDto oneList = boardService.findByNo(bno);
 		
-		System.out.println(oneList);
-		
-		return ResponseEntity.ok().header("Content-Type", "application/json; chrset=UTF-8").body(oneList);
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(oneList);
 		
 	}
 	
 	//게시글 등록
 	@PostMapping("/boards")
-	public ResponseEntity<BoardDto> boardSave(BoardDto dto) {
+	public ResponseEntity<BoardDto> boardSave(@RequestBody BoardDto dto) {
 		
 		//추가 디테일 잡는 부분
 		//String message = "";
@@ -66,17 +68,16 @@ public class BoardController {
 		
 		boardService.boardSave(dto);
 		
-		return ResponseEntity.ok().header("Content-Type", "application/json; chrset=UTF-8").body(dto);
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(dto);
 	}
 	
 	//게시글 수정
 	@PutMapping("/boards")
 	public ResponseEntity<BoardDto> boardUpdate(BoardDto dto) {
-		
-		System.out.println(dto);
+	
 		boardService.boardUpdate(dto);
 		
-		return ResponseEntity.ok().header("Content-Type", "application/json; chrset=UTF-8").body(dto);
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(dto);
 	}
 	
 	//게시글 삭제
@@ -98,7 +99,7 @@ public class BoardController {
 		
 		
 		
-		return ResponseEntity.ok().header("Content-Type", "application/json; chrset=UTF-8").body(message);
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 	}
 	
 }
