@@ -6,6 +6,7 @@ import model.diet.publicData_model as pub
 
 class Diet(Resource):
     def __init__(self):
+        # print(self)
         self.parser = reqparse.RequestParser()
         # 아래는 공통 파라미터 설정(key=value로 받기)
         self.parser.add_argument('DESCRIPTION',location='form')
@@ -16,15 +17,16 @@ class Diet(Resource):
         self.parser.add_argument('END_DATE', location='form')
     def get(self,user_id):
         args = self.parser.parse_args()
-        # print(args)
+        # print(args,'args')
         try:
             #겟 파라미터 받아오는 법(http://localhost:5000/diet/3?param1=23)
             dof = request.args.get('date')
-
+            # print(dof, 'dof')
 
 
             food_all=[]
             cal = request.args.get('calId')
+            # print(cal, 'cal')
             if(cal != None):
                 #
                 # print(cal)
@@ -32,7 +34,7 @@ class Diet(Resource):
                 conn = oracle.diet_connectDatabase()
                 str1 = oracle.diet_selectOne(conn, cal)
                 oracle.diet_close(conn)
-                print(str1)
+                print(str1,'str1')
 
                 return str1
 
@@ -50,11 +52,13 @@ class Diet(Resource):
 
             # print(food_all[0]) # (21, 'fdads', '3ㅇㄴㅁㅇ', '순대', '2024-01-25 00:03:23', '2024-01-25 00:03:23', None, 300, 4)
             pub_data = []
-            if len(food_all) > 0:
-                for i in range(len(food_all)):
-                    data = food_all[i][2]
+            if len(meal_all) > 0:
+                for i in range(len(meal_all)):
+                    data = meal_all[i][2]
+                    print(data,'data....하.')
                     pub_data1 = pub.line(data)
-                    print(pub_data1)
+                    print(pub_data1,'pub_data1여긴가..')
+                    # print(pub_data1)
                     pub_data.append(pub_data1[0] if len(pub_data1) > 0 else [])
             # print(pub_data[0][1:-1])
 
@@ -63,7 +67,6 @@ class Diet(Resource):
                 j.append({'name':lis[index],'size':num[index]})
                 print(lis[index])
             print(food_all)
-            return jsonify(dict(zip(list_,(j,food_all,j,j))))
         except:
             print("error")
 
