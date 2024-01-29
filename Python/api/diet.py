@@ -1,8 +1,10 @@
 from flask_restful import Resource,reqparse
 from flask import jsonify , request
 import model.diet.diet_model as oracle
+import model.image_oracledb.image_model as imagedb
 import model.diet.publicData_model as pub
 
+import base64
 
 class Diet(Resource):
     def __init__(self):
@@ -74,10 +76,26 @@ class Diet(Resource):
     def post(self,user_id):
         # print(user_id)
         args = self.parser.parse_args()
+        # print(args['DIET_IMAGE'])
         # print(type(args))
-        conn = oracle.diet_connectDatabase()
-        data = oracle.diet_insert(conn, user_id, args)
-        # print('post',data)
+        # imagedb
+        image = args['DIET_IMAGE']
+        print('image', image == '')
+        if image != '':
+            conn = imagedb.connectDatabase()
+            data = imagedb.insert(conn)
+            str1 = 'C:\\Users\\user\\Upload\\' + str(data[0]) + '.png'
+            args['DIET_IMAGE'] = str(data[0])
+            with open(str1, "bw") as f:
+                f.write(base64.b64decode(image.encode()))
+
+        for t in args:
+            print(t,':',args[t])
+
+
+        conn1 = oracle.diet_connectDatabase()
+        data = oracle.diet_insert(conn1, user_id, args)
+        print('post',data)
         return data #테이블 2개여서 성공이면 2이다
     def put(self,cal_id):
         pass
