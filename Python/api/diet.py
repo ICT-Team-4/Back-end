@@ -52,9 +52,9 @@ class Diet(Resource):
 
             # print(food_all[0]) # (21, 'fdads', '3ㅇㄴㅁㅇ', '순대', '2024-01-25 00:03:23', '2024-01-25 00:03:23', None, 300, 4)
             pub_data = []
-            if len(meal_all) > 0:
-                for i in range(len(meal_all)):
-                    data = meal_all[i][2]
+            if len(food_all) > 0:
+                for i in range(len(food_all)):
+                    data = food_all[i][2]
                     print(data,'data....하.')
                     pub_data1 = pub.line(data)
                     print(pub_data1,'pub_data1여긴가..')
@@ -67,6 +67,7 @@ class Diet(Resource):
                 j.append({'name':lis[index],'size':num[index]})
                 print(lis[index])
             print(food_all)
+            return jsonify(dict(zip(list_, (j, food_all, j, j))))
         except:
             print("error")
 
