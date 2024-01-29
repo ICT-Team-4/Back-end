@@ -1,11 +1,14 @@
 from flask_restful import Resource,reqparse
 from flask import jsonify , request
 import model.diet.diet_model as oracle
+import model.image_oracledb.image_model as imagedb
 import model.diet.publicData_model as pub
 
+import base64
 
 class Diet(Resource):
     def __init__(self):
+        # print(self)
         self.parser = reqparse.RequestParser()
         # 아래는 공통 파라미터 설정(key=value로 받기)
         self.parser.add_argument('DESCRIPTION',location='form')
@@ -16,15 +19,16 @@ class Diet(Resource):
         self.parser.add_argument('END_DATE', location='form')
     def get(self,user_id):
         args = self.parser.parse_args()
-        # print(args)
+        # print(args,'args')
         try:
             #겟 파라미터 받아오는 법(http://localhost:5000/diet/3?param1=23)
             dof = request.args.get('date')
-
+            # print(dof, 'dof')
 
 
             food_all=[]
             cal = request.args.get('calId')
+            # print(cal, 'cal')
             if(cal != None):
                 #
                 # print(cal)
@@ -32,7 +36,7 @@ class Diet(Resource):
                 conn = oracle.diet_connectDatabase()
                 str1 = oracle.diet_selectOne(conn, cal)
                 oracle.diet_close(conn)
-                print(str1)
+                print(str1,'str1')
 
                 return str1
 
@@ -53,8 +57,10 @@ class Diet(Resource):
             if len(food_all) > 0:
                 for i in range(len(food_all)):
                     data = food_all[i][2]
+                    print(data,'data....하.')
                     pub_data1 = pub.line(data)
-                    print(pub_data1)
+                    print(pub_data1,'pub_data1여긴가..')
+                    # print(pub_data1)
                     pub_data.append(pub_data1[0] if len(pub_data1) > 0 else [])
             # print(pub_data[0][1:-1])
 
@@ -63,17 +69,33 @@ class Diet(Resource):
                 j.append({'name':lis[index],'size':num[index]})
                 print(lis[index])
             print(food_all)
-            return jsonify(dict(zip(list_,(j,food_all,j,j))))
+            return jsonify(dict(zip(list_, (j, food_all, j, j))))
         except:
             print("error")
 
     def post(self,user_id):
         # print(user_id)
         args = self.parser.parse_args()
+        # print(args['DIET_IMAGE'])
         # print(type(args))
-        conn = oracle.diet_connectDatabase()
-        data = oracle.diet_insert(conn, user_id, args)
-        # print('post',data)
+        # imagedb
+        image = args['DIET_IMAGE']
+        print('image', image == '')
+        if image != '':
+            conn = imagedb.connectDatabase()
+            data = imagedb.insert(conn)
+            str1 = 'C:\\Users\\user\\Upload\\' + str(data[0]) + '.png'
+            args['DIET_IMAGE'] = str(data[0])
+            with open(str1, "bw") as f:
+                f.write(base64.b64decode(image.encode()))
+
+        for t in args:
+            print(t,':',args[t])
+
+
+        conn1 = oracle.diet_connectDatabase()
+        data = oracle.diet_insert(conn1, user_id, args)
+        print('post',data)
         return data #테이블 2개여서 성공이면 2이다
     def put(self,cal_id):
         pass

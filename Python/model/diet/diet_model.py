@@ -33,11 +33,11 @@ def diet_insert(conn, user_id, list_):
     test.append(list_['FOOD']) #음식 이름
     test.append(list_['FOOD_WEIGHT']) #음식 용량
     test.append(list_['END_DATE']) #식사 시간
-    print(user_id, ":", test)
+    print('diet_insert',user_id, ":", test)
     sql = f"INSERT ALL INTO calendar VALUES(SEQ_CALENDAR.nextval, {user_id}, '{list_['DESCRIPTION']}', '{list_['MEMO']}',DEFAULT,TO_DATE('{list_['END_DATE']}' , 'YYYY-MM-DD HH24:MI')) INTO diet VALUES((SEQ_CALENDAR.nextval), '{list_['DIET_IMAGE']}', '{list_['FOOD']}', {list_['FOOD_WEIGHT']}) SELECT * FROM DUAL"
     with conn.cursor() as cursor:
         try:
-            print(sql)
+            print(sql,'diet_sql')
             cursor.execute(sql)
             conn.commit()
             return cursor.rowcount
@@ -85,7 +85,7 @@ def diet_selectOne(conn, cal_id):  # 합치기 귀찮아서...
             # print(cal_id == 'undefined')
             data =cal_id if cal_id != 'undefined' else 0
             data = data if data != 'false' else 0
-            print(data)
+            print(data,'diet_data')
             cursor.execute(
                 f"SELECT c.calendar_no,description,memo,food,to_char(start_postdate,'YYYY-MM-DD HH24:MI:SS') s_time,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') e_time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE c.calendar_no = {data}")
             return cursor.fetchone()
@@ -105,6 +105,7 @@ def diet_selectAll(conn,user_id, date): #합치기 귀찮아서...
             date_.append(date if date != None else now.strftime('%Y-%m-%d'))
             # date_.append(date['END_POSTDATE'])
             date_.append(user_id)
+            print(date_, 'date_이건가..?')
             # print(date_)
             # cursor.execute(f'SELECT c.calendar_no,description,memo,food,to_char(start_postdate,"YYYY-MM-DD HH24:MI:SS") s_time, to_char(end_postdate,"YYYY-MM-DD HH24:MI:SS") e_time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE TRUNC(start_postdate) = :1 AND TRUNC(end_postdate) = :2 AND account_no = :3 ORDER by s_time',
             #     date_)

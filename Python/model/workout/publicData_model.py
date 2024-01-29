@@ -8,7 +8,7 @@ def line(name):
     df = pd.read_csv(path+"/workout.csv")
     # print("path"+path)
     # print(df.values)
-    return  df.values[df.values[:,0]==name]
+    return df.values[df.values[:,0]==name]
 
 if __name__ == '__main__':
     print(line('윗몸일으키기'))
