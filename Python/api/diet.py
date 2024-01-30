@@ -46,6 +46,24 @@ class Diet(Resource):
             # # # print("test",conn)
             food_all = oracle.diet_selectAll(conn, user_id, dof)
             oracle.diet_close(conn)
+            # print(food_all)
+            foodDiary = []
+            for i in range(len(food_all)):
+                print('food : ',"None" if food_all[i][4] == None else food_all[i][4])
+                # print(list(food_all[i][0:4])+list(['50005'])+list(food_all[i][5:]))
+                # food_all[i][4:4] = '3030'
+                id = 41 if food_all[i][4] == None else food_all[i][4]
+                str1 = 'C:\\Users\\user\\Upload\\' + str(id) + '.png'
+                # print(str1)
+
+                with open(str1, "rb") as f:
+                    image = base64.b64encode(f.read())
+                    # print(str(image)[2:-2])
+                    # food_all[i][4] = str(image)[2:-2]
+                    foodDiary.append(list(food_all[i][0:4])+list(["data:image/png;base64,"+str(image)[2:-2]])+list(food_all[i][5:]))
+            print(foodDiary)
+
+
             list_ = ['chart1','foodDiary','chart2','chart3'] #리액트로 보내줄 헤더
 
 
@@ -54,12 +72,12 @@ class Diet(Resource):
 
             # print(food_all[0]) # (21, 'fdads', '3ㅇㄴㅁㅇ', '순대', '2024-01-25 00:03:23', '2024-01-25 00:03:23', None, 300, 4)
             pub_data = []
-            if len(food_all) > 0:
-                for i in range(len(meal_all)):
-                    data = food_all[i][2]
-                    print(data,'data....하.')
+            if len(foodDiary) > 0:
+                for i in range(len(foodDiary)):
+                    data = foodDiary[i][2]
+                    # print(data,'data....하.')
                     pub_data1 = pub.line(data)
-                    print(pub_data1,'pub_data1여긴가..')
+                    # print(pub_data1,'pub_data1여긴가..')
                     # print(pub_data1)
                     pub_data.append(pub_data1[0] if len(pub_data1) > 0 else [])
             # print(pub_data[0][1:-1])
@@ -67,9 +85,9 @@ class Diet(Resource):
             j=[]
             for index in range(len(lis)):
                 j.append({'name':lis[index],'size':num[index]})
-                print(lis[index])
-            print(food_all)
-            return jsonify(dict(zip(list_,(j,food_all,j,j))))
+                # print(lis[index])
+            # print(food_all)
+            return jsonify(dict(zip(list_, (j, foodDiary, j, j))))
         except:
             print("error")
 
