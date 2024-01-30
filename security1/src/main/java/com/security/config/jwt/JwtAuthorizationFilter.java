@@ -13,6 +13,7 @@ import com.security.model.UserMapper;
 import com.security.util.JWTOkens;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -36,9 +37,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
       FilterChain chain) throws IOException, ServletException {
     // super.doFilterInternal(request, response, chain);
     System.out.println("인증이나 권한이 필요한 주소 요청이 됨");
-
-    String jwtHeader = request.getHeader("Authorization");
+    
+    //String jwtHeader = request.getHeader("Authorization");
+    String jwtHeader = request.getHeader("Authorization").split(" ")[1].trim();
     System.out.println("jwtHeader :" + jwtHeader);
+    System.out.println("확인" + request.getHeader("Authorization").split(" ")[1]);
 
     // header가 있는지 확인
     if (jwtHeader == null) {
@@ -47,7 +50,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     // JWT 토큰을 검증해서 정상적인 사용자인지 확인
-    String token = request.getHeader("Authorization");
+    //String token = request.getHeader("Authorization");
+    String token = jwtHeader;
     System.out.println(token);
 
     Map<String, Object> payload = JWTOkens.getTokenPayloads(token);

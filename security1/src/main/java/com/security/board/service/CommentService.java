@@ -17,8 +17,8 @@ public class CommentService {
 		this.commentMapper = commentMapper;
 	}
 	
-	public List<BoardCommentDto> commentList(Long bcno) {
-		return commentMapper.findAllByNo(bcno);
+	public List<BoardCommentDto> commentList(Long bno) {
+		return commentMapper.findAllByNo(bno);
 	}
 	
 	public BoardCommentDto commentOne(Long bcno) {
