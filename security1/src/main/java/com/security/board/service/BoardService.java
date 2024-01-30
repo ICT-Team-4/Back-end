@@ -37,6 +37,11 @@ public class BoardService {
 		
 	}
 	
+	//회원 번호로 해당 회원 게시글 목록 조회
+	public List<BoardDto> findAllByNo(Long acconutNo) {
+		return boardMapper.findAllByNo(acconutNo);
+	}
+	
 	//사용자 정보 조회
 	public AccountDto findByUsername(String username) {
 		return boardMapper.findByUsername(username);
@@ -75,10 +80,6 @@ public class BoardService {
 		return boardMapper.delete(dto);
 	}
 
-	//번호로
-	public List<BoardDto> findAllByNo(Long acconutNo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 }
