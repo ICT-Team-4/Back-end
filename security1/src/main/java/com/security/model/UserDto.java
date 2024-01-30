@@ -33,6 +33,8 @@ public class UserDto {
   @Builder.Default private String hobby="";
   @Builder.Default private String image="";
   @Builder.Default private String role="";
+  @Builder.Default private String height="";
+  @Builder.Default private String weight="";
   
   private String providerId;
   private String provider;
