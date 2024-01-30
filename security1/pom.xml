@@ -92,6 +92,15 @@
 			<scope>runtime</scope>
 		</dependency>
 		
+		<!-- JSON -->
+		<!--
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20210307</version>
+		</dependency>
+		-->
+		
 		<!-- WebSocket 라이브러리 -->
 		<!--
 		<dependency>
