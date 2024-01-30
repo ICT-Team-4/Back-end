@@ -79,6 +79,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         JWTOkens.createToken(principalDetails.getDto().getUsername(), payloads, expirationTime);
     Cookie cookie = new Cookie("Authorization", token);
     response.addCookie(cookie);
-
+    
   }
 }
