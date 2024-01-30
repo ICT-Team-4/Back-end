@@ -3,12 +3,17 @@ import pandas as pd
 import os
 
 def line(name):
-    # csv_data = np.loadtxt('amount_of_food.csv', delimiter=',')
     path = os.path.dirname(os.path.abspath(__file__))
-    df = pd.read_csv(path+"/food_public.csv", encoding='utf8')
-    # print("path"+path)
-    print(df)
-    # return  df.values[df.values[:,0]==name]
+    loc = path + '\\food_public.csv'
+    # print(loc)
+    df = pd.read_csv(loc, encoding='cp949')
+    arr = ('식품명','영양성분함량기준량','에너지(kcal)','수분(g)','단백질(g)','지방(g)','회분(g)','탄수화물(g)')
+    df1 = pd.DataFrame(df, columns=arr)
+    # print(df1)
+    # print(df1[df1['식품명']==name])
+    # print(df1[df1['식품명']==name])
+    # print(dict(zip(tuple(df1.columns),tuple(df1[df1['식품명']==name].values))))
+    return df1[df1['식품명']==name].values
 def lineArr():
     # csv_data = np.loadtxt('amount_of_food.csv', delimiter=',')
     path = os.path.dirname(os.path.abspath(__file__))
