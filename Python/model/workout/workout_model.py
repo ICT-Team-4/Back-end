@@ -87,9 +87,29 @@ def workout_delete(conn,cal_id):
             conn.commit()
             return cursor.rowcount
         except Exception as e:
-            print('모든 데이터 조회시 오류:', e)
+            print('데이터 삭제시 오류:', e)
             return None
 
 
-def workout_update(conn,cal_id,date):
-    print(cal_id, "diet_update :",date)
+def workout_update(conn,cal_id,list_):
+    print(cal_id, "diet_update :",list_)
+    # test = []  # 캘린더 테이블
+    # test.append(cal_id)
+    # test.append(list_['DESCRIPTION'])  # 제목
+    # test.append(list_['MEMO'])  # 메모,내용
+    # test.append(list_['CATEGORY'])  # 운동 종류
+    # test.append(list_['COUNTS'])  # 운동 횟수
+    # test.append(list_['WEIGHT'])  # 무게
+    # test.append(list_['END_DATE'])  # 운동 시간
+    # print('workout_update', cal_id, ":", test)
+    # sql = f"UPDATE calendar SET DESCRIPTION='{list_['DESCRIPTION']}', MEMO='{list_['MEMO']}', END_DATE=TO_DATE('{list_['END_DATE']}','YYYY-MM-DD HH24:MI') WHERE calendar_no={cal_id}"
+    # sql2 = f"UPDATE workout SET CATEGORY='{list_['CATEGORY']}' ,COUNTS='{list_['COUNTS']}' , WEIGHT='{list_['WEIGHT']}' WHERE calendar_no={cal_id})"
+    # with conn.cursor() as cursor:
+    #     try:
+    #         cursor.execute()
+    #         conn.commit()
+    #         return cursor.rowcount
+    #     except Exception as e:
+    #         # conn.rollback()
+    #         print('데이터 수정시 오류:', e)
+    #         return 0
