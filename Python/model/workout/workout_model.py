@@ -71,7 +71,7 @@ def workout_selectAll(conn, user_id, date):
             date_.append(user_id)
             print(date_,'date_이건가..?')
             cursor.execute(
-                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN workout w ON c.calendar_no = w.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER by time",
+                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,like_date FROM calendar c JOIN workout w ON c.calendar_no = w.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER by time",
                 date_)
             return cursor.fetchall()
         except Exception as e:
