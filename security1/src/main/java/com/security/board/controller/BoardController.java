@@ -1,6 +1,7 @@
 package com.security.board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,8 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardDto;
+import com.security.board.dto.FriendDto;
 import com.security.board.service.BoardService;
+import com.security.util.JWTOkens;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin
@@ -27,6 +33,22 @@ public class BoardController {
 		this.boardService = boardService;
 	}
 	
+	//현재 로그인 중인 사용자 정보 조회
+	@GetMapping("/boards/account")
+	public ResponseEntity<AccountDto> accountInfo(HttpServletRequest request) {
+		  
+		String token = request.getHeader("Authorization").split(" ")[1].trim();
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String username = payload.get("sub").toString();
+		
+		AccountDto accountInfo = boardService.findByUsername(username);
+		
+		System.out.println(accountInfo);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(accountInfo);
+		  
+	}
+	
 	//게시글 전체 조회
 	@GetMapping("/boards")
 	public ResponseEntity<List<BoardDto>> boardAllList() {
@@ -36,6 +58,16 @@ public class BoardController {
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(allList);
 	}
 	
+	//특정 회원의 게시글 전체 조회
+	@GetMapping("/boards/friends/{accountNo}") 
+	public ResponseEntity<List<BoardDto>> boardAllListByNo(@PathVariable Long acconutNo) {
+		
+		List<BoardDto> allListNo = boardService.findAllByNo(acconutNo);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(allListNo);
+		
+	}
+	
 	//특정 게시글 상세 조회
 	@GetMapping("/boards/{bno}")
 	public ResponseEntity<BoardDto> boardOneList(@PathVariable Long bno){
@@ -43,7 +75,21 @@ public class BoardController {
 		BoardDto oneList = boardService.findByOne(bno);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(oneList);
+	}
+	
+	//친구 목록 출력
+	@GetMapping("/boards/friend")
+	public ResponseEntity<List<FriendDto>> boardFriendList(AccountDto dto, HttpServletRequest request) {
 		
+		String token = request.getHeader("Authorization").split(" ")[1].trim();
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String username = payload.get("sub").toString();
+		
+		List<FriendDto> friendsInfo = boardService.findFriendByUsername(username);
+		
+		System.out.println(friendsInfo);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(friendsInfo);	
 	}
 	
 	//게시글 등록
