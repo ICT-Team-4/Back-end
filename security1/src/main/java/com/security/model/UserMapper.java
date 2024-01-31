@@ -16,4 +16,5 @@ public interface UserMapper {
   UserDto findAccountByProviderId(String providerId);
   
   UserDto findMemberInfoByUsername(String username);
+  
 }

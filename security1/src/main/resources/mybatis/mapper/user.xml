@@ -9,7 +9,7 @@
 		<selectKey keyProperty="accountNo" resultType="long" order="BEFORE">
 			SELECT SEQ_ACCOUNT.NEXTVAL FROM DUAL
 		</selectKey> 
-		
+		<!--  
 		INSERT INTO 
 			ACCOUNT(
 				ACCOUNT_NO, USERNAME, PASSWORD, NAME, GENDER, 
@@ -19,6 +19,21 @@
 				#{accountNo}, #{username}, #{password}, #{name}, #{gender, jdbcType=VARCHAR}, 
 				#{age}, #{address}, #{hobby}, default, default, #{image}
 				)
+		-->
+		INSERT ALL 
+		INTO ACCOUNT(
+					ACCOUNT_NO, USERNAME, PASSWORD, NAME, GENDER, 
+					AGE, ADDRESS, HOBBY, ENROLL_DATE, Role, IMAGE
+					) 
+			 VALUES (
+			 		#{accountNo}, #{username}, #{password}, #{name}, #{gender, jdbcType=VARCHAR}, 
+					#{age}, #{address}, #{hobby}, default, default, #{image}
+					)
+		INTO INBODY (ACCOUNT_NO, HEIGHT, WEIGHT) 
+			 VALUES (#{accountNo}, {height}, {weight})
+		
+		SELECT * FROM DUAL;
+		
 	</insert>
 		
 	<insert id="insertSocial" parameterType="UserDto">
@@ -63,21 +78,5 @@
 			FROM ACCOUNT a				     
 		
 	</select>
-	<!--  
-	<update id="updateMemberInfo" parameterType="MemberDto">	
-		UPDATE member
-		SET user_nick=#{username},
-		user_height=#{userHeight},
-		user_weight=#{userWeight},
-		user_email=#{userEmail},
-		user_gender=#{userGender},
-		user_sport_hard=#{userSportHard},
-		user_cal=#{userCal},
-		user_name=#{userName},
-		user_uid=#{userUid},
-		user_pwd=#{userPwd}
-		WHERE user_id=#{userId}	
-	</update>
-	-->
 	
 </mapper>

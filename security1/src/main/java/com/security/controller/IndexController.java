@@ -87,7 +87,7 @@ public class IndexController {
 	    return "joinForm";
 	  }
 	
-	
+	 
 	  @PostMapping("/join")
 	  public String join(UserDto dto) {
 	    dto.setPassword(passwordEncorder.encode(dto.getPassword()));
@@ -96,7 +96,7 @@ public class IndexController {
 	    System.out.println(dto);
 	    return "redirect:/loginForm";
 	  }
-	
+
 	  @Secured("ROLE_ADMIN")
 	  @GetMapping("/info")
 	  public @ResponseBody String info() {
