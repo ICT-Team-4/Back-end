@@ -23,8 +23,8 @@ class Account(Resource):
         # return jsonify(dict(zip(list_,(user,diet1,workout1))))
 
         conn = oracle.connectDatabase()
-        user = oracle.selectOne(conn, user_id)
-        account_data = user
+        # user = oracle.selectOne(conn, user_id)
+        # account_data = user
         diet1 = None
         workout1 = None
         dof = request.args.get('hobby')
@@ -39,7 +39,7 @@ class Account(Resource):
             workout1 = list(workout1.reshape(workout1.shape[0]))
 
         return jsonify({
-            'account': account_data,
+            # 'account': account_data,
             'diet': diet1,
             'workout': workout1
         })
