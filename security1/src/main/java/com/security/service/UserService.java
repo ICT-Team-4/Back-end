@@ -24,8 +24,9 @@ public class UserService {
 	
 	  @Transactional
 	  public int insertMember(UserDto dto) {
-
-	    return usermapper.insertMember(dto);
+		  int member = usermapper.insertMember(dto);
+		  int bodysize = usermapper.insertMemberInBody(dto);
+	    return member + bodysize ;
 	  }
 	 
 	  @Transactional

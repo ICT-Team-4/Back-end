@@ -11,6 +11,9 @@ public interface UserMapper {
   
   int insertMemberWithSocial(UserDto dto);
   
+  int insertMemberInBody(UserDto dto);
+  
+  
   UserDto findAccountByUsername(String username);
 
   UserDto findAccountByProviderId(String providerId);
