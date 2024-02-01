@@ -42,7 +42,7 @@ def workout_calendar(conn, user_id):
     with conn.cursor() as cursor:
         try:
             cursor.execute(
-                f"SELECT DISTINCT to_char(TRUNC(start_postdate),'YYYY-MM-DD') time FROM calendar c JOIN workout w ON c.calendar_no = w.calendar_no WHERE account_no = :1",
+                f"SELECT DISTINCT to_char(TRUNC(end_postdate),'YYYY-MM-DD') time FROM calendar c JOIN workout w ON c.calendar_no = w.calendar_no WHERE account_no = :1 ORDER BY time",
                 user_id)
             return cursor.fetchall()
         except Exception as e:
