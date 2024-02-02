@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,9 +25,11 @@ import jakarta.servlet.http.Part;
 public class RestApiController {
 
 	private final UserService userService;
+	private BCryptPasswordEncoder passwordEncoder;
 
-    public RestApiController(UserService userService) {
+    public RestApiController(UserService userService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 	
 	  @GetMapping("home")
@@ -39,6 +42,7 @@ public class RestApiController {
 	    return "<h1>token</h1>";
 	  }
 	  
+
 	  @PostMapping("/joinMember")
 	    public ResponseEntity<String> joinMember(
 	            @RequestParam("name") String name,
@@ -56,7 +60,7 @@ public class RestApiController {
 	            UserDto dto = new UserDto();
 	            dto.setName(name);
 	            dto.setUsername(username);
-	            dto.setPassword(password);
+	            dto.setPassword(passwordEncoder.encode(password));
 	            dto.setHeight(height);
 	            dto.setWeight(weight);
 	            dto.setAddress(address);

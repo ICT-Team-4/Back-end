@@ -19,15 +19,15 @@ public class IndexController {
 
 																											
 	  private UserService userService; // 필드 주입
-	  private BCryptPasswordEncoder passwordEncorder;
+	  private BCryptPasswordEncoder passwordEncoder;
 	
 	  // 필드 주입의 단점
 	  // 테스트 코드 작성 시 정보를 가져올 수 없다
 	
 	  // 생성자 주입
-	  public IndexController(UserService userService, BCryptPasswordEncoder passwordEncorder) {
+	  public IndexController(UserService userService, BCryptPasswordEncoder passwordEncoder) {
 	    this.userService = userService;
-	    this.passwordEncorder = passwordEncorder;
+	    this.passwordEncoder = passwordEncoder;
 	  }
 	
 	  @GetMapping("/test/login")
@@ -90,7 +90,7 @@ public class IndexController {
 	 
 	  @PostMapping("/join")
 	  public String join(UserDto dto) {
-	    dto.setPassword(passwordEncorder.encode(dto.getPassword()));
+	    dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 	    dto.setRole("ROLE_USER");
 	    userService.insertMember(dto);
 	    System.out.println(dto);
