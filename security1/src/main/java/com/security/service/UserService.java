@@ -24,8 +24,15 @@ public class UserService {
 	
 	  @Transactional
 	  public int insertMember(UserDto dto) {
+		  int member = usermapper.insertMember(dto);
+		  
+		  UserDto bringNo = usermapper.findAccountByUsername(dto.getUsername());
+		  long accountNo = bringNo.getAccountNo();
 
-	    return usermapper.insertMember(dto);
+		  dto.setAccountNo(accountNo);
+		  int bodysize = usermapper.insertMemberInBody(dto);
+		  
+	    return member + bodysize ;
 	  }
 	 
 	  @Transactional
