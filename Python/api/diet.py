@@ -116,8 +116,8 @@ class Diet(Resource):
         # print(type(args))
         # imagedb
         image = args['DIET_IMAGE']
-        print('image', image == '')
-        if image != '':
+        print('image', image == '', image==None)
+        if image != None and image != '':
             conn = imagedb.connectDatabase()
             data = imagedb.insert(conn)
             str1 = 'C:\\Users\\user\\Upload\\' + str(data[0]) + '.png'
@@ -135,9 +135,12 @@ class Diet(Resource):
         return data #테이블 2개여서 성공이면 2이다
     def put(self,user_id):
         args = self.parser.parse_args()
-        print('args',args)
+        # print('args',args)
         conn = oracle.diet_connectDatabase()
-        # data = oracle.diet_update(conn, user_id)
+        data = oracle.diet_update(conn, user_id,args)
+        oracle.diet_close(conn)
+        return data
+
     def delete(self,user_id):
         print('data', user_id)
         conn = oracle.diet_connectDatabase()

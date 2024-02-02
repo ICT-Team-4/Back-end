@@ -132,12 +132,15 @@ def diet_delete(conn,cal_id):
             return None
 
 def diet_update(conn,cal_id,data):
-    print(cal_id, "diet_update :",data)
-    # with conn.cursor() as cursor:
-    #     try:
-    #         cursor.execute(f"delete calendar where calendar_no = {cal_id}")
-    #         conn.commit()
-    #         return cursor.rowcount
-    #     except Exception as e:
-    #         print('모든 데이터 조회시 오류:', e)
-    #         return None
+    print(cal_id, "diet_update :",data['DESCRIPTION']) # END_DATE
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute(f"UPDATE calendar SET DESCRIPTION='{data['DESCRIPTION']}',MEMO='{data['MEMO']}',end_postdate=TO_DATE('{data['END_DATE']}' , 'YYYY-MM-DD HH24:MI:SS') WHERE calendar_no = {cal_id}")
+            if cursor.rowcount != 0:
+                cursor.execute(f"UPDATE diet SET FOOD='{data['FOOD']}',FOOD_WEIGHT={data['FOOD_WEIGHT']},DIET_IMAGE='{data['DIET_IMAGE']}' WHERE calendar_no = {cal_id}")
+            conn.commit()
+
+            return cursor.rowcount
+        except Exception as e:
+            print('모든 데이터 조회시 오류:', e)
+            return None
