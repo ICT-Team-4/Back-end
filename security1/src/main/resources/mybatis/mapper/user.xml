@@ -20,6 +20,12 @@
 				#{age}, #{address}, #{hobby}, default, default, #{image}
 				)
 	</insert>
+	
+	<insert id="insertMemberInBody" parameterType="UserDto">
+        INSERT INTO INBODY (ACCOUNT_NO,HEIGHT, WEIGHT) 
+        VALUES (#{accountNo}, #{height}, #{weight})
+    </insert>
+	
 		
 	<insert id="insertSocial" parameterType="UserDto">
 		INSERT INTO SOCIAL(ACCOUNT_NO, PROVIDER_ID, PROVIDER) 

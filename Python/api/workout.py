@@ -39,16 +39,17 @@ class Workout(Resource):
             conn = oracle.workout_connectDatabase()
             workout_all = oracle.workout_selectAll(conn,user_id,dof)
             oracle.workout_close(conn)
-            workoutDiary = []
-            for i in range(len(workout_all)):
-                id = 41 if workout_all[i][4] == None else workout_all[i][4]
-                print(id,'id')
-                str1 = 'C:\\Users\\user\\Upload\\' + str(id) + '.png'
-
-                with open(str1, "rb") as f:
-                    image = base64.b64encode(f.read())
-                    workoutDiary.append(list(workout_all[i][4])+list(["data:image/png;base64,"+str(image)[2:-2]])+list(workout_all[i][5:]))
-            print(len(workoutDiary))
+            print('workout_all',workout_all)
+            # workoutDiary = []
+            # for i in range(len(workout_all)):
+            #     id = 41 if workout_all[i][4] == None else workout_all[i][4]
+            #     print(id,'id')
+            #     str1 = 'C:\\Users\\user\\Upload\\' + str(id) + '.png'
+            #
+            #     with open(str1, "rb") as f:
+            #         image = base64.b64encode(f.read())
+            #         workoutDiary.append(list(workout_all[i][4])+list(["data:image/png;base64,"+str(image)[2:-2]])+list(workout_all[i][5:]))
+            # print(len(workoutDiary))
 
             list_ = ['chart1','workout','chart2','chart3']
             lis = ['Red', 'Good', 'Orange', 'Yellow', 'Green', 'Blue']
@@ -82,15 +83,15 @@ class Workout(Resource):
         print(args,type(args),'workout_args')
         # imagedb
         image = args['CATEGORY']
-        print('image', image == '')
-        if image != '':
-            conn = imagedb.connectDatabase()
-            data = imagedb.insert(conn)
-            str1 = 'C:\\Users\\user\\Upload\\' + str(data[0]) + '.png'
-            args['CATEGORY'] = str(data[0])
-            with open(str1, "bw") as f:
-                f.write(base64.b64decode(image.encode()))
-
+        # print('image', image == '')
+        # if image != '':
+        #     conn = imagedb.connectDatabase()
+        #     data = imagedb.insert(conn)
+        #     str1 = 'C:\\Users\\user\\Upload\\' + str(data[0]) + '.png'
+        #     args['CATEGORY'] = str(data[0])
+        #     with open(str1, "bw") as f:
+        #         f.write(base64.b64decode(image.encode()))
+        #
         for t in args:
             print(t, ':', args[t])
 

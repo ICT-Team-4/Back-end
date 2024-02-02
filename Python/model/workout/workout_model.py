@@ -23,6 +23,7 @@ def workout_close(conn):  # 커넥션객체 닫기
 
 # 운동 추가
 def workout_insert(conn, user_id, list_):
+
     test = []  # 캘린더 테이블
     test.append(user_id)
     test.append(list_['DESCRIPTION']) #제목
@@ -69,10 +70,11 @@ def workout_selectAll(conn, user_id, date):
             now = dt.datetime.now()
             date_.append(date if date != None else now.strftime('%Y-%m-%d'))
             date_.append(user_id)
+            print(date if date != None else now.strftime('%Y-%m-%d'))
             print(date_,'date_이건가..?')
-            cursor.execute(
-                f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,account_no FROM calendar c JOIN workout w ON c.calendar_no = w.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = :1 AND account_no = :2 ORDER by time",
-                date_)
+            sql = f"SELECT c.calendar_no,description,memo,category,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') time,accuracy,counts,weight,like_date FROM calendar c JOIN workout w ON c.calendar_no = w.calendar_no LEFT JOIN calendar_likes cl ON c.calendar_no = cl.calendar_no WHERE TRUNC(end_postdate) = '{date if date != None else now.strftime('%Y-%m-%d')}' AND account_no = {user_id} ORDER by time"
+            print('sql:',sql)
+            cursor.execute(sql)
             return cursor.fetchall()
         except Exception as e:
             print('모든 데이터 조회시 오류:', e)
