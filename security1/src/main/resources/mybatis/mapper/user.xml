@@ -22,7 +22,7 @@
 	</insert>
 	
 	<insert id="insertMemberInBody" parameterType="UserDto">
-        INSERT INTO INBODY (ACCOUNT_NO, HEIGHT, WEIGHT) 
+        INSERT INTO INBODY (ACCOUNT_NO,HEIGHT, WEIGHT) 
         VALUES (#{accountNo}, #{height}, #{weight})
     </insert>
 	
