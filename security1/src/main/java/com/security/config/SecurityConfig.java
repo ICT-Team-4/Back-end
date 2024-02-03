@@ -15,11 +15,14 @@ import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.filter.CorsFilter;
 import com.security.config.jwt.JwtAuthenticationFilter;
 import com.security.config.jwt.JwtAuthorizationFilter;
+import com.security.config.oauth.OAuth2SuccessHandler;
 import com.security.config.oauth.PrincipalOauth2UserService;
 import com.security.model.UserMapper;
 
+import lombok.extern.log4j.Log4j2;
 
 
+@Log4j2
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true) // secured 어노테이션 활성화,
@@ -61,8 +64,14 @@ public class SecurityConfig {
             .requestMatchers("/api/v1/admin/**").hasRole("ADMIN").anyRequest().permitAll())
         .formLogin(
             t -> t.loginPage("/loginForm").loginProcessingUrl("/login").defaultSuccessUrl("/"))
-        .oauth2Login(t -> t.loginPage("/loginForm")
-            .userInfoEndpoint(endpoint -> endpoint.userService(principalOauth2UserService)));
+        .oauth2Login(t -> t
+        	.loginPage("/loginForm")
+            .userInfoEndpoint(endpoint -> endpoint.userService(principalOauth2UserService))
+            .defaultSuccessUrl("http://localhost:3000/")
+            .successHandler((request, response, authentication)->{
+            	log.info("authentication: ", authentication);
+            	response.getWriter().println("success");
+            }).successHandler(new OAuth2SuccessHandler()));
 
     return http.build();
   }
