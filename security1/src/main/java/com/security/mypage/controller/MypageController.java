@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.security.mypage.dto.MypageAccountDto;
 import com.security.mypage.dto.MypageGameRoomDto;
 import com.security.mypage.dto.MypageWorkAccuracyDto;
+import com.security.mypage.dto.MypageWorkBigThreeDto;
 import com.security.mypage.service.MypageService;
 import com.security.util.JWTOkens;
 
@@ -32,7 +33,7 @@ public class MypageController {
 	@GetMapping("/mypages/account")
 	public ResponseEntity<MypageAccountDto> accountInfo(HttpServletRequest request) {
 		  
-		String token = request.getHeader("Authorization").split(" ")[1].trim();
+		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String username = payload.get("sub").toString();
 		
@@ -56,5 +57,10 @@ public class MypageController {
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findAllByNo);
 		
 	}
-	
+	@GetMapping("/mypages/workBigThree/{accountNo}")
+	public ResponseEntity<List<MypageWorkBigThreeDto>> bigThreeInfo(@PathVariable int accountNo){
+		List<MypageWorkBigThreeDto> findBigThreeAllByNo = mypageService.findBigThreeAllByNo(accountNo);
+		return  ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findBigThreeAllByNo);
+		
+	}
 }

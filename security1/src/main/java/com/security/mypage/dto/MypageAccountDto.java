@@ -30,7 +30,6 @@ public class MypageAccountDto {
 	private int weight;
 	private String game_image;
 	private String nickname;
-	private int mmr;
 	private double skeletalMuscle; //SKELETAL_MUSCLE
 	private double bodyFatMass; //BODY_FAT_MASS
 	private double bodyFatPercentage; //BODY_FAT_PERCENTAGE

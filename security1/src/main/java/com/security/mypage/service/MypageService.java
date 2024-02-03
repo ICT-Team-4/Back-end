@@ -8,6 +8,7 @@ import com.security.mypage.dao.MypageMapper;
 import com.security.mypage.dto.MypageAccountDto;
 import com.security.mypage.dto.MypageGameRoomDto;
 import com.security.mypage.dto.MypageWorkAccuracyDto;
+import com.security.mypage.dto.MypageWorkBigThreeDto;
 
 @Service
 public class MypageService {
@@ -28,6 +29,10 @@ public class MypageService {
 	
 	public List<MypageWorkAccuracyDto> findAccuracyAllByNo(int accountNo){
 		return mypageMapper.findAccuracyAllByNo(accountNo);
+	}
+	
+	public List<MypageWorkBigThreeDto> findBigThreeAllByNo(int accountNo){
+		return mypageMapper.findBigThreeAllByNo(accountNo);
 	}
 	
 	

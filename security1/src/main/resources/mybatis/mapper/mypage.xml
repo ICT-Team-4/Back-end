@@ -17,7 +17,6 @@
 				,weight
 				,game_image
 				,nickname
-				,mmr 
 				,SKELETAL_MUSCLE
 				,BODY_FAT_MASS
 				,BODY_FAT_PERCENTAGE
@@ -50,4 +49,14 @@
 		GROUP BY CATEGORY,end_postdate 
 		ORDER BY TRUNC(end_postdate)
 	</select>
+	<select id="findBigThreeAllByNo">
+		select CATEGORY,SUM(weight) weight,end_postdate 
+		from workout w,calendar c 
+		WHERE w.calendar_no = c.calendar_no 
+		    and (category='벤치프레스' or category='데드리프트' or category='스쿼트') 
+		    and account_no = #{accountNo}
+		GROUP BY CATEGORY,end_postdate
+		ORDER BY TRUNC(end_postdate)
+	</select>
+	
 </mapper> 

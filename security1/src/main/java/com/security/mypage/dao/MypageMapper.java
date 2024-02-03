@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.security.mypage.dto.MypageAccountDto;
 import com.security.mypage.dto.MypageGameRoomDto;
 import com.security.mypage.dto.MypageWorkAccuracyDto;
+import com.security.mypage.dto.MypageWorkBigThreeDto;
 
 @Mapper
 public interface MypageMapper {
@@ -19,6 +20,6 @@ public interface MypageMapper {
 	
 	//운동별 정확도 증가 추이
 	public List<MypageWorkAccuracyDto> findAccuracyAllByNo(int accountNo);
-	
-	
+	//3대 운동 증가 추이(횟수?)
+	public List<MypageWorkBigThreeDto> findBigThreeAllByNo(int accountNo);
 }
