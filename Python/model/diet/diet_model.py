@@ -87,7 +87,7 @@ def diet_selectOne(conn, cal_id):  # 합치기 귀찮아서...
             data = data if data != 'false' else 0
             print(data,'diet_data')
             cursor.execute(
-                f"SELECT c.calendar_no,description,memo,food,to_char(start_postdate,'YYYY-MM-DD HH24:MI:SS') s_time,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') e_time,diet_image,food_weight,account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE c.calendar_no = {data}")
+                f"SELECT c.calendar_no,description,memo,food,to_char(start_postdate,'YYYY-MM-DD HH24:MI:SS') s_time,to_char(end_postdate,'YYYY-MM-DD HH24:MI:SS') e_time,diet_image,food_weight,    account_no FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE c.calendar_no = {data}")
             return cursor.fetchone()
         except Exception as e:
             print('레코드 하나 조회시 오류:', e)

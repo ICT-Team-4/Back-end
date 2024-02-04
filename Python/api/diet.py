@@ -32,8 +32,11 @@ class Diet(Resource):
                 conn = oracle.diet_connectDatabase()
                 str1 = oracle.diet_selectOne(conn, cal)
                 oracle.diet_close(conn)
-                print(str1,'str1')
-                return str1
+                st = pub.line(str1[3])
+                strArr = list(str1)
+                strArr.append(list(st[0]))
+                print(strArr,'str1')
+                return jsonify(strArr)
 
 
             # print(dof)

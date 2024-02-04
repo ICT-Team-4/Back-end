@@ -33,7 +33,7 @@ def workout_insert(conn, user_id, list_):
     test.append(list_['WEIGHT']) #무게
     test.append(list_['END_DATE']) #운동 시간
     print('workout_insert',user_id, ":", test)
-    sql = f"INSERT ALL INTO calendar VALUES(SEQ_CALENDAR.nextval, {user_id}, '{list_['DESCRIPTION']}', '{list_['MEMO']}', DEFAULT,TO_DATE('{list_['END_DATE']}' , 'YYYY-MM-DD HH24:MI')) INTO workout VALUES((SEQ_CALENDAR.nextval),'{list_['CATEGORY']}','0','{list_['COUNTS']}', '{list_['WEIGHT']}') SELECT * FROM DUAL"
+    sql = f"INSERT ALL INTO calendar VALUES(SEQ_CALENDAR.nextval, {user_id}, '{list_['DESCRIPTION']}', '{list_['MEMO']}', DEFAULT,TO_DATE('{list_['END_DATE']}' , 'YYYY-MM-DD HH24:MI')) INTO workout VALUES((SEQ_CALENDAR.nextval),'{list_['CATEGORY']}',null,'{list_['COUNTS']}', '{list_['WEIGHT']}') SELECT * FROM DUAL"
     with conn.cursor() as cursor:
         try:
             # cursor.execute(f"INSERT ALL INTO calendar VALUES(SEQ_CALENDAR_CALENDAR_NO.nextval, :1, :2, :3,default,default) INTO workout VALUES((SEQ_CALENDAR_CALENDAR_NO.nextval), :4, :5, :6, :7) SELECT * FROM DUAL", test)
