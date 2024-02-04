@@ -73,10 +73,20 @@
 	    WHERE BNO = #{bno}
 	</update>
 	
-	<!-- 좋아요 누를 때 마다 좋아요 수 증가 -->
-	<insert id="incrementLikeCount" parameterType="Long">
-		INSERT INTO BOARD_LIKES VALUES(#{bno}, #{accountNo}, #{likeDate})
+	<!-- 좋아요 누른 회원인지 확인 -->
+	<select id="findByLike" parameterType="BoardLikesDto" resultType="int">
+		SELECT COUNT(BNO) FROM BOARD_LIKES WEHRE BNO=#{bno} AND ACCOUNT_NO=#{account_no} 
+	</select>
+	
+	<!-- 좋아요 버튼 클릭 -->
+	<insert id="insertLike" parameterType="BoardLikesDto">
+		INSERT INTO BOARD_LIKES VALUES(#{bno}, #{accountNo}, SYSDATE)
 	</insert>
+	
+	<!-- 좋아요 이미 눌렀을 시 삭제 -->
+	<delete id="deleteLike" parameterType="BoardLikesDto">
+		DELETE FROM BOARD_LIKES WHERE BNO=#{bno} AND ACCOUNT_NO=#{accountNo}
+	</delete>
 	
 	<!-- 게시글 등록 -->
 	<insert id="save" parameterType="BoardDto">
