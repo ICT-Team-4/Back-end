@@ -18,6 +18,14 @@
     	SELECT * FROM BOARD_COMMENT WHERE BCNO=#{bcno}
     </select>
     
+    <!-- 게시판에서 사용자 정보 조회 -->
+	<select id="findByUsername" parameterType="String" resultType="AccountDto">
+		SELECT
+			ACCOUNT_NO
+		FROM ACCOUNT
+		WHERE USERNAME = #{username}
+	</select>
+    
     <!-- 댓글 등록 -->
     <insert id="insert" parameterType="BoardCommentDto">
     	<selectKey keyProperty="bcno" order="BEFORE" resultType="Long">
@@ -39,5 +47,19 @@
     	UPDATE BOARD_COMMENT SET BC_COMMENT =#{bcComment}, EDIT_DATE=SYSDATE WHERE BCNO=#{BCNO}
     </update>
     
-
+    <!-- 댓글 좋아요 누른 여부 확인 -->
+	<select id="findBycommentLike" parameterType="CommentLikeDto" resultType="Long">
+		SELECT COUNT(BCNO) FROM BOARD_COMMENT_LIKES WHERE BCNO=#{bcno} AND ACCOUNT_NO=#{accountNo} 
+	</select>
+	
+	<!-- 댓글 좋아요 버튼 클릭 -->
+	<insert id="insertCommentLike" parameterType="CommentLikeDto">
+		INSERT INTO BOARD_COMMENT_LIKES VAELUS(BCNO, ACCOUNT_NO, SYSDATE)
+	</insert>
+	
+	<!-- 댓글 좋아요 삭제 -->
+	<delete id="deleteCommentLike" parameterType="CommentLikeDto">
+		DELETE FROM BOARD_COMMENT_LIKES WHERE BCNO=#{bcno} AND ACCOUNT_NO=#{accountNo}
+	</delete>
+	
 </mapper>

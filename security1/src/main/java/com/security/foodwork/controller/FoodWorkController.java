@@ -30,7 +30,7 @@ public class FoodWorkController {
 	@GetMapping("/foodworks/account")
 	public ResponseEntity<AccountFoodWorkDto> accountInfo(HttpServletRequest request){
 		System.out.println("Authorization");
-		String token = request.getHeader("Authorization").split(" ")[1].trim();
+		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String username = payload.get("sub").toString();
 		

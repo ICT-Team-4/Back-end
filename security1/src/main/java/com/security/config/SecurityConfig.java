@@ -58,7 +58,10 @@ public class SecurityConfig {
         .addFilter(new JwtAuthenticationFilter(authenticationManager)) // AuthenticationManager
         .addFilter(new JwtAuthorizationFilter(authenticationManager, userMapper)) // AuthenticationManager
         .authorizeHttpRequests(t -> t.requestMatchers("/api/v1/user/**").authenticated()
-    		.requestMatchers("/api/v1/boards/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+        	.requestMatchers("/api/v1/boards/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+        	.requestMatchers("/api/v1/games/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+        	.requestMatchers("/api/v1/foodworks/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+        	.requestMatchers("/api/v1/mypages/**").hasAnyRole("USER", "MANAGER", "ADMIN")
             .requestMatchers("/api/v1/user/**").hasAnyRole("USER", "MANAGER", "ADMIN")
             .requestMatchers("/api/v1/manager/**").hasAnyRole("MANAGER", "ADMIN")
             .requestMatchers("/api/v1/admin/**").hasRole("ADMIN").anyRequest().permitAll())
