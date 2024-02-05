@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardDto;
+import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
 import com.security.board.dto.FriendDto;
 
@@ -42,6 +43,9 @@ public interface BoardMapper {
 	
 	//게시글 등록
 	int save(BoardDto dto);
+	
+	//게시글 등록 시 이미지 등록
+	int imageUpload(BoardImageDto dto);
 	
 	//게시글 수정
 	int update(BoardDto dto);

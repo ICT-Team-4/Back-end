@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.security.board.dao.BoardMapper;
 import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardDto;
+import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
 import com.security.board.dto.FriendDto;
 
@@ -53,10 +54,19 @@ public class BoardService {
 	
 	//게시글 등록
 	@Transactional
-	public int boardSave(BoardDto dto) {
+	public int boardSave(BoardDto BoardDto, BoardImageDto imageDto) {
 		
-		return boardMapper.save(dto);
+		int boardFlag = 0;
+		int imageFlag = 0;
 		
+		boardFlag = boardMapper.save(BoardDto);
+		imageFlag = boardMapper.imageUpload(imageDto);
+		
+		if(boardFlag == 1 && imageFlag == 1) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 	
 	//좋아요 버튼 클릭
