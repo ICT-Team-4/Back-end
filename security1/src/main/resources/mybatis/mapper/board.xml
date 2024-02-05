@@ -97,6 +97,10 @@
 		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_CATEGORY, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
     	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardCategory}, #{boardComment}, #{address}, null)
 	</insert>
+	<insert id="imageUpload" parameterType="BoardImageDto">
+		INSERT INTO BOARD_IMAGE(BNO, IMAGE, LINE_LOC) 
+		VALUES(SEQ_BOARD.CURRVAL, #{image}, #{lineLoc})
+	</insert>
 	
 	<!-- 게시글 수정 -->
 	<update id="update" parameterType="BoardDto">
