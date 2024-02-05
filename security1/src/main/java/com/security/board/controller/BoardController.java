@@ -140,6 +140,29 @@ public class BoardController {
 		int count = 0;
 		
 		count= boardService.like(bno, username);
+    
+		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
+		if(count == 1) {
+			message = "활성화";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		} else {
+			message = "비활성화";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		}
+	}
+	
+	//좋아요
+	@PostMapping("/boards/like/{bno}")
+	public ResponseEntity<String> boardLike(@PathVariable Long bno, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String username = payload.get("sub").toString();
+		
+		String message = "";
+		int count = 0;
+		
+		count= boardService.like(bno, username);
 		
 		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
 		if(count == 1) {
@@ -196,7 +219,7 @@ public class BoardController {
 		AccountDto accountDto = boardService.findByUsername(username);
 		
 		System.out.println(String.format("게시글 작성자 번호 : %s, 로그인한 사람 번호 : %s", boardDto.getAccountNo(), accountDto.getAccountNo()));
-		
+
 		if(!(boardDto.getAccountNo() == accountDto.getAccountNo())) {
 			message = "동일한 회원이 아닙니다";
 			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);

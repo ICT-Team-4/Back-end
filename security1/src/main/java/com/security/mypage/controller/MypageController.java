@@ -30,7 +30,7 @@ public class MypageController {
 		this.mypageService = mypageService;
 	}
 	
-	@GetMapping("/mypages/account")
+	@GetMapping("/mypages/account") //유저정보 가져오기
 	public ResponseEntity<MypageAccountDto> accountInfo(HttpServletRequest request) {
 		  
 		String token = request.getHeader("Authorization");
@@ -51,7 +51,7 @@ public class MypageController {
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findAllByNo);
 	}
-	@GetMapping("/mypages/workAccuracy/{accountNo}") //3대 운동 추이
+	@GetMapping("/mypages/workAccuracy/{accountNo}") //정확도
 	public ResponseEntity<List<MypageWorkAccuracyDto>> accuracyInfo(@PathVariable int accountNo){
 		List<MypageWorkAccuracyDto> findAllByNo = mypageService.findAccuracyAllByNo(accountNo);
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findAllByNo);
