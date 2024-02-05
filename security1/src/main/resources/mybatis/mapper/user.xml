@@ -9,7 +9,7 @@
 		<selectKey keyProperty="accountNo" resultType="long" order="BEFORE">
 			SELECT SEQ_ACCOUNT.NEXTVAL FROM DUAL
 		</selectKey> 
-		<!--  
+		
 		INSERT INTO 
 			ACCOUNT(
 				ACCOUNT_NO, USERNAME, PASSWORD, NAME, GENDER, 
@@ -19,22 +19,13 @@
 				#{accountNo}, #{username}, #{password}, #{name}, #{gender, jdbcType=VARCHAR}, 
 				#{age}, #{address}, #{hobby}, default, default, #{image}
 				)
-		-->
-		INSERT ALL 
-		INTO ACCOUNT(
-					ACCOUNT_NO, USERNAME, PASSWORD, NAME, GENDER, 
-					AGE, ADDRESS, HOBBY, ENROLL_DATE, Role, IMAGE
-					) 
-			 VALUES (
-			 		#{accountNo}, #{username}, #{password}, #{name}, #{gender, jdbcType=VARCHAR}, 
-					#{age}, #{address}, #{hobby}, default, default, #{image}
-					)
-		INTO INBODY (ACCOUNT_NO, HEIGHT, WEIGHT) 
-			 VALUES (#{accountNo}, {height}, {weight})
-		
-		SELECT * FROM DUAL;
-		
 	</insert>
+	
+	<insert id="insertMemberInBody" parameterType="UserDto">
+        INSERT INTO INBODY (ACCOUNT_NO,HEIGHT, WEIGHT) 
+        VALUES (#{accountNo}, #{height}, #{weight})
+    </insert>
+	
 		
 	<insert id="insertSocial" parameterType="UserDto">
 		INSERT INTO SOCIAL(ACCOUNT_NO, PROVIDER_ID, PROVIDER) 

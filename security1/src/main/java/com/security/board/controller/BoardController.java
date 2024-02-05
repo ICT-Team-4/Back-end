@@ -1,5 +1,6 @@
 package com.security.board.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -12,14 +13,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardDto;
+import com.security.board.dto.BoardImageDto;
+import com.security.board.dto.BoardLikesDto;
 import com.security.board.dto.FriendDto;
 import com.security.board.service.BoardService;
 import com.security.util.JWTOkens;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -37,7 +43,7 @@ public class BoardController {
 	@GetMapping("/boards/account")
 	public ResponseEntity<AccountDto> accountInfo(HttpServletRequest request) {
 		  
-		String token = request.getHeader("Authorization").split(" ")[1].trim();
+		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String username = payload.get("sub").toString();
 		
@@ -81,7 +87,7 @@ public class BoardController {
 	@GetMapping("/boards/friend")
 	public ResponseEntity<List<FriendDto>> boardFriendList(AccountDto dto, HttpServletRequest request) {
 		
-		String token = request.getHeader("Authorization").split(" ")[1].trim();
+		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String username = payload.get("sub").toString();
 		
@@ -94,52 +100,136 @@ public class BoardController {
 	
 	//게시글 등록
 	@PostMapping("/boards")
-	public ResponseEntity<BoardDto> boardSave(@RequestBody BoardDto dto) {
+	public ResponseEntity<BoardDto> boardSave(
+			@RequestPart Long accountNo,
+			@RequestPart String title,
+			@RequestPart String boardCategory,
+			@RequestPart String boardComment,
+			@RequestPart String address,
+			@RequestPart MultipartFile image,
+			HttpServletRequest request
+		) throws IOException, ServletException {
 		
-		//추가 디테일 잡는 부분
-		//String message = "";
-		//int flag=0;
-		//flag = boardService.boardSave(dto);
-		/*
-		if(flag==0) {
-			message="게시글 등록 실패";
-			System.out.println(message);
-			return ResponseEntity.ok().header("Content-Type", "application/json; chrset=UTF-8").body(dto);
+		System.out.println("리퀘스트 겟 파츠"+request.getParts());
+		System.out.println("이미지 경로"+image);
+		System.out.println("dddd");
+		
+		BoardDto boardDto = new BoardDto();
+		boardDto.setAccountNo(accountNo);
+		boardDto.setTitle(title);
+		boardDto.setBoardCategory(boardCategory);
+		boardDto.setBoardComment(boardComment);
+		boardDto.setAddress(address);
+		BoardImageDto imageDto = new BoardImageDto();
+		
+		
+		boardService.boardSave(boardDto, imageDto);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(boardDto);
+	}
+	
+	//좋아요
+	@PostMapping("/boards/like/{bno}")
+	public ResponseEntity<String> boardLike(@PathVariable Long bno, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String username = payload.get("sub").toString();
+		
+		String message = "";
+		int count = 0;
+		
+		count= boardService.like(bno, username);
+    
+		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
+		if(count == 1) {
+			message = "활성화";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		} else {
+			message = "비활성화";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 		}
-		*/
+	}
+	
+	//좋아요
+	@PostMapping("/boards/like/{bno}")
+	public ResponseEntity<String> boardLike(@PathVariable Long bno, HttpServletRequest request) {
 		
-		boardService.boardSave(dto);
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String username = payload.get("sub").toString();
 		
-		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(dto);
+		String message = "";
+		int count = 0;
+		
+		count= boardService.like(bno, username);
+		
+		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
+		if(count == 1) {
+			message = "활성화";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		} else {
+			message = "비활성화";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		}
 	}
 	
 	//게시글 수정
-	@PutMapping("/boards")
-	public ResponseEntity<BoardDto> boardUpdate(BoardDto dto) {
-	
-		boardService.boardUpdate(dto);
+	@PutMapping("/boards/{bno}")
+	public ResponseEntity<String> boardUpdate(@PathVariable Long bno ,@RequestBody BoardDto dto, HttpServletRequest request) {
 		
-		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(dto);
-	}
-	
-	//게시글 삭제
-	@DeleteMapping("/boards/{bno}")
-	public ResponseEntity<String> boardDelete(@PathVariable Long bno) {
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String username = payload.get("sub").toString();
 		
 		String message = "";
 		int flag = 0;
 		
-		BoardDto dto = boardService.findByOne(bno);
+		AccountDto accountDto = boardService.findByUsername(username);
+		BoardDto boardDto = boardService.findByOne(bno);
 		
-		//현재 접속중인 사용자에 대한 정보를 받아오는 부분이 필요함
-		//일단은 임시 방편으로 지워지게만 만듬
-		flag = boardService.boardDelete(dto);
+		if(!(accountDto.getAccountNo() == boardDto.getAccountNo())) {
+			message = "등록한 사용자가 아닙니다.";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		}
+	
+		flag = boardService.boardUpdate(dto);
+		
+		if(flag == 0) {
+			message = "수정에 실패 했습니다";
+		}
+		
+		message = dto.getBno() +"번 게시글 수정 성공";
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+	}
+	
+	//게시글 삭제
+	@DeleteMapping("/boards/{bno}")
+	public ResponseEntity<String> boardDelete(@PathVariable Long bno, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String username = payload.get("sub").toString();
+			
+		String message = "";
+		int flag = 0;
+		
+		BoardDto boardDto = boardService.findByOne(bno);
+		AccountDto accountDto = boardService.findByUsername(username);
+		
+		System.out.println(String.format("게시글 작성자 번호 : %s, 로그인한 사람 번호 : %s", boardDto.getAccountNo(), accountDto.getAccountNo()));
+
+		if(!(boardDto.getAccountNo() == accountDto.getAccountNo())) {
+			message = "동일한 회원이 아닙니다";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		}
+
+		flag = boardService.boardDelete(boardDto);
 		
 		if(flag == 0) message = "삭제에 실패했습니다";
 		
 		message = "삭제 성공";
-		
-		
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 	}
