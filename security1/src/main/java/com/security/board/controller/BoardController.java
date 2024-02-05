@@ -1,5 +1,6 @@
 package com.security.board.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -12,15 +13,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardDto;
+import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
 import com.security.board.dto.FriendDto;
 import com.security.board.service.BoardService;
 import com.security.util.JWTOkens;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -95,11 +100,55 @@ public class BoardController {
 	
 	//게시글 등록
 	@PostMapping("/boards")
-	public ResponseEntity<BoardDto> boardSave(@RequestBody BoardDto dto) {
+	public ResponseEntity<BoardDto> boardSave(
+			@RequestPart Long accountNo,
+			@RequestPart String title,
+			@RequestPart String boardCategory,
+			@RequestPart String boardComment,
+			@RequestPart String address,
+			@RequestPart MultipartFile image,
+			HttpServletRequest request
+		) throws IOException, ServletException {
 		
-		boardService.boardSave(dto);
+		System.out.println("리퀘스트 겟 파츠"+request.getParts());
+		System.out.println("이미지 경로"+image);
+		System.out.println("dddd");
 		
-		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(dto);
+		BoardDto boardDto = new BoardDto();
+		boardDto.setAccountNo(accountNo);
+		boardDto.setTitle(title);
+		boardDto.setBoardCategory(boardCategory);
+		boardDto.setBoardComment(boardComment);
+		boardDto.setAddress(address);
+		BoardImageDto imageDto = new BoardImageDto();
+		
+		
+		boardService.boardSave(boardDto, imageDto);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(boardDto);
+	}
+	
+	//좋아요
+	@PostMapping("/boards/like/{bno}")
+	public ResponseEntity<String> boardLike(@PathVariable Long bno, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String username = payload.get("sub").toString();
+		
+		String message = "";
+		int count = 0;
+		
+		count= boardService.like(bno, username);
+    
+		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
+		if(count == 1) {
+			message = "활성화";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		} else {
+			message = "비활성화";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		}
 	}
 	
 	//좋아요
@@ -170,7 +219,7 @@ public class BoardController {
 		AccountDto accountDto = boardService.findByUsername(username);
 		
 		System.out.println(String.format("게시글 작성자 번호 : %s, 로그인한 사람 번호 : %s", boardDto.getAccountNo(), accountDto.getAccountNo()));
-		
+
 		if(!(boardDto.getAccountNo() == accountDto.getAccountNo())) {
 			message = "동일한 회원이 아닙니다";
 			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);

@@ -9,7 +9,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.security.websocket.chat.service.ChatService;
+
 import com.security.websocket.dto.ChatDto;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin
 @RequiredArgsConstructor
 public class ChatController {
-	
+
 	private SimpMessagingTemplate simpMessagingTemplate;
 	
 	private ChatService service;
@@ -35,7 +37,7 @@ public class ChatController {
     	System.out.println(dto.toString());
     	
     	service.insert(dto);
-    	
+
         simpMessagingTemplate.convertAndSend("/sub/chat/" + dto.getChattingNo(), dto);
     }
 
