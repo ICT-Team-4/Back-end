@@ -26,7 +26,7 @@ public class GameAccountController {
 	
 	@PutMapping("/games/account")
 	public ResponseEntity<GameAccountDto> gameAccountUpdate(GameAccountDto dto){
-		System.out.println("확인용"+dto.toString());
+//		System.out.println("확인용"+dto.toString());
 		gameAccountService.gameAccountUpdate(dto);
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(dto);
 	}
