@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.security.config.mail.MailSendService;
 import com.security.model.UserDto;
 import com.security.service.UserService;
 
@@ -25,6 +27,10 @@ import jakarta.servlet.http.Part;
 @RestController
 @CrossOrigin
 public class RestApiController {
+	
+	@Autowired
+	private MailSendService mailService;
+	
 
 	private final UserService userService;
 	private BCryptPasswordEncoder passwordEncoder;
@@ -46,17 +52,17 @@ public class RestApiController {
 	  
 
 	  @PostMapping("/joinMember")
-	    public ResponseEntity<String> joinMember(
-	            @RequestParam("name") String name,
-	            @RequestParam("username") String username,
-	            @RequestParam("password") String password,
-	            @RequestParam("height") String height,
-	            @RequestParam("weight") String weight,
-	            @RequestParam("address") String address,
-	            @RequestParam("age") String age,
-	            @RequestParam("gender") String gender,
-	            @RequestParam("hobby") String hobby,
-	            HttpServletRequest req
+	  public ResponseEntity<String> joinMember(
+			  @RequestParam("name") String name,
+			  @RequestParam("username") String username,
+			  @RequestParam("password") String password,
+			  @RequestParam("height") String height,
+			  @RequestParam("weight") String weight,
+			  @RequestParam("address") String address,
+			  @RequestParam("age") String age,
+			  @RequestParam("gender") String gender,
+			  @RequestParam("hobby") String hobby,
+			  HttpServletRequest req
 	    ) {
 	        try {
 	            UserDto dto = new UserDto();
@@ -77,6 +83,19 @@ public class RestApiController {
 	        } catch (Exception e) {
 	            return new ResponseEntity<>("회원가입 실패: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	        }
-	  }
+	  }////
 	  	
+	  //이메일 인증
+	  @GetMapping("/mailCheck")
+	  @ResponseBody
+	  public ResponseEntity<String> mailCheck(@RequestParam("email") String email) {
+	      try {
+	          System.out.println("이메일 요청이 들어옴!!!! : " + email);
+	          String result = mailService.joinEmail(email);
+	          return new ResponseEntity<>(result, HttpStatus.OK);
+	      } catch (Exception e) {
+	          return new ResponseEntity<>("에러 발생: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	      }
+	  }
+	  
 }
