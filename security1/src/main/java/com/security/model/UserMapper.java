@@ -20,4 +20,6 @@ public interface UserMapper {
   
   UserDto findMemberInfoByUsername(String username);
   
+  void leaveMember(long accountNo);
+  
 }

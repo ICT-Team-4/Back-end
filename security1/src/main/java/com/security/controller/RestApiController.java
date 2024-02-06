@@ -9,8 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,7 +87,19 @@ public class RestApiController {
 	            return new ResponseEntity<>("회원가입 실패: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	        }
 	  }////
-	  	
+	  
+	  // 회원 탈퇴 처리
+	    @PutMapping("/users/{accountNo}")
+	    public ResponseEntity<String> deactivateAccount(@PathVariable long accountNo) {
+	        try {
+	            userService.deactivateAccountByAccountNo(accountNo);
+	            return new ResponseEntity<>("회원 탈퇴가 완료되었습니다.", HttpStatus.OK);
+	        } catch (Exception e) {
+	            return new ResponseEntity<>("회원 탈퇴 실패: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    }
+	  
+	  
 	  //이메일 인증
 	  @GetMapping("/mailCheck")
 	  @ResponseBody

@@ -76,7 +76,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     Map<String, Object> payloads = new HashMap<>();// 사용자 임의 데이타 추가
     long expirationTime = 1000 * 60 * 60 * 3;// 토큰의 만료시간 설정(3시간)
     String token =
-        JWTOkens.createToken(principalDetails.getDto().getUsername(), 
+        JWTOkens.createToken(principalDetails.getDto().getAccountNo(), 
         		 payloads, expirationTime);
     Cookie cookie = new Cookie("Authorization", token);
     cookie.setPath("/");
