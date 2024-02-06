@@ -161,7 +161,7 @@ public class JWTOkens {
 
   public static void removeToken(HttpServletRequest request, HttpServletResponse response) {
     Cookie cookie = new Cookie(request.getServletContext().getInitParameter("COOKIE-NAME"), "");
-    cookie.setPath(request.getContextPath());
+    cookie.setPath("/");
     cookie.setMaxAge(0);
     response.addCookie(cookie);
   }//
