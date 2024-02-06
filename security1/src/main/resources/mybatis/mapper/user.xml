@@ -70,4 +70,11 @@
 		
 	</select>
 	
+	<update id="leaveMember" parameterType="long">
+	  UPDATE ACCOUNT
+	  SET ROLE = 'OUT'
+	  WHERE ACCOUNT_NO = #{accountNo}
+	</update>
+	
+	
 </mapper>
