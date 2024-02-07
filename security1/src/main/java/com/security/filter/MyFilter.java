@@ -10,7 +10,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class MyFilter3 implements Filter {
+public class MyFilter implements Filter {
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -25,7 +25,7 @@ public class MyFilter3 implements Filter {
       System.out.println("POST요청됨");
       String headerAuth = req.getHeader("Authorization");
       System.out.println(headerAuth);
-      System.out.println("필터1");
+      System.out.println("필터작동");
 
       if (headerAuth.equals("cos")) {
         chain.doFilter(req, res);

@@ -53,7 +53,7 @@ public class JWTOkens {
    * @param expirationTime 토큰 만료 시간(15분에서 몇 시간이 적당).단위는 천분의 1초
    * @return
    */
-  public static String createToken(String username, Map<String, Object> payloads,
+  public static String createToken(Long accountNo, Map<String, Object> payloads,
       long expirationTime) {
 
     // JWT 토큰의 만료 시간 설정
@@ -73,7 +73,7 @@ public class JWTOkens {
 
     JwtBuilder builder = Jwts.builder().header().add(headers).and()// Headers 설정
         .claims(payloads)// Claims 설정(기타 페이로드)
-        .subject(username)// 사용자 ID 설정
+        .subject(String.valueOf(accountNo))// 사용자 ID 설정
         .issuedAt(new Date())// 생성 시간을 설정
         .expiration(new Date(expirationTime))// 만료 시간 설정(필수로 설정하자.왜냐하면 토큰(문자열이라)은 세션처럼 제어가 안된다)
         .signWith(secretKey, Jwts.SIG.HS256);// 비밀 키로 JWT를 서명
