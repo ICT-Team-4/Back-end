@@ -29,7 +29,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler{
 		long expirationTime = 1000 * 60 * 3;// 토큰의 만료시간 설정(30)
 		int status = 1;
 		String token = 
-				JWTOkens.createToken(principalDetails.getDto().getUsername(),
+				JWTOkens.createToken(principalDetails.getDto().getAccountNo(),
 				payloads, expirationTime);
 		Cookie accessCookie = new Cookie("Authorization", token);
 		log.info(accessCookie);
