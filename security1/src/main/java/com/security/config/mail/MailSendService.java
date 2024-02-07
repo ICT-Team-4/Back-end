@@ -33,7 +33,11 @@ public class MailSendService {
 			String setFrom = "ictteam4fit@gmail.com"; // email-config에 설정한 자신의 이메일 주소를 입력 
 			String toMail = email;
 			log.info("보내는 이메일 :" + email);
-			String title = "FITME 인증 이메일 입니다.";  // 이메일 제목 
+			String title = "FITME 인증 이메일 입니다.";  // 이메일 제목
+			// StringBuffer sb = new StringBuffer();
+			// sb.append("홈페이지를 방문해주셔서 감사합니다.")
+			// .append() ~~ ;
+			// 
 			String content = 
 					"홈페이지를 방문해주셔서 감사합니다." + 
 	                "<br><br>" + 
@@ -41,6 +45,7 @@ public class MailSendService {
 				    "<br>" + 
 				    "해당 인증번호를 인증번호 확인란에 기입하여 주세요."; //이메일 내용 삽입
 			mailSend(setFrom, toMail, title, content);
+			// mailSend(setFrom, toMail, title, sb.toString());
 			return Integer.toString(authNumber);
 		}
 		
