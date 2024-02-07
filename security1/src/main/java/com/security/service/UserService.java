@@ -55,6 +55,10 @@ public class UserService {
 		  System.out.println("userDto: " + userDto);
 	    return userDto;
 	  }
-
+	  
+	  @Transactional
+	  public void deactivateAccountByAccountNo(long accountNo) {
+	    usermapper.leaveMember(accountNo);
+	  }
 
 }

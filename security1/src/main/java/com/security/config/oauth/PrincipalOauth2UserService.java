@@ -35,7 +35,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     this.userservice = userservice;
   }
 
-  // 구글로부터 받은 userRequest 데이터에 대한 후처리되는 함수
+  // 소셜부터 받은 userRequest 데이터에 대한 후처리되는 함수
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     System.out.println("getClientRegistration:" + userRequest.getClientRegistration());// registrarionId로
@@ -97,7 +97,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     } else {
       System.out.println("로그인을 이미 한 적이있습니다. 당신은 자동 회원가입이 되어있습니다");
     }
-    System.out.println("회원가입이 됐니?");
     return new PrincipalDetails(userEntity, oauth2User.getAttributes());
   }
 }
