@@ -90,7 +90,7 @@ public class RestApiController {
 	  
 	  // 회원 탈퇴 처리
 	    @PutMapping("/users/{accountNo}")
-	    public ResponseEntity<String> deactivateAccount(@PathVariable long accountNo) {
+	    public ResponseEntity<String> leaveMember(@PathVariable long accountNo) {
 	        try {
 	            userService.deactivateAccountByAccountNo(accountNo);
 	            return new ResponseEntity<>("회원 탈퇴가 완료되었습니다.", HttpStatus.OK);
