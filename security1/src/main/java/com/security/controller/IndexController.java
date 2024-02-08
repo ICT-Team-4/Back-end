@@ -32,26 +32,6 @@ public class IndexController {
 	    this.passwordEncoder = passwordEncoder;
 	  }
 	
-	  @GetMapping("/test/login")
-	  public @ResponseBody String testLogin(Authentication authentication,
-	      @AuthenticationPrincipal PrincipalDetails userDetails) {// DI(의존성 주입)
-	    System.out.println("/test/login ========");
-	    PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-	    System.out.println("authentication:" + principalDetails.getDto());
-	
-	    System.out.println("userDetails:" + userDetails.getUsername());
-	    return "세션정보 확인하기";
-	  }
-	
-	  @GetMapping("/test/oauth/login")
-	  public @ResponseBody String testOAuthLogin(Authentication authentication,
-	      @AuthenticationPrincipal OAuth2User oauth) {// DI(의존성 주입)
-	    System.out.println("/test/oauth/login ========");
-	    OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-	    System.out.println("authentication:" + oauth2User.getAttributes());
-	    System.out.println("oauth2User:" + oauth.getAttributes());
-	    return "OAuth 세션정보 확인하기";
-	  }
 	
 	  // 스프링 시큐리티 자기만의 시큐리티 세션을 가지고있다
 	  // x라는 클래스를 만들어서 userDetails & OAuth2User 상속받아 사용
