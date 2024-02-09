@@ -38,9 +38,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     // super.doFilterInternal(request, response, chain);
     System.out.println("인증이나 권한이 필요한 주소 요청이 됨");
     
-//    String jwtHeader = request.getHeader("Authorization");
+    String jwtHeader = request.getHeader("Authorization");
 //    String jwtHeader = request.getHeader("Authorization").split(" ")[1].trim();
-    String jwtHeader = JWTOkens.getToken(request, "Authorization");
     System.out.println("jwtHeader :" + jwtHeader);
 //    System.out.println("확인" + request.getHeader("Authorization").split(" ")[1]);
 
@@ -58,11 +57,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
     System.out.println("payload:" + payload);
 
-    String accountNo = payload.get("sub").toString();
-    System.out.println("email :" + accountNo);
+    String username = payload.get("sub").toString();
+    System.out.println("email :" + username);
     // 서명이 정상적으로 됨
-    if (accountNo != null) {
-      UserDto userEntity = userMapper.findAccountByAccountNo(accountNo);
+    if (username != null) {
+      UserDto userEntity = userMapper.findAccountByUsername(username);
       PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
       System.out.println("getAuthorities : " + principalDetails.getAuthorities());
       Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails,

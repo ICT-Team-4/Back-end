@@ -50,12 +50,6 @@ public class UserService {
 	    return userDto;
 	  }
 	  
-	  public UserDto findAccountByAccountNo(String accountNo) {
-		  UserDto userDto = usermapper.findAccountByAccountNo(accountNo);
-		  System.out.println("userDto: " + userDto);
-	    return userDto;
-	  }
-	  
 	  public UserDto findMemberInfoByUsername(String username) {
 		  UserDto userDto = usermapper.findAccountByUsername(username);
 		  System.out.println("userDto: " + userDto);

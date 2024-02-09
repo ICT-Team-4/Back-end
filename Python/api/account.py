@@ -33,12 +33,10 @@ class Account(Resource):
         if 'diet' in dof:
             diet1 = np.array(oracle.diet_calendar(conn, user_id))
             diet1 = list(diet1.reshape(diet1.shape[0]))
-            oracle.close(conn)
 
         if 'workout' in dof:
             workout1 = np.array(oracle.workout_calendar(conn, user_id))
             workout1 = list(workout1.reshape(workout1.shape[0]))
-            oracle.close(conn)
 
         return jsonify({
             # 'account': account_data,
