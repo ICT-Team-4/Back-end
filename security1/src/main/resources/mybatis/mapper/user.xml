@@ -44,6 +44,10 @@
 		SELECT * FROM ACCOUNT WHERE USERNAME=#{username}
 	</select>
 	
+	<select id="findAccountByAccountNo" parameterType="String" resultType="UserDto">
+		SELECT * FROM ACCOUNT WHERE ACCOUNT_NO=#{accountNo}
+	</select>
+	
 	<select id="findAccountByProviderId" parameterType="String" resultType="UserDto">
 		
 		SELECT a.*,

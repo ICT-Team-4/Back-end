@@ -54,6 +54,7 @@ public class RestApiController {
 	  }
 	  
 
+	  // DTO를 바로 받도록 변경할 것
 	  @PostMapping("/joinMember")
 	  public ResponseEntity<String> joinMember(
 			  @RequestParam("name") String name,

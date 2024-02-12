@@ -151,28 +151,28 @@ public class BoardController {
 		}
 	}
 	
-	//좋아요
-	@PostMapping("/boards/like/{bno}")
-	public ResponseEntity<String> boardLike(@PathVariable Long bno, HttpServletRequest request) {
-		
-		String token = request.getHeader("Authorization");
-		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
-		
-		String message = "";
-		int count = 0;
-		
-		count= boardService.like(bno, username);
-		
-		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
-		if(count == 1) {
-			message = "활성화";
-			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
-		} else {
-			message = "비활성화";
-			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
-		}
-	}
+//	//좋아요
+//	@PostMapping("/boards/like/{bno}")
+//	public ResponseEntity<String> boardLike(@PathVariable Long bno, HttpServletRequest request) {
+//		
+//		String token = request.getHeader("Authorization");
+//		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+//		String username = payload.get("sub").toString();
+//		
+//		String message = "";
+//		int count = 0;
+//		
+//		count= boardService.like(bno, username);
+//		
+//		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
+//		if(count == 1) {
+//			message = "활성화";
+//			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+//		} else {
+//			message = "비활성화";
+//			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+//		}
+//	}
 	
 	//게시글 수정
 	@PutMapping("/boards/{bno}")
