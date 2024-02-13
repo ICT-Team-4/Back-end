@@ -6,12 +6,44 @@
 	<select id="findChatListByNo" parameterType="int" resultType="ChatListDto">
 		SELECT chatting_nick
 				,c.chatting_no chatting_no
+				,c.account_no
 				,(SELECT count(chatting_no) FROM chatting_list WHERE chatting_no = c.chatting_no GROUP BY chatting_no) count 
 		FROM chatting_list cl, chatting c 
 		WHERE cl.chatting_no = c.chatting_no 
 			AND cl.account_no = #{accountNo}
 	</select>
+	<!-- 채팅내용 출력 -->
+	<select id="findChatCommentByNo" parameterType="int" resultType="ChatCommentListDto">
+		SELECT * FROM (
+			SELECT * 
+			FROM (SELECT chatting_cno
+						,a.account_no
+						,name
+						,chat_comment
+						,to_char(post_date,'YYYY-MM-DD HH24:MI:SS') time 
+                        ,(select count(max(chatting_cno)) 
+                        	FROM chatting_read 
+                        	WHERE chatting_no = c.chatting_no 
+                        		and c.chatting_cno > chatting_cno 
+                        	GROUP BY chatting_no,account_no) read
+					FROM chatting_chatroom c
+						,account a 
+					WHERE c.account_no = a.account_no 
+						and chatting_no = #{chattingNo}
+					ORDER BY time desc) chat 
+			WHERE ROWNUM BETWEEN 1 AND 10
+		) ORDER BY time
+	</select>
+	<!-- 채팅방 확인용 -->
+	<select id="findChatByNo" parameterType="int" resultType="ChatRoomDto">
+		SELECT * FROM chatting WHERE chatting_no = #{chattingNo}
+	</select>
+	
 	<insert id="insertChat" parameterType="ChatDto">
 		INSERT INTO chatting_chatroom VALUES(seq_chatroom.nextval,#{chattingNo},#{accountNo},default,#{chatComment},null,null)
 	</insert>
+	<delete id="delete">
+		DELETE chatting WHERE chatting_no = #{chattingNo}
+	</delete>
+	
 </mapper>

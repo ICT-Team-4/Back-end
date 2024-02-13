@@ -13,9 +13,12 @@ public class FoodWorkService {
 		this.foodWorkMapper = foodWorkMapper;
 	}
 	
-	public AccountFoodWorkDto findByUsername(String username) {
-		return foodWorkMapper.findByUsername(username);
+	public AccountFoodWorkDto findByNo(String accountNo) {
+		return foodWorkMapper.findByNo(accountNo);
 	}
+//	public AccountFoodWorkDto findByUsername(String username) {
+//		return foodWorkMapper.findByUsername(username);
+//	}
 	
 	
 	

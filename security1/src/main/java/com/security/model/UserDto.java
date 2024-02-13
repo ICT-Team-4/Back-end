@@ -26,6 +26,9 @@ public class UserDto {
   private Long accountNo;
   private String username;
   private String password;
+  private String providerId;
+  private String provider;
+  private Date enrollDate;
   
   @Builder.Default private String name="";
   @Builder.Default private String gender="";
@@ -37,10 +40,6 @@ public class UserDto {
   @Builder.Default private String height="";
   @Builder.Default private String weight="";
   
-  private String providerId;
-  private String provider;
-  private Date enrollDate;
-
   public List<String> getRoleList() {
     if (this.role.length() > 0) {
       return Arrays.asList(this.role.split(","));
