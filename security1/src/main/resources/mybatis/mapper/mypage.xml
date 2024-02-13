@@ -29,6 +29,32 @@
 			and a.account_no = g.account_no 
 			and username = #{username}
 	</select> 
+	<select id="findByNo" parameterType="String" resultType="MypageAccountDto">
+		SELECT a.account_no
+				,username
+				,name
+				,gender
+				,age
+				,address
+				,hobby
+				,enroll_date
+				,image
+				,height
+				,weight
+				,game_image
+				,nickname
+				,SKELETAL_MUSCLE
+				,BODY_FAT_MASS
+				,BODY_FAT_PERCENTAGE
+				,ABDOMINAL_FAT_RATE
+				,BASAL_METABOLIC_RATE
+		FROM account a
+			,game_account g
+			, inbody i 
+		WHERE a.account_no = i.account_no 
+			and a.account_no = g.account_no 
+			and a.account_no = #{accountNo}
+	</select> 
 	<select id="findAllByNo">
 		select gameroom_no
 				,account_no
