@@ -34,7 +34,8 @@ public class FoodWorkController {
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String username = payload.get("sub").toString();
 		
-		AccountFoodWorkDto accountInfo = foodWorkService.findByUsername(username);
+		System.out.println("username"+username);
+		AccountFoodWorkDto accountInfo = foodWorkService.findByNo(username);
 		
 		System.out.println(accountInfo);
 		

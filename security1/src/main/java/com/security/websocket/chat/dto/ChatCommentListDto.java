@@ -13,12 +13,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Alias("ChatListDto")
-public class ChatListDto {
+@Alias("ChatCommentListDto")
+public class ChatCommentListDto {
 	
-	private String chattingNick;
-	private int chattingNo;
+	private int chattingCno;
 	private int accountNo;
-	private int count;
+	private String name;
+	private String chatComment;
+	private String time;
+	private int read;
 
 }
