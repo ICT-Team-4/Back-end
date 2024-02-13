@@ -68,7 +68,6 @@ public class IndexController {
 	  public String joinForm() {
 	    return "joinForm";
 	  }
-	
 	 
 	  @PostMapping("/join")
 	  public String join(UserDto dto) {
@@ -90,7 +89,5 @@ public class IndexController {
 	  public @ResponseBody String data() {
 	    return "데이터정보";
 	  }
-	  	
-
 
 }

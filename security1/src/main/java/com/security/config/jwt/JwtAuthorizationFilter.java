@@ -38,14 +38,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     // super.doFilterInternal(request, response, chain);
     System.out.println("인증이나 권한이 필요한 주소 요청이 됨");
     
-//    String jwtHeader = request.getHeader("Authorization");
+    String jwtHeader = request.getHeader("Authorization");
 //    String jwtHeader = request.getHeader("Authorization").split(" ")[1].trim();
-    String jwtHeader = JWTOkens.getToken(request, "Authorization");
+//    String jwtHeader = JWTOkens.getToken(request, "Authorization");
     System.out.println("jwtHeader :" + jwtHeader);
 //    System.out.println("확인" + request.getHeader("Authorization").split(" ")[1]);
 
     // header가 있는지 확인
-    if (jwtHeader == null /* || !jwtHeader.startsWith("Bearer ")*/) {
+    if (jwtHeader == null) {
       chain.doFilter(request, response);
       return;
     }
