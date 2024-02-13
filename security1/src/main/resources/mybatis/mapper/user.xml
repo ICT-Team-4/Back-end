@@ -59,7 +59,6 @@
 		
 	</select>
 	
-	
 	<select id="findMemberInfoByUsername" parameterType="String" resultType="UserDto">
 		SELECT a.USERNAME,
 				a.NAME,
@@ -78,6 +77,18 @@
 	  UPDATE ACCOUNT
 	  SET ROLE = 'OUT'
 	  WHERE ACCOUNT_NO = #{accountNo}
+	</update>
+	
+	<select id="selectPasswordByUsername" parameterType="String" resultType="String">
+	  SELECT PASSWORD
+	  FROM ACCOUNT
+	  WHERE USERNAME = #{username}
+	</select>
+	
+	<update id="updatePasswordByUsername" parameterType="Map">
+	  UPDATE ACCOUNT
+	  SET PASSWORD = #{newPassword}
+	  WHERE USERNAME = #{username}
 	</update>
 	
 	
