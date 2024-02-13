@@ -1,5 +1,7 @@
 package com.security.websocket.chat.dto;
 
+import java.sql.Date;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
@@ -13,12 +15,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Alias("ChatListDto")
-public class ChatListDto {
+@Alias("ChatRoomDto")
+public class ChatRoomDto {
 	
-	private String chattingNick;
 	private int chattingNo;
 	private int accountNo;
-	private int count;
+	private Date openingDate;
 
 }
