@@ -43,13 +43,13 @@ public class BoardService {
 	}
 	
 	//사용자 정보 조회
-	public AccountDto findByUsername(String username) {
-		return boardMapper.findByUsername(username);
+	public AccountDto findByAccountNo(String accountNo) {
+		return boardMapper.findByAccountNo(accountNo);
 	}
 	
 	//사용자 친구 정보 조회
-	public List<FriendDto> findFriendByUsername(String username) {
-		return boardMapper.findFriendByUsername(username);
+	public List<FriendDto> findFriendByAccountNo(String accountNo) {
+		return boardMapper.findFriendByAccountNo(accountNo);
 	}
 	
 	//게시글 등록
@@ -71,10 +71,7 @@ public class BoardService {
 	
 	//좋아요 버튼 클릭
 	@Transactional
-	public int like(Long bno, String username) {
-		
-		//접속중인 회원의 번호 확인
-		Long accountNo = boardMapper.findByUsername(username).getAccountNo();
+	public int like(Long bno, String accountNo) {
 
 		BoardLikesDto like = new BoardLikesDto();		
 		like.setBno(bno);

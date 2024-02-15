@@ -19,7 +19,7 @@ import lombok.ToString;
 public class BoardLikesDto {
 	
 	private Long bno;
-	private Long accountNo;
+	private String accountNo;
 	private Date likeDate;
 
 }
