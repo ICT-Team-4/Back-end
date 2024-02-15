@@ -14,6 +14,7 @@ public interface MypageMapper {
 	
 	//자신의 개인 프로필
 	public MypageAccountDto findByUsername(String username);
+	public MypageAccountDto findByNo(String accountNo);
 	
 	//게임 기록
 	public List<MypageGameRoomDto> findAllByNo(int accountNo);
