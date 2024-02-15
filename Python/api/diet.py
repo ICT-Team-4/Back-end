@@ -4,6 +4,8 @@ import model.diet.diet_model as oracle
 import model.image_oracledb.image_model as imagedb
 import model.diet.publicData_model as pub
 
+import numpy as np
+
 from datetime import datetime
 import base64
 
@@ -57,7 +59,7 @@ class Diet(Resource):
                     # print(str(image)[2:-2])
                     # food_all[i][4] = str(image)[2:-2]
                     foodDiary.append(list(food_all[i][0:4])+list(["data:image/png;base64,"+str(image)[2:-2]])+list(food_all[i][5:]))
-            print(len(foodDiary))
+            print(foodDiary)
 
 
             list_ = ['chart1','foodDiary','chart2','chart3'] #리액트로 보내줄 헤더
@@ -79,8 +81,15 @@ class Diet(Resource):
 
                     data = str(foodDiary[i][2])
                     pub_data = pub.line(data)[0][2:]
-                    dnum = foodDiary[i][5]/float(pub.line(data)[0][1][:-1])
 
+                    pub_num=0
+                    if pub.line(data)[0][1].find('g') == -1:
+                        pub_num = float(pub.line(data)[0][1][:-2])
+                    else:
+                        pub_num = float(pub.line(data)[0][1][:-1])
+                    dnum = foodDiary[i][5]/pub_num
+
+                    print("공공데이타 :", pub_data)  # null값 있는지 확인
                     if (int(hTime) >= 5 and int(hTime) <= 9):
                         time1[0] += round((pub_data[0]*dnum)+time1[0],2)
                     elif int(hTime) <= 14 and int(hTime) >= 11:
@@ -90,7 +99,10 @@ class Diet(Resource):
                     else:
                         time1[3] += round((pub_data[0]*dnum)+time1[3],2)
 
+
                     for k in range(len(pub_data)):
+                        if(np.isnan(pub_data[k])):
+                            pub_data[k] = 0
                         print(k,':',round(pub_data[k]*dnum,2))
                         data1[k] = round(round(pub_data[k]*dnum,2)+data1[k],2)
                     pub_data = data1
