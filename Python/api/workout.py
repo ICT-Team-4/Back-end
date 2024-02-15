@@ -10,7 +10,7 @@ import model.image_oracledb.image_model as imagedb
 
 class Workout(Resource):
     def __init__(self):
-        print(self,'self')
+        # print(self,'self')
         self.parser = reqparse.RequestParser()
         # 아래는 공통 파라미터 설정(key=value로 받기)
         self.parser.add_argument('DESCRIPTION',location='form')
@@ -22,18 +22,18 @@ class Workout(Resource):
         self.parser.add_argument('END_DATE', location='form')
     def get(self,user_id):
         args = self.parser.parse_args()
-        print(args,'args')
+        # print(args,'args')
         try:
             dof = request.args.get('date')
-            print(dof,'dof')
+            # print(dof,'dof')
             workout_all=[]
             cal = request.args.get('calId')
-            print(cal,'cal')
+            # print(cal,'cal')
             if(cal != None):
                 conn = oracle.workout_connectDatabase()
                 str1 = oracle.workout_selectOne(conn,cal)
                 oracle.workout_close(conn)
-                print('str1:',str1)
+                # print('str1:',str1)
                 return str1
 
             conn = oracle.workout_connectDatabase()
@@ -50,15 +50,15 @@ class Workout(Resource):
             #         f.read(base64.b64decode(image.encode()))
 
             workDiary =[]
-            print('workout_all---',workout_all)
-            print('workout_all', workout_all)
+            # print('workout_all---',workout_all)
+            # print('workout_all', workout_all)
             for i in range(len(workout_all)):
-                print('>>>', workout_all[i][3])
+                # print('>>>', workout_all[i][3])
                 str1 = 'C:\\Users\\user\\Upload\\' + workout_all[i][3] + '.png'
-                print(str1)
+                # print(str1)
                 with open(str1, "rb") as f:
                     image = base64.b64encode(f.read())
-                    print('image_encoded',image)
+                    # print('image_encoded',image)
                     workDiary.append(list(workout_all[i])+list(["data:image/png;base64," + str(image)[2:-2]]))
 
 
@@ -98,7 +98,7 @@ class Workout(Resource):
         # conn = oracle.workout_connectDatabase()
         # data = oracle.workout_insert(conn, user_id, args)
         # return data #테이블 2개여서 성공이면 2이다
-        print(user_id)
+        # print(user_id)
         args = self.parser.parse_args()
         # print('args(CATEGORY) : ',args['CATEGORY'])
         # image = args['CATEGORY']
@@ -110,19 +110,20 @@ class Workout(Resource):
         #     with open(str1, "bw") as f:
         #         f.write(base64.b64decode(image.encode()))
         #
-        for t in args:
-            print(t, ':', args[t])
+        # for t in args:
+        #     print(t, ':', args[t])
 
         conn1 = oracle.workout_connectDatabase()
         data = oracle.workout_insert(conn1, user_id, args)
-        print('post', data)
+        # print('post', data)
         return data  # 테이블 2개여서 성공이면 2이다
 
-    def put(self,cal_id):
+    def put(self,user_id):
         # dof = request.args.get('date')
         args = self.parser.parse_args()
+        # print(args)
         conn = oracle.workout_connectDatabase()
-        data = oracle.workout_update(conn, cal_id, args)
+        data = oracle.workout_update(conn, user_id, args)
         oracle.workout_close(conn)
         return data
 
