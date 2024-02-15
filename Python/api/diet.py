@@ -46,10 +46,11 @@ class Diet(Resource):
             # # # print("test",conn)
             food_all = oracle.diet_selectAll(conn, user_id, dof)
             oracle.diet_close(conn)
-            # print('food_all',food_all)
+            print('food_all',food_all)
             foodDiary = []
             for i in range(len(food_all)):
-                id = 41 if food_all[i][4] == None else food_all[i][4]
+                id = 41 if food_all[i][4] == None or food_all[i][4] == 'None' else food_all[i][4]
+                print('id',id)
                 str1 = 'C:\\Users\\user\\Upload\\' + str(id) + '.png'
                 # print('food : ', id,":",len(food_all))
                 # print(str1)
@@ -59,7 +60,7 @@ class Diet(Resource):
                     # print(str(image)[2:-2])
                     # food_all[i][4] = str(image)[2:-2]
                     foodDiary.append(list(food_all[i][0:4])+list(["data:image/png;base64,"+str(image)[2:-2]])+list(food_all[i][5:]))
-            print(foodDiary)
+            print('foodDiary',foodDiary)
 
 
             list_ = ['chart1','foodDiary','chart2','chart3'] #리액트로 보내줄 헤더
@@ -102,6 +103,7 @@ class Diet(Resource):
 
                     for k in range(len(pub_data)):
                         if(np.isnan(pub_data[k])):
+                            print('k',k)
                             pub_data[k] = 0
                         print(k,':',round(pub_data[k]*dnum,2))
                         data1[k] = round(round(pub_data[k]*dnum,2)+data1[k],2)
