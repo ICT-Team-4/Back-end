@@ -45,9 +45,9 @@ public class BoardController {
 		  
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 		
-		AccountDto accountInfo = boardService.findByUsername(username);
+		AccountDto accountInfo = boardService.findByAccountNo(accountNo);
 		
 		System.out.println(accountInfo);
 		
@@ -89,9 +89,9 @@ public class BoardController {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 		
-		List<FriendDto> friendsInfo = boardService.findFriendByUsername(username);
+		List<FriendDto> friendsInfo = boardService.findFriendByAccountNo(accountNo);
 		
 		System.out.println(friendsInfo);
 		
@@ -180,12 +180,12 @@ public class BoardController {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 		
 		String message = "";
 		int flag = 0;
 		
-		AccountDto accountDto = boardService.findByUsername(username);
+		AccountDto accountDto = boardService.findByAccountNo(accountNo);
 		BoardDto boardDto = boardService.findByOne(bno);
 		
 		if(!(accountDto.getAccountNo() == boardDto.getAccountNo())) {
@@ -210,13 +210,13 @@ public class BoardController {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 			
 		String message = "";
 		int flag = 0;
 		
 		BoardDto boardDto = boardService.findByOne(bno);
-		AccountDto accountDto = boardService.findByUsername(username);
+		AccountDto accountDto = boardService.findByAccountNo(accountNo);
 		
 		System.out.println(String.format("게시글 작성자 번호 : %s, 로그인한 사람 번호 : %s", boardDto.getAccountNo(), accountDto.getAccountNo()));
 
