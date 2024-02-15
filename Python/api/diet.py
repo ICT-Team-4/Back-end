@@ -133,6 +133,7 @@ class Diet(Resource):
         image = args['DIET_IMAGE']
         print('image', image == '', image==None)
         if image != None and image != '':
+            print('image,dase64',image)
             conn = imagedb.connectDatabase()
             data = imagedb.insert(conn)
             str1 = 'C:\\Users\\user\\Upload\\' + str(data[0]) + '.png'
