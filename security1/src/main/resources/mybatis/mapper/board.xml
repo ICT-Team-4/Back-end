@@ -96,8 +96,8 @@
 				SELECT SEQ_BOARD.NEXTVAL
 				FROM DUAL
 		</selectKey>
-		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_CATEGORY, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
-    	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardCategory}, #{boardComment}, #{address}, null)
+		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
+    	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardComment}, #{address}, null)
 	</insert>
 	<insert id="imageUpload" parameterType="BoardImageDto">
 		INSERT INTO BOARD_IMAGE(BNO, IMAGE, LINE_LOC) 
