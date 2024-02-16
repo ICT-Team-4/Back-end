@@ -132,12 +132,32 @@ def diet_delete(conn,cal_id):
             return None
 
 def diet_update(conn,cal_id,data):
-    print(cal_id, "diet_update :",data['DESCRIPTION']) # END_DATE
+    # print(cal_id, "diet_update :",data['DESCRIPTION']) # END_DATE
+    sql = f"UPDATE calendar SET calendar_no={cal_id} "
+    sql2 = f"UPDATE diet SET calendar_no={cal_id} "
+    for cate in data:
+        print(cate,':',len(str(data[cate])))
+        if len(str(data[cate])) <= 0:
+            continue
+        if data[cate] != None:
+            if cate in ['DESCRIPTION', 'MEMO', 'END_DATE']:
+                if cate != 'END_DATE':
+                    sql += f", {cate}='{data[cate]}'"
+                else:
+                    sql += f", END_POSTDATE = TO_DATE('{data[cate]}','YYYY-MM-DD HH24:MI') "
+
+            else:
+                sql2 += f", {cate}='{data[cate]}' "
+
+    sql += f" WHERE calendar_no={cal_id}"
+    sql2 += f" WHERE calendar_no={cal_id}"
+    print(sql)
+    print(sql2)
     with conn.cursor() as cursor:
         try:
-            cursor.execute(f"UPDATE calendar SET DESCRIPTION='{data['DESCRIPTION']}',MEMO='{data['MEMO']}',end_postdate=TO_DATE('{data['END_DATE']}' , 'YYYY-MM-DD HH24:MI:SS') WHERE calendar_no = {cal_id}")
-            if cursor.rowcount != 0:
-                cursor.execute(f"UPDATE diet SET FOOD='{data['FOOD']}',FOOD_WEIGHT={data['FOOD_WEIGHT']},DIET_IMAGE='{data['DIET_IMAGE']}' WHERE calendar_no = {cal_id}")
+            cursor.execute(sql)
+            if int(cursor.rowcount) != 0:
+                cursor.execute(sql2)
             conn.commit()
 
             return cursor.rowcount
