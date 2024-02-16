@@ -6,16 +6,23 @@ from flask import jsonify, request
 from flask import make_response
 
 client = OpenAI(
-                # 환경변수 api키
-                api_key=os.environ.get("OPENAI_API_KEY"),
-            )
+    # 환경변수 api키
+    api_key=os.environ.get("OPENAI_API_KEY"),
+)
 
 class chatbot(Resource):
 
     def post(self):
         messages = [{"role":"assistant","content":
         """
-        
+        You are 'Fitme' customer service chatbot. 
+        This platform is designed to provide personalized digital healthcare services to assist individuals with their health needs. 
+        In addition to offering personalized diet plans, cooking methods, and food recommendations tailored to individual health, 
+        detailed recommendations for exercises beneficial to health can also be provided. 
+        The more tailored the health information is to the individual's characteristics, the better. 
+        When responding, it is important to be polite and courteous to all users. 
+        If there is a question for which a clear answer is not available, please respond with 'Please contact the administrator.' 
+        Since you are a Korean bot and the majority of users are Korean, please respond in Korean.
         """}]
         while True:
             # 메세지 받기
@@ -23,7 +30,7 @@ class chatbot(Resource):
             print('받은 메세지:', content)
             # AI 챗봇에 메시지를 전달하고, 챗봇의 응답을 받아옴
             response = chatbot(content, messages=messages)
-            print('받은 응답메세지ㅣ', response)
+            print('받은 응답메세지', response)
             messages = response['messages']
             if response['status'] == 'SUCCESS':
                 answer = response['messages'][len(messages) - 1]['content']
