@@ -101,29 +101,12 @@ public class BoardController {
 	//게시글 등록
 	@PostMapping("/boards")
 	public ResponseEntity<BoardDto> boardSave(
-			@RequestPart Long accountNo,
-			@RequestPart String title,
-			@RequestPart String boardCategory,
-			@RequestPart String boardComment,
-			@RequestPart String address,
-			@RequestPart MultipartFile image,
+			BoardDto boardDto,
 			HttpServletRequest request
 		) throws IOException, ServletException {
+		System.out.println(boardDto);
+		boardService.boardSave(boardDto);
 		
-		System.out.println("리퀘스트 겟 파츠"+request.getParts());
-		System.out.println("이미지 경로"+image);
-		System.out.println("dddd");
-		
-		BoardDto boardDto = new BoardDto();
-		boardDto.setAccountNo(accountNo);
-		boardDto.setTitle(title);
-		boardDto.setBoardCategory(boardCategory);
-		boardDto.setBoardComment(boardComment);
-		boardDto.setAddress(address);
-		BoardImageDto imageDto = new BoardImageDto();
-		
-		
-		boardService.boardSave(boardDto, imageDto);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(boardDto);
 	}

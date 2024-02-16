@@ -8,6 +8,7 @@
 	<select id="findByAll" resultType="BoardDto">
 		SELECT 
 			B.*,
+			(SELECT A.IMAGE FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as IMAGE,
 			(SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as NAME,
 			(SELECT COUNT(BNO) FROM BOARD_LIKES L WHERE L.BNO=B.BNO) AS LIKES,
 			(SELECT COUNT(BNO) FROM BOARD_SCRAPS S WHERE S.BNO=B.BNO) AS SCRAPS,
@@ -95,8 +96,8 @@
 				SELECT SEQ_BOARD.NEXTVAL
 				FROM DUAL
 		</selectKey>
-		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_CATEGORY, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
-    	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardCategory}, #{boardComment}, #{address}, null)
+		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
+    	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardComment}, #{address}, null)
 	</insert>
 	<insert id="imageUpload" parameterType="BoardImageDto">
 		INSERT INTO BOARD_IMAGE(BNO, IMAGE, LINE_LOC) 

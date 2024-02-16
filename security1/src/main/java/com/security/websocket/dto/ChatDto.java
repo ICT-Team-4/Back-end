@@ -22,6 +22,7 @@ public class ChatDto {
 	
 	private int chattingNo;
 	private int accountNo;
+	private String name;
 	private String chatComment;
 	private Date postDate;
 }
