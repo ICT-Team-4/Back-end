@@ -18,6 +18,7 @@ public class ChatListDto {
 	
 	private String chattingNick;
 	private int chattingNo;
+	private int accountNo;
 	private int count;
 
 }

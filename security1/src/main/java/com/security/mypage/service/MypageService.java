@@ -22,6 +22,9 @@ public class MypageService {
 	public MypageAccountDto findByUsername(String username) {
 		return mypageMapper.findByUsername(username);
 	}
+	public MypageAccountDto findByNo(String accountNo) {
+		return mypageMapper.findByNo(accountNo);
+	}
 	
 	public List<MypageGameRoomDto> findAllByNo(int accountNo){
 		return mypageMapper.findAllByNo(accountNo);

@@ -45,9 +45,9 @@ public class BoardController {
 		  
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 		
-		AccountDto accountInfo = boardService.findByUsername(username);
+		AccountDto accountInfo = boardService.findByAccountNo(accountNo);
 		
 		System.out.println(accountInfo);
 		
@@ -89,9 +89,9 @@ public class BoardController {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 		
-		List<FriendDto> friendsInfo = boardService.findFriendByUsername(username);
+		List<FriendDto> friendsInfo = boardService.findFriendByAccountNo(accountNo);
 		
 		System.out.println(friendsInfo);
 		
@@ -101,29 +101,12 @@ public class BoardController {
 	//게시글 등록
 	@PostMapping("/boards")
 	public ResponseEntity<BoardDto> boardSave(
-			@RequestPart Long accountNo,
-			@RequestPart String title,
-			@RequestPart String boardCategory,
-			@RequestPart String boardComment,
-			@RequestPart String address,
-			@RequestPart MultipartFile image,
+			BoardDto boardDto,
 			HttpServletRequest request
 		) throws IOException, ServletException {
+		System.out.println(boardDto);
+		boardService.boardSave(boardDto);
 		
-		System.out.println("리퀘스트 겟 파츠"+request.getParts());
-		System.out.println("이미지 경로"+image);
-		System.out.println("dddd");
-		
-		BoardDto boardDto = new BoardDto();
-		boardDto.setAccountNo(accountNo);
-		boardDto.setTitle(title);
-		boardDto.setBoardCategory(boardCategory);
-		boardDto.setBoardComment(boardComment);
-		boardDto.setAddress(address);
-		BoardImageDto imageDto = new BoardImageDto();
-		
-		
-		boardService.boardSave(boardDto, imageDto);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(boardDto);
 	}
@@ -180,12 +163,12 @@ public class BoardController {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 		
 		String message = "";
 		int flag = 0;
 		
-		AccountDto accountDto = boardService.findByUsername(username);
+		AccountDto accountDto = boardService.findByAccountNo(accountNo);
 		BoardDto boardDto = boardService.findByOne(bno);
 		
 		if(!(accountDto.getAccountNo() == boardDto.getAccountNo())) {
@@ -210,13 +193,13 @@ public class BoardController {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 			
 		String message = "";
 		int flag = 0;
 		
 		BoardDto boardDto = boardService.findByOne(bno);
-		AccountDto accountDto = boardService.findByUsername(username);
+		AccountDto accountDto = boardService.findByAccountNo(accountNo);
 		
 		System.out.println(String.format("게시글 작성자 번호 : %s, 로그인한 사람 번호 : %s", boardDto.getAccountNo(), accountDto.getAccountNo()));
 
