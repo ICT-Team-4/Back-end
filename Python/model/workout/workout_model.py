@@ -96,28 +96,18 @@ def workout_delete(conn,cal_id):
 def workout_update(conn,cal_id,list_):
     # print(cal_id, "diet_update :",list_)
     # test = []  # 캘린더 테이블
-    sql = f"UPDATE calendar SET "
-    sql2 = f"UPDATE workout SET "
-    index1 = 0
-    index2 = 0
+    sql = f"UPDATE calendar SET calendar_no={cal_id} "
+    sql2 = f"UPDATE workout SET calendar_no={cal_id} "
     for cate in list_:
         if list_[cate] != None:
             if cate in ['DESCRIPTION','MEMO','END_DATE']:
-                if index1 == 0:
-                    index1 = 1
-                else:
-                    sql += ','
                 if cate != 'END_DATE':
-                    sql += f" {cate}='{list_[cate]}'"
+                    sql += f", {cate}='{list_[cate]}'"
                 else:
-                    sql += f" END_POSTDATE = TO_DATE('{list_[cate]}','YYYY-MM-DD HH24:MI') "
+                    sql += f", END_POSTDATE = TO_DATE('{list_[cate]}','YYYY-MM-DD HH24:MI') "
 
             else:
-                if index2 ==0:
-                    index2 = 1
-                else:
-                    sql2 += ','
-                sql2 += f" {cate}='{list_[cate]}' "
+                sql2 += f", {cate}='{list_[cate]}' "
 
 
     sql += f" WHERE calendar_no={cal_id}"

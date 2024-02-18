@@ -54,19 +54,12 @@ public class BoardService {
 	
 	//게시글 등록
 	@Transactional
-	public int boardSave(BoardDto BoardDto, BoardImageDto imageDto) {
+	public int boardSave(BoardDto BoardDto) {
 		
 		int boardFlag = 0;
-		int imageFlag = 0;
 		
 		boardFlag = boardMapper.save(BoardDto);
-		imageFlag = boardMapper.imageUpload(imageDto);
-		
-		if(boardFlag == 1 && imageFlag == 1) {
-			return 1;
-		} else {
-			return 0;
-		}
+		return boardFlag;
 	}
 	
 	//좋아요 버튼 클릭

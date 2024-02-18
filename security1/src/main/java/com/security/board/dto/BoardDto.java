@@ -33,6 +33,8 @@ public class BoardDto {
 	private int scraps;
 	//사용자 이름 가져오기 위한 변수
 	private String name;
+	//사용자 프로필 이미지
+	private String image;
 	//게시글에 달린 댓글 수
 	private int comments;
 
