@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 매퍼파일 -->
 <mapper namespace="com.security.board.dao.BoardMapper">
-
+	<!-- ver1 리팩토링 과정 서브쿼리 -> JOIN방식 -->
 	<!-- 전체 게시물 조회(사용자명+좋아요+스크랩) -->
 	<select id="findByAll" resultType="BoardDto">
 		SELECT 
