@@ -24,6 +24,7 @@ public class AccountDto {
 	private Date enrollDate;
 	private String image;
 	
+	private String realation;
 	//등록한 게시글 수
 	private Long postCount;
 	//팔로워 (나를 친구 추가한 사람)
