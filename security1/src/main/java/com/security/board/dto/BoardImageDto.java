@@ -18,7 +18,7 @@ import lombok.ToString;
 @Alias("BoardImageDto")
 public class BoardImageDto {
 	
-	private Long bno;
+	private String bno;
 	private String image;
 	private String lineLoc;
 

@@ -18,7 +18,7 @@ import lombok.ToString;
 @Alias("AccountDto")
 public class AccountDto {
 	
-	private Long accountNo;
+	private String accountNo;
 	private String username;
 	private String name;
 	private Date enrollDate;

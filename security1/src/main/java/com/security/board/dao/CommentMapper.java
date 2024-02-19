@@ -12,10 +12,10 @@ import com.security.board.dto.CommentLikeDto;
 public interface CommentMapper {
 
 	//특정 게시글에 대한 전체 댓글 목록 조회
-	List<BoardCommentDto> findAllByNo(Long bno);
+	List<BoardCommentDto> findAllByNo(String bno);
 	
 	//댓글 한개 정보 조회
-	BoardCommentDto findByOne(Long bcno);
+	BoardCommentDto findByOne(String bcno);
 	
 	//로그인한 사용자 정보 조회
 	AccountDto findByUsername(String username);
@@ -24,7 +24,7 @@ public interface CommentMapper {
 	int insert(BoardCommentDto dto);
 	
 	//댓글 삭제
-	int delete(Long bcno);
+	int delete(String bcno);
 	
 	//댓글 수정
 	int update(BoardCommentDto dto);

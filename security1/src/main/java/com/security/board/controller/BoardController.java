@@ -75,6 +75,15 @@ public class BoardController {
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(allList);
 	}
 	
+	//전체 게시글 조회시 각 게시글 마다 이미지 번호 조회
+	@GetMapping("/boards/images/{bno}")
+	public ResponseEntity<List<String>> imageAllList(@PathVariable String bno) {
+		
+		List<String> boardImages = boardService.findImageByBno(bno);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(boardImages);
+	}
+	
 	//특정 회원의 게시글 전체 조회
 	@GetMapping("/boards/friends/{accountNo}")
 	public ResponseEntity<List<BoardDto>> boardAllListByNo(@PathVariable String accountNo) {
@@ -89,7 +98,7 @@ public class BoardController {
 	
 	//특정 게시글 상세 조회
 	@GetMapping("/boards/{bno}")
-	public ResponseEntity<BoardDto> boardOneList(@PathVariable Long bno){
+	public ResponseEntity<BoardDto> boardOneList(@PathVariable String bno){
 		
 		BoardDto oneList = boardService.findByOne(bno);
 		
@@ -153,10 +162,10 @@ public class BoardController {
 	//게시글 등록
 	@PostMapping("/boards")
 	public ResponseEntity<BoardDto> boardSave(
-			BoardDto boardDto,
+			@RequestBody BoardDto boardDto,
 			HttpServletRequest request
 		) throws IOException, ServletException {
-		System.out.println(boardDto);
+		
 		boardService.boardSave(boardDto);
 		
 		
@@ -188,7 +197,7 @@ public class BoardController {
 	
 	//게시글 수정
 	@PutMapping("/boards/{bno}")
-	public ResponseEntity<String> boardUpdate(@PathVariable Long bno ,@RequestBody BoardDto dto, HttpServletRequest request) {
+	public ResponseEntity<String> boardUpdate(@PathVariable String bno ,@RequestBody BoardDto dto, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
@@ -218,7 +227,7 @@ public class BoardController {
 	
 	//게시글 삭제
 	@DeleteMapping("/boards/{bno}")
-	public ResponseEntity<String> boardDelete(@PathVariable Long bno, HttpServletRequest request) {
+	public ResponseEntity<String> boardDelete(@PathVariable String bno, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
