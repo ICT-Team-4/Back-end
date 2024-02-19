@@ -11,6 +11,7 @@ import com.security.board.dto.BoardDto;
 import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
 import com.security.board.dto.FriendDto;
+import com.security.board.dto.FriendshipDto;
 
 @Service
 public class BoardService {
@@ -38,8 +39,8 @@ public class BoardService {
 	}
 	
 	//회원 번호로 해당 회원 게시글 목록 조회
-	public List<BoardDto> findAllByNo(String acconutNo) {
-		return boardMapper.findAllByNo(acconutNo);
+	public List<BoardDto> findAllByNo(String accountNo) {
+		return boardMapper.findAllByNo(accountNo);
 	}
 	
 	//사용자 정보 조회
@@ -50,6 +51,12 @@ public class BoardService {
 	//사용자 친구 정보 조회
 	public List<FriendDto> findFriendByAccountNo(String accountNo) {
 		return boardMapper.findFriendByAccountNo(accountNo);
+	}
+	
+	//친구 추가
+	@Transactional
+	public int saveFriend(FriendshipDto dto) {
+		return boardMapper.saveFriend(dto);
 	}
 	
 	//게시글 등록

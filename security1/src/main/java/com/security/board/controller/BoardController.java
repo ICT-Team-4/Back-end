@@ -22,11 +22,13 @@ import com.security.board.dto.BoardDto;
 import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
 import com.security.board.dto.FriendDto;
+import com.security.board.dto.FriendshipDto;
 import com.security.board.service.BoardService;
 import com.security.util.JWTOkens;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.experimental.PackagePrivate;
 
 @RestController
 @CrossOrigin
@@ -49,10 +51,19 @@ public class BoardController {
 		
 		AccountDto accountInfo = boardService.findByAccountNo(accountNo);
 		
-		System.out.println(accountInfo);
-		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(accountInfo);
 		  
+	}
+	
+	//accountNo를 통한 사용자 정보 조회
+	@GetMapping("/boards/account/{accountNo}")
+	public ResponseEntity<AccountDto> accountInfoByAccountNo(@PathVariable String accountNo) {
+		
+		AccountDto accountInfo = boardService.findByAccountNo(accountNo);
+		
+		System.out.println("게시글 프로필 클릭 시 사용자 정보 출력" + accountInfo);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(accountInfo);
 	}
 	
 	//게시글 전체 조회
@@ -66,11 +77,11 @@ public class BoardController {
 	
 	//특정 회원의 게시글 전체 조회
 	@GetMapping("/boards/friends/{accountNo}")
-	public ResponseEntity<List<BoardDto>> boardAllListByNo(@PathVariable String acconutNo) {
+	public ResponseEntity<List<BoardDto>> boardAllListByNo(@PathVariable String accountNo) {
 		
-		System.out.println("친구의 accountNo"+acconutNo);
+		System.out.println("친구의 accountNo"+accountNo);
 		
-		List<BoardDto> allListNo = boardService.findAllByNo(acconutNo);
+		List<BoardDto> allListNo = boardService.findAllByNo(accountNo);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(allListNo);
 		
@@ -95,26 +106,48 @@ public class BoardController {
 		
 		List<FriendDto> friendsInfo = boardService.findFriendByAccountNo(accountNo);
 		
-		System.out.println(friendsInfo);
+		System.out.println("정보 출력"+friendsInfo);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(friendsInfo);	
 	}
 	
+	//친구 추가
 	@PostMapping("/boards/follow")
-	public ResponseEntity<String> follow(FriendDto friendDto, HttpServletRequest request) {
+	public ResponseEntity<String> follow(@RequestBody String opponentNo, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
-		
-		String token1 = JWTOkens.getToken(request, "Authorization");
-		
-		System.out.println(token1);
-		
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String accountNo = payload.get("sub").toString();
 		
-		friendDto.setAccountNo(accountNo);
+		System.out.println(accountNo + " : " + opponentNo);
 		
-		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body("");
+		int flag = 0;
+		int save = 0;
+		String chage = "";
+		
+		FriendshipDto follow = new FriendshipDto();
+		follow.setAccountNo(accountNo);
+		follow.setOpponentNo(opponentNo);
+	
+		flag = boardService.saveFriend(follow);
+		
+		if(flag == 1) {
+			chage = accountNo;
+			accountNo = opponentNo;
+			opponentNo = chage;
+			
+			follow.setAccountNo(accountNo);
+			follow.setOpponentNo(opponentNo);
+			
+			save = boardService.saveFriend(follow);
+			
+			if(save == 1)
+				return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body("둘다 친구 추가 성공");
+			else 
+				return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body("둘다 친구 추가 실패");
+		}
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body("로그인한 사용자만 친구 추가 성공");
 	}
 	
 	//게시글 등록
@@ -152,29 +185,6 @@ public class BoardController {
 			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 		}
 	}
-	
-//	//좋아요
-//	@PostMapping("/boards/like/{bno}")
-//	public ResponseEntity<String> boardLike(@PathVariable Long bno, HttpServletRequest request) {
-//		
-//		String token = request.getHeader("Authorization");
-//		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-//		String username = payload.get("sub").toString();
-//		
-//		String message = "";
-//		int count = 0;
-//		
-//		count= boardService.like(bno, username);
-//		
-//		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
-//		if(count == 1) {
-//			message = "활성화";
-//			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
-//		} else {
-//			message = "비활성화";
-//			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
-//		}
-//	}
 	
 	//게시글 수정
 	@PutMapping("/boards/{bno}")
