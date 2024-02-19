@@ -65,8 +65,10 @@ public class BoardController {
 	}
 	
 	//특정 회원의 게시글 전체 조회
-	@GetMapping("/boards/friends/{accountNo}") 
-	public ResponseEntity<List<BoardDto>> boardAllListByNo(@PathVariable Long acconutNo) {
+	@GetMapping("/boards/friends/{accountNo}")
+	public ResponseEntity<List<BoardDto>> boardAllListByNo(@PathVariable String acconutNo) {
+		
+		System.out.println("친구의 accountNo"+acconutNo);
 		
 		List<BoardDto> allListNo = boardService.findAllByNo(acconutNo);
 		
@@ -96,6 +98,23 @@ public class BoardController {
 		System.out.println(friendsInfo);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(friendsInfo);	
+	}
+	
+	@PostMapping("/boards/follow")
+	public ResponseEntity<String> follow(FriendDto friendDto, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		
+		String token1 = JWTOkens.getToken(request, "Authorization");
+		
+		System.out.println(token1);
+		
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String accountNo = payload.get("sub").toString();
+		
+		friendDto.setAccountNo(accountNo);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body("");
 	}
 	
 	//게시글 등록

@@ -21,13 +21,19 @@ public interface BoardMapper {
 	BoardDto findByNo(Long bno);
 
 	//특정 사용자가 등록한 게시글 전체 조회
-	List<BoardDto> findAllByNo(Long acconutNo);
+	List<BoardDto> findAllByNo(String acconutNo);
+	
+	//특정 사용자가 올린 bno를 통해 사용자 정보 조회
+	AccountDto findAccountByNo(String bno);
 	
 	//로그인한 사용자 정보 조회
 	AccountDto findByAccountNo(String accountNo);
 	
 	//로그인한 사용자 친구 정보 조회(친구 정보 + 친구 게시글 정보)
 	List<FriendDto> findFriendByAccountNo(String accountNo);
+	
+	//친구 추가
+	int saveFriend(FriendDto dto);
 	
 	//특정 게시물 조회시 마다 조회수 증가
 	int incrementHitCount(Long bno);
