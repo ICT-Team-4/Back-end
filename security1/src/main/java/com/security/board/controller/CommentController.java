@@ -34,7 +34,7 @@ private CommentService commentService;
 	
 	//특정 게시글에 대한 댓글 목록 조회
 	@GetMapping("/comments/{bno}")
-	public ResponseEntity<List<BoardCommentDto>> commentAllList(@PathVariable Long bno){
+	public ResponseEntity<List<BoardCommentDto>> commentAllList(@PathVariable String bno){
 		
 		List<BoardCommentDto> commentList = commentService.commentList(bno);
 		
@@ -64,7 +64,7 @@ private CommentService commentService;
 	
 	//댓글 삭제
 	@DeleteMapping("/comments/{bcno}")
-	public ResponseEntity<String> commentDelete(@PathVariable Long bcno, HttpServletRequest request) {
+	public ResponseEntity<String> commentDelete(@PathVariable String bcno, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
@@ -96,7 +96,7 @@ private CommentService commentService;
 	
 	//댓글 수정
 	@PutMapping("/comments/{bcno}")
-	public ResponseEntity<String> commentUpdate(@PathVariable Long bcno, HttpServletRequest request) {
+	public ResponseEntity<String> commentUpdate(@PathVariable String bcno, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
@@ -127,7 +127,7 @@ private CommentService commentService;
 	
 	//댓글 좋아요
 	@PostMapping("/comments/like/{bcno}")
-	public ResponseEntity<String> commentLike(@PathVariable Long bcno, HttpServletRequest request) {
+	public ResponseEntity<String> commentLike(@PathVariable String bcno, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);

@@ -27,9 +27,14 @@ public class BoardService {
 		return boardMapper.findByAll();
 	}
 	
+	//모든 게시물에 대한 이미지 조회
+	public List<String> findImageByBno(String bno) {
+		return boardMapper.findImageByBno(bno);
+	}
+	
 	//특정 게시물 상세 조회
 	@Transactional
-	public BoardDto findByOne(Long bno) {
+	public BoardDto findByOne(String bno) {
 		
 		//조회 시 조회수 증가
 		boardMapper.incrementHitCount(bno);
@@ -61,12 +66,36 @@ public class BoardService {
 	
 	//게시글 등록
 	@Transactional
-	public int boardSave(BoardDto BoardDto) {
+	public int boardSave(BoardDto boardDto) {
 		
 		int boardFlag = 0;
 		
-		boardFlag = boardMapper.save(BoardDto);
+		//BOARD 테이블에 입력한 정보 등록
+		boardFlag = boardMapper.save(boardDto);
+		
+		//BOARD_IMAGE 테이블에 이미지 서버에 등록한 이미지 일련번호 등록
+		BoardImageDto boarImageDto = new BoardImageDto();
+		
+		String bno = String.valueOf(boardDto.getBno());
+		String[] boardImages = boardDto.getBoardImages();
+		int count = 1;
+		
+		//이미지 수 만큼 INSERT문 동작
+		for(String boardImage : boardImages) {
+			boarImageDto.setBno(bno);
+			boarImageDto.setImage(boardImage);
+			boarImageDto.setLineLoc(String.valueOf(count));
+			count++;
+			boardMapper.imageUpload(boarImageDto);
+		}
+		
 		return boardFlag;
+	}
+	
+	//게시글 등록된 이미지 등록
+	@Transactional
+	public int saveImage(BoardImageDto boardImageDto) {
+		return boardMapper.imageUpload(boardImageDto);
 	}
 	
 	//좋아요 버튼 클릭
