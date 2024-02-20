@@ -10,6 +10,7 @@ import com.security.board.dto.BoardDto;
 import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
 import com.security.board.dto.FriendDto;
+import com.security.board.dto.FriendshipDto;
 
 @Mapper
 public interface BoardMapper {
@@ -17,11 +18,14 @@ public interface BoardMapper {
 	//전체 게시물 조회(좋아요 및 스크렙 수 까지)
 	List<BoardDto> findByAll();
 	
+	//게시글에 등록된 이미지 번호 조회
+	List<String> findImageByBno(String bno);
+	
 	//특정 게시물 상세 조회
-	BoardDto findByNo(Long bno);
+	BoardDto findByNo(String bno);
 
 	//특정 사용자가 등록한 게시글 전체 조회
-	List<BoardDto> findAllByNo(String acconutNo);
+	List<BoardDto> findAllByNo(String accountNo);
 	
 	//특정 사용자가 올린 bno를 통해 사용자 정보 조회
 	AccountDto findAccountByNo(String bno);
@@ -33,10 +37,10 @@ public interface BoardMapper {
 	List<FriendDto> findFriendByAccountNo(String accountNo);
 	
 	//친구 추가
-	int saveFriend(FriendDto dto);
+	int saveFriend(FriendshipDto dto);
 	
 	//특정 게시물 조회시 마다 조회수 증가
-	int incrementHitCount(Long bno);
+	int incrementHitCount(String bno);
 	
 	//좋아요 누른지 확인 여부
 	int findByLike(BoardLikesDto dto);

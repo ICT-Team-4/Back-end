@@ -11,6 +11,7 @@ import com.security.board.dto.BoardDto;
 import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
 import com.security.board.dto.FriendDto;
+import com.security.board.dto.FriendshipDto;
 
 @Service
 public class BoardService {
@@ -26,9 +27,14 @@ public class BoardService {
 		return boardMapper.findByAll();
 	}
 	
+	//모든 게시물에 대한 이미지 조회
+	public List<String> findImageByBno(String bno) {
+		return boardMapper.findImageByBno(bno);
+	}
+	
 	//특정 게시물 상세 조회
 	@Transactional
-	public BoardDto findByOne(Long bno) {
+	public BoardDto findByOne(String bno) {
 		
 		//조회 시 조회수 증가
 		boardMapper.incrementHitCount(bno);
@@ -38,8 +44,8 @@ public class BoardService {
 	}
 	
 	//회원 번호로 해당 회원 게시글 목록 조회
-	public List<BoardDto> findAllByNo(String acconutNo) {
-		return boardMapper.findAllByNo(acconutNo);
+	public List<BoardDto> findAllByNo(String accountNo) {
+		return boardMapper.findAllByNo(accountNo);
 	}
 	
 	//사용자 정보 조회
@@ -52,14 +58,44 @@ public class BoardService {
 		return boardMapper.findFriendByAccountNo(accountNo);
 	}
 	
+	//친구 추가
+	@Transactional
+	public int saveFriend(FriendshipDto dto) {
+		return boardMapper.saveFriend(dto);
+	}
+	
 	//게시글 등록
 	@Transactional
-	public int boardSave(BoardDto BoardDto) {
+	public int boardSave(BoardDto boardDto) {
 		
 		int boardFlag = 0;
 		
-		boardFlag = boardMapper.save(BoardDto);
+		//BOARD 테이블에 입력한 정보 등록
+		boardFlag = boardMapper.save(boardDto);
+		
+		//BOARD_IMAGE 테이블에 이미지 서버에 등록한 이미지 일련번호 등록
+		BoardImageDto boarImageDto = new BoardImageDto();
+		
+		String bno = String.valueOf(boardDto.getBno());
+		String[] boardImages = boardDto.getBoardImages();
+		int count = 1;
+		
+		//이미지 수 만큼 INSERT문 동작
+		for(String boardImage : boardImages) {
+			boarImageDto.setBno(bno);
+			boarImageDto.setImage(boardImage);
+			boarImageDto.setLineLoc(String.valueOf(count));
+			count++;
+			boardMapper.imageUpload(boarImageDto);
+		}
+		
 		return boardFlag;
+	}
+	
+	//게시글 등록된 이미지 등록
+	@Transactional
+	public int saveImage(BoardImageDto boardImageDto) {
+		return boardMapper.imageUpload(boardImageDto);
 	}
 	
 	//좋아요 버튼 클릭
