@@ -38,7 +38,7 @@ public class BoardService {
 	}
 	
 	//회원 번호로 해당 회원 게시글 목록 조회
-	public List<BoardDto> findAllByNo(Long acconutNo) {
+	public List<BoardDto> findAllByNo(String acconutNo) {
 		return boardMapper.findAllByNo(acconutNo);
 	}
 	

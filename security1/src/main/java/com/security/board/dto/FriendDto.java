@@ -19,9 +19,12 @@ import lombok.ToString;
 public class FriendDto {
 	
 	//상단 친구 정보
-	private Long accountNo;
+	private String accountNo;
 	private String name;
 	private String image;
+	private String address;
+	//이미 친구인지 확인하기 위한 정보
+	private String realation;
 	//사용자 프로필 정보
 	private Date enrollDate;
 	private String postCount;
