@@ -44,6 +44,10 @@
 		SELECT * FROM ACCOUNT WHERE USERNAME=#{username}
 	</select>
 	
+	<select id="findAccountByAccountNo" parameterType="String" resultType="UserDto">
+		SELECT * FROM ACCOUNT WHERE ACCOUNT_NO=#{accountNo}
+	</select>
+	
 	<select id="findAccountByProviderId" parameterType="String" resultType="UserDto">
 		
 		SELECT a.*,
@@ -54,7 +58,6 @@
 		WHERE s.PROVIDER_ID = #{providerId}
 		
 	</select>
-	
 	
 	<select id="findMemberInfoByUsername" parameterType="String" resultType="UserDto">
 		SELECT a.USERNAME,
@@ -74,6 +77,18 @@
 	  UPDATE ACCOUNT
 	  SET ROLE = 'OUT'
 	  WHERE ACCOUNT_NO = #{accountNo}
+	</update>
+	
+	<select id="selectPasswordByUsername" parameterType="String" resultType="String">
+	  SELECT PASSWORD
+	  FROM ACCOUNT
+	  WHERE USERNAME = #{username}
+	</select>
+	
+	<update id="updatePasswordByUsername" parameterType="Map">
+	  UPDATE ACCOUNT
+	  SET PASSWORD = #{newPassword}
+	  WHERE USERNAME = #{username}
 	</update>
 	
 	

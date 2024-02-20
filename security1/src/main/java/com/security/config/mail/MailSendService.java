@@ -34,17 +34,16 @@ public class MailSendService {
 			String toMail = email;
 			log.info("보내는 이메일 :" + email);
 			String title = "FITME 인증 이메일 입니다.";  // 이메일 제목
-			// StringBuffer sb = new StringBuffer();
-			// sb.append("홈페이지를 방문해주셔서 감사합니다.")
-			// .append() ~~ ;
-			// 
-			String content = 
-					"홈페이지를 방문해주셔서 감사합니다." + 
-	                "<br><br>" + 
-				    "인증 번호는 " + authNumber + "입니다." + 
-				    "<br>" + 
-				    "해당 인증번호를 인증번호 확인란에 기입하여 주세요."; //이메일 내용 삽입
-			mailSend(setFrom, toMail, title, content);
+			StringBuffer content = new StringBuffer();
+			content.append("<h1>홈페이지를 방문해주셔서 감사합니다.</h1>")
+			       .append("<br><br>")
+			       .append("<p>인증 번호는 <strong>")
+			       .append(authNumber)
+			       .append("</strong>입니다.</p>")
+			       .append("<br>")
+			       .append("<p>해당 인증번호를 인증번호 확인란에 기입하여 주세요.</p>");
+
+			mailSend(setFrom, toMail, title, content.toString());
 			// mailSend(setFrom, toMail, title, sb.toString());
 			return Integer.toString(authNumber);
 		}
@@ -67,6 +66,4 @@ public class MailSendService {
 				log.error("이메일 전송 실패: 수신자 - {}, 제목 - {}", toMail, title);
 			}
 		}
-		
-	
 }

@@ -7,6 +7,6 @@ import com.security.foodwork.dto.AccountFoodWorkDto;
 @Mapper
 public interface FoodWorkMapper {
 	
-	public AccountFoodWorkDto findByUsername(String username);
+	public AccountFoodWorkDto findByNo(String accountNo);
 //public AccountDto findByUsername(String username);
 }

@@ -3,11 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 매퍼파일 -->
 <mapper namespace="com.security.board.dao.BoardMapper">
+	<resultMap id="imageResultMap" type="java.lang.String" >
+	    <result property="image" column="IMAGE"/>
+	</resultMap>
 
+	<!-- ver1 리팩토링 과정 서브쿼리 -> JOIN방식 -->
 	<!-- 전체 게시물 조회(사용자명+좋아요+스크랩) -->
 	<select id="findByAll" resultType="BoardDto">
 		SELECT 
 			B.*,
+			(SELECT A.IMAGE FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as IMAGE,
 			(SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as NAME,
 			(SELECT COUNT(BNO) FROM BOARD_LIKES L WHERE L.BNO=B.BNO) AS LIKES,
 			(SELECT COUNT(BNO) FROM BOARD_SCRAPS S WHERE S.BNO=B.BNO) AS SCRAPS,
@@ -16,8 +21,13 @@
 		ORDER BY BNO DESC
 	</select>
 	
+	<!-- 게시물에 등록된 이미지 번호 조회 -->
+	<select id="findImageByBno" resultMap="imageResultMap" parameterType="String">
+	    SELECT IMAGE FROM BOARD_IMAGE WHERE BNO=#{bno}
+	</select>
+	
 	<!-- 특정 게시물 조회 -->
-	<select id="findByNo" parameterType="Long" resultType="BoardDto">
+	<select id="findByNo" parameterType="String" resultType="BoardDto">
 		SELECT 
 			B.*,
 			(SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as NAME
@@ -26,25 +36,28 @@
 	</select>
 	
 	<!-- 게시판에서 사용자 정보 조회 -->
-	<select id="findByUsername" parameterType="String" resultType="AccountDto">
+	<select id="findByAccountNo" parameterType="String" resultType="AccountDto">
 		SELECT
 			A.ACCOUNT_NO,
+			A.IMAGE,
 			A.USERNAME,
+			A.ADDRESS,
 			A.NAME,
 			A.ENROLL_DATE,
-			A.IMAGE,
 			(SELECT COUNT(B.ACCOUNT_NO) FROM BOARD B WHERE B.ACCOUNT_NO=A.ACCOUNT_NO) AS POSTCOUNT,
+			
 			(SELECT COUNT(F.ACCOUNT_NO) FROM FRIENDSHIP F WHERE F.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWING,
 			(SELECT COUNT(F.OPPONENT_NO) FROM FRIENDSHIP F WHERE F.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWER
 		FROM ACCOUNT A
-		WHERE A.USERNAME = #{username}
+		WHERE A.ACCOUNT_NO = #{accountNo}
 	</select>
 	
 	<!-- 특정 사용자가 등록한 게시글 전체 조회 -->
-	<select id="findAllByNo">
+	<select id="findAllByNo" parameterType="String" resultType="BoardDto">
 		SELECT
 			B.*,
 			(SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as NAME,
+			(SELECT A.IMAGE FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as IMAGE,
 			(SELECT COUNT(BNO) FROM BOARD_LIKES L WHERE L.BNO=B.BNO) AS LIKES,
 			(SELECT COUNT(BNO) FROM BOARD_SCRAPS S WHERE S.BNO=B.BNO) AS SCRAPS,
 			(SELECT COUNT(BC_COMMENT) FROM BOARD_COMMENT C WHERE C.BNO=B.BNO) AS BCCOMMENT
@@ -52,19 +65,34 @@
 		WHERE B.ACCOUNT_NO=#{accountNo}
 	</select>
 	
+	<!-- 특정 사용자가 올린 bno를 통해 해당 사용자 정보 조회 -->
+	
+	
 	<!-- 게시판 상단 친구 목록 조회 및 해당 친구 정보 조회 -->
-	<select id="findFriendByUsername" parameterType="String" resultType="FriendDto"> 
+	<select id="findFriendByAccountNo" parameterType="String" resultType="FriendDto"> 
 		SELECT 
-			A.ACCOUNT_NO,
-			A.NAME,
-			A.IMAGE,
-			A.ENROLL_DATE,
-			(SELECT COUNT(B.ACCOUNT_NO) FROM BOARD B WHERE B.ACCOUNT_NO=A.ACCOUNT_NO) AS POSTCOUNT,
-			(SELECT COUNT(F.ACCOUNT_NO) FROM FRIENDSHIP F WHERE F.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWING,
-			(SELECT COUNT(F.OPPONENT_NO) FROM FRIENDSHIP F WHERE F.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWER
-		FROM ACCOUNT A JOIN FRIENDSHIP F ON A.ACCOUNT_NO= F.OPPONENT_NO 
-		WHERE F.ACCOUNT_NO=(SELECT ACCOUNT_NO FROM ACCOUNT WHERE USERNAME=#{username})
+		    A.ACCOUNT_NO,
+		    A.IMAGE,
+		    A.NAME,
+		    A.ADDRESS,
+		    A.ENROLL_DATE,
+		    (SELECT COUNT(B.ACCOUNT_NO) FROM BOARD B WHERE B.ACCOUNT_NO = A.ACCOUNT_NO) AS POSTCOUNT,
+		    (SELECT COUNT(F1.ACCOUNT_NO) FROM FRIENDSHIP F1 WHERE F1.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWING,
+		    (SELECT COUNT(F2.OPPONENT_NO) FROM FRIENDSHIP F2 WHERE F2.OPPONENT_NO = A.ACCOUNT_NO) AS FOLLOWER,
+		    F.REALATION AS REALATION
+		FROM 
+		    ACCOUNT A
+		JOIN 
+		    FRIENDSHIP F ON A.ACCOUNT_NO = F.OPPONENT_NO
+		WHERE 
+		    F.ACCOUNT_NO = #{accountNo}
+
 	</select>
+	
+	<insert id="saveFriend" parameterType="FriendshipDto">
+		INSERT INTO FRIENDSHIP(ACCOUNT_NO, OPPONENT_NO, NICKNAME, REALATION) 
+		VALUES(#{accountNo}, #{opponentNo}, null, DEFAULT)
+	</insert>
 	
 	<!-- 특정 게시물 조회 마다 조회수 증가 -->
 	<update id="incrementHitCount" parameterType="Long">
@@ -90,16 +118,17 @@
 	
 	<!-- 게시글 등록 -->
 	<insert id="save" parameterType="BoardDto">
-		<selectKey keyProperty="bno" order="BEFORE" resultType="Long">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="String">
 				SELECT SEQ_BOARD.NEXTVAL
 				FROM DUAL
 		</selectKey>
-		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_CATEGORY, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
-    	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardCategory}, #{boardComment}, #{address}, null)
+		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
+    	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardComment}, #{address}, null)
 	</insert>
+	<!-- 게시글 등록 시 이미지 서버에 등록된 이미지 번호 등록 -->
 	<insert id="imageUpload" parameterType="BoardImageDto">
 		INSERT INTO BOARD_IMAGE(BNO, IMAGE, LINE_LOC) 
-		VALUES(SEQ_BOARD.CURRVAL, #{image}, #{lineLoc})
+		VALUES(#{bno}, #{image}, #{lineLoc})
 	</insert>
 	
 	<!-- 게시글 수정 -->

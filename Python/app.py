@@ -12,8 +12,8 @@ import os
 #내가 만든 RESTFul API서비스용 클래스 모듈들
 from api.upload import Upload
 
-#OCR서비용
-from api.ocr import OCR
+#OCR
+from api.ocr import Ocr
 #크롤링
 from api.crawling import Crawling
 #식단 데이타 보내기
@@ -26,6 +26,13 @@ from api.workout import Workout
 from api.account import Account
 
 from api.publicData import Public
+
+#챗봇
+from api.chatbot import Chatbot
+#챗이미지 생성
+from api.chatImage import ChatImage
+
+from api.food_detection import FoodDetection
 
 #플라스크 앱 생성
 app = Flask(__name__)
@@ -43,7 +50,8 @@ api = Api(app)
 
 api.add_resource(Upload,'/fileupload')
 
-api.add_resource(OCR,'/ocr')
+#OCR
+api.add_resource(Ocr,'/ocr')
 #크롤링 네이버 구글
 api.add_resource(Crawling,'/crawling')
 #식단 데이타 보내기
@@ -56,6 +64,12 @@ api.add_resource(Workout,'/workout/<user_id>')
 api.add_resource(Account,'/account/<user_id>')
 #공공데이타
 api.add_resource(Public,'/public')
+#챗봇
+api.add_resource(Chatbot,'/chatbot')
+#챗이미지 생성
+api.add_resource(ChatImage,'/chatImage')
+
+api.add_resource(FoodDetection,'/food')
 
 
 if __name__ == '__main__':

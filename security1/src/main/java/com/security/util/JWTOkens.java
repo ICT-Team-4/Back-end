@@ -46,6 +46,8 @@ public class JWTOkens {
 
 
   /**
+   * 처음날짜 추가
+   * 수정이력 02-18 만료 시간 변경
    * JWT토큰을 생성해서 반환하는 메소드
    * 
    * @param username 사용자 아이디
@@ -57,7 +59,7 @@ public class JWTOkens {
       long expirationTime) {
 
     // JWT 토큰의 만료 시간 설정
-    long currentTimeMillis = System.currentTimeMillis();// 토큰의 생성시간
+    long currentTimeMillis = System.currentTimeMillis(); // 토큰의 생성시간
     expirationTime = currentTimeMillis + expirationTime; // 토큰의 만료시간
 
     // Header 부분 설정

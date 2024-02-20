@@ -1,5 +1,7 @@
 package com.security.model;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -20,6 +22,12 @@ public interface UserMapper {
   
   UserDto findMemberInfoByUsername(String username);
   
+  UserDto findAccountByAccountNo(String accountNo);
+  
+  String selectPasswordByUsername(String username);
+
   void leaveMember(long accountNo);
+  
+  void updatePasswordByUsername(Map<String, Object> parameters);
   
 }

@@ -37,9 +37,9 @@ public class MypageController {
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String username = payload.get("sub").toString();
 		
-		MypageAccountDto accountInfo = mypageService.findByUsername(username);
+		MypageAccountDto accountInfo = mypageService.findByNo(username);
 		
-		System.out.println(accountInfo);
+		System.out.println(accountInfo.toString());
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(accountInfo);
 		  

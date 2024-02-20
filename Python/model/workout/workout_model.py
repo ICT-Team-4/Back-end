@@ -94,24 +94,38 @@ def workout_delete(conn,cal_id):
 
 
 def workout_update(conn,cal_id,list_):
-    print(cal_id, "diet_update :",list_)
+    # print(cal_id, "diet_update :",list_)
     # test = []  # 캘린더 테이블
-    # test.append(cal_id)
-    # test.append(list_['DESCRIPTION'])  # 제목
-    # test.append(list_['MEMO'])  # 메모,내용
-    # test.append(list_['CATEGORY'])  # 운동 종류
-    # test.append(list_['COUNTS'])  # 운동 횟수
-    # test.append(list_['WEIGHT'])  # 무게
-    # test.append(list_['END_DATE'])  # 운동 시간
-    # print('workout_update', cal_id, ":", test)
-    # sql = f"UPDATE calendar SET DESCRIPTION='{list_['DESCRIPTION']}', MEMO='{list_['MEMO']}', END_DATE=TO_DATE('{list_['END_DATE']}','YYYY-MM-DD HH24:MI') WHERE calendar_no={cal_id}"
-    # sql2 = f"UPDATE workout SET CATEGORY='{list_['CATEGORY']}' ,COUNTS='{list_['COUNTS']}' , WEIGHT='{list_['WEIGHT']}' WHERE calendar_no={cal_id})"
-    # with conn.cursor() as cursor:
-    #     try:
-    #         cursor.execute()
-    #         conn.commit()
-    #         return cursor.rowcount
-    #     except Exception as e:
-    #         # conn.rollback()
-    #         print('데이터 수정시 오류:', e)
-    #         return 0
+    sql = f"UPDATE calendar SET calendar_no={cal_id} "
+    sql2 = f"UPDATE workout SET calendar_no={cal_id} "
+    for cate in list_:
+        if list_[cate] != None:
+            if cate in ['DESCRIPTION','MEMO','END_DATE']:
+                if cate != 'END_DATE':
+                    sql += f", {cate}='{list_[cate]}'"
+                else:
+                    sql += f", END_POSTDATE = TO_DATE('{list_[cate]}','YYYY-MM-DD HH24:MI') "
+
+            else:
+                sql2 += f", {cate}='{list_[cate]}' "
+
+
+    sql += f" WHERE calendar_no={cal_id}"
+    sql2 += f" WHERE calendar_no={cal_id}"
+    # print("sql",sql)
+    # print("sql2",sql2)
+
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute(sql)
+            conn.commit()
+            # print('cursor.rowcount',cursor.rowcount)
+            if int(cursor.rowcount) != 0:
+                cursor.execute(sql2)
+                conn.commit()
+                return 2
+            return 1
+        except Exception as e:
+            # conn.rollback()
+            print('데이터 수정시 오류:', e)
+            return 0

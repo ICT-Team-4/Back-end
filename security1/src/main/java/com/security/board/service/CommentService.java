@@ -20,12 +20,12 @@ public class CommentService {
 	}
 	
 	//특정 게시글에 대한 전체 댓글 목록 조회
-	public List<BoardCommentDto> commentList(Long bno) {
+	public List<BoardCommentDto> commentList(String bno) {
 		return commentMapper.findAllByNo(bno);
 	}
 	
 	//특정 게시글에 대한 특정 댓글 정보 조회
-	public BoardCommentDto commentOne(Long bcno) {
+	public BoardCommentDto commentOne(String bcno) {
 		return commentMapper.findByOne(bcno);
 	}
 	
@@ -36,9 +36,9 @@ public class CommentService {
 	
 	//댓글 좋아요
 	@Transactional
-	public int commentLike(Long bcno, String username) {
+	public int commentLike(String bcno, String username) {
 		
-		Long accountNo = commentMapper.findByUsername(username).getAccountNo();
+		String accountNo = commentMapper.findByUsername(username).getAccountNo();
 		
 		CommentLikeDto clike = new CommentLikeDto();
 		clike.setBcno(bcno);
@@ -65,7 +65,7 @@ public class CommentService {
 	
 	//댓글 삭제
 	@Transactional
-	public int commentDelete(Long bcno) {
+	public int commentDelete(String bcno) {
 		return commentMapper.delete(bcno);
 	}
 	
