@@ -31,19 +31,17 @@ def diet_calendar(conn, user_id):
     with conn.cursor() as cursor:
         try:
             cursor.execute(
-                f"SELECT DISTINCT to_char(TRUNC(end_postdate),'YYYY-MM-DD') time FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE account_no = :1",
-                user_id)
+                f"SELECT DISTINCT to_char(TRUNC(end_postdate),'YYYY-MM-DD') time FROM calendar c JOIN diet d ON c.calendar_no = d.calendar_no WHERE account_no = {user_id}")
             return cursor.fetchall()
         except Exception as e:
             print('모든 데이터 조회시 오류:', e)
             return None
 
-def exercise_calendar(conn, user_id):
+def workout_calendar(conn, user_id):
     with conn.cursor() as cursor:
         try:
             cursor.execute(
-                f"SELECT DISTINCT to_char(TRUNC(start_postdate),'YYYY-MM-DD') time FROM calendar c JOIN workout e ON c.calendar_no = e.calendar_no WHERE account_no = :1",
-                user_id)
+                f"SELECT DISTINCT to_char(TRUNC(end_postdate),'YYYY-MM-DD') time FROM calendar c JOIN workout w ON c.calendar_no = w.calendar_no WHERE account_no = {user_id} ORDER BY time")
             return cursor.fetchall()
         except Exception as e:
             print('모든 데이터 조회시 오류:',e)

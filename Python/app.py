@@ -25,6 +25,8 @@ from api.workout import Workout
 #public
 from api.account import Account
 
+from api.publicData import Public
+
 #플라스크 앱 생성
 app = Flask(__name__)
 #CORS에러 처리
@@ -52,6 +54,8 @@ api.add_resource(CalendarLike,'/calendarLike/<cal_id>')
 api.add_resource(Workout,'/workout/<user_id>')
 #어카운트 정보 받아오기
 api.add_resource(Account,'/account/<user_id>')
+#공공데이타
+api.add_resource(Public,'/public')
 
 
 if __name__ == '__main__':

@@ -27,18 +27,3 @@ class Image(Resource):
         # print(base64_string1)
         return {'image':base64_string1.decode('utf8')}
         # return jsonify(data)  # 테이블 2개여서 성공이면 2이다
-    def post(self,id):
-        args = self.parser.parse_args()
-        # print(id,':',args['uploads'])
-        conn = oracle.connectDatabase()
-        data = oracle.insert(conn)
-        # print(data[0])
-        strDe = args['uploads']
-
-        str1 = 'C:\\Users\\user\\Upload\\'+str(data[0])+'.png'
-        with open(str1, "bw") as f:
-            f.write(base64.b64decode(strDe.encode()))
-            # print(str1)
-        return data[0]
-    def delete(self,id):
-        print(id)

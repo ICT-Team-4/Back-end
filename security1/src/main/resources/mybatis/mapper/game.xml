@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 매퍼파일 -->
+<mapper namespace="com.security.game.dao.GameAccountMapper">
+	<update id="update" parameterType="GameAccountDto">
+		UPDATE game_account
+		<set>
+			<if test="gameImage != null">game_image= #{gameImage},</if>
+			<if test="nickname != null">nickname= #{nickname}</if>
+		</set>
+		WHERE account_no = #{accountNo}
+	</update>
+</mapper>
