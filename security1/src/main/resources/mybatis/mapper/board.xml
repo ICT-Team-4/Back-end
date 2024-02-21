@@ -45,7 +45,6 @@
 			A.NAME,
 			A.ENROLL_DATE,
 			(SELECT COUNT(B.ACCOUNT_NO) FROM BOARD B WHERE B.ACCOUNT_NO=A.ACCOUNT_NO) AS POSTCOUNT,
-			
 			(SELECT COUNT(F.ACCOUNT_NO) FROM FRIENDSHIP F WHERE F.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWING,
 			(SELECT COUNT(F.OPPONENT_NO) FROM FRIENDSHIP F WHERE F.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWER
 		FROM ACCOUNT A
@@ -95,7 +94,7 @@
 	</insert>
 	
 	<!-- 특정 게시물 조회 마다 조회수 증가 -->
-	<update id="incrementHitCount" parameterType="Long">
+	<update id="incrementHitCount" parameterType="String">
 	    UPDATE BOARD
 	    SET HIT_COUNT = HIT_COUNT + 1
 	    WHERE BNO = #{bno}
@@ -103,7 +102,7 @@
 	
 	<!-- 좋아요 누른 회원인지 확인 -->
 	<select id="findByLike" parameterType="BoardLikesDto" resultType="int">
-		SELECT COUNT(BNO) FROM BOARD_LIKES WEHRE BNO=#{bno} AND ACCOUNT_NO=#{account_no} 
+		SELECT COUNT(BNO) FROM BOARD_LIKES WHERE BNO=#{bno} AND ACCOUNT_NO=#{accountNo} 
 	</select>
 	
 	<!-- 좋아요 버튼 클릭 -->
@@ -146,4 +145,9 @@
 	<delete id="delete">
 		DELETE FROM BOARD WHERE ACCOUNT_NO=#{accountNo} AND BNO=#{bno}
 	</delete>
+	
+	<!-- 게시글 스크랩 -->
+	<insert id="saveScraps" parameterType="Map">
+		INSERT INTO BOARD_SCRAPS VALUES(#{accountNo}, #{bno})
+	</insert>
 </mapper>
