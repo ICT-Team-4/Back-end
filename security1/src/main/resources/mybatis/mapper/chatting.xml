@@ -12,6 +12,37 @@
 		WHERE cl.chatting_no = c.chatting_no 
 			AND cl.account_no = #{accountNo}
 	</select>
+	
+	<!--  채팅방 멤버 확인 -->
+	<select id="findChatRoomMemberByChatNo" parameterType="int" resultType="ChatMemberDto">
+		SELECT chatting_no
+				,a.account_no
+				,name
+				,image
+				,(select c.account_no 
+				  FROM chatting c 
+				  where c.chatting_no = cl.chatting_no) king 
+		FROM chatting_list cl
+			,ACCOUNT a 
+		WHERE cl.account_no=a.account_no 
+			and chatting_no = #{chattingNo}
+	</select>
+	<!--  채팅방 친구 추가 리스트-->
+	<select id="findChatFriendsByChatNo" parameterType="ChatDto" resultType="ChatFriendsDto">
+		SELECT DISTINCT f.nickname name
+                ,f.opponent_no accountNo
+                ,image
+		FROM friendship f,
+		        account a
+		WHERE f.account_no = #{accountNo}
+		    AND f.opponent_no NOT IN (
+		        SELECT account_no
+		        FROM chatting_list
+		        WHERE chatting_no = #{chattingNo}
+		    )
+		    AND a.account_no = opponent_no
+	</select>
+	
 	<!-- 채팅내용 출력 -->
 	<select id="findChatCommentByNo" parameterType="int" resultType="ChatCommentListDto">
 		SELECT * FROM (
@@ -38,6 +69,11 @@
 	<select id="findChatByNo" parameterType="int" resultType="ChatRoomDto">
 		SELECT * FROM chatting WHERE chatting_no = #{chattingNo}
 	</select>
+	
+	<!-- 채팅방 인원 추가 -->
+	<insert id="chatRoomSave" parameterType="ChatRoomFriendsDto">
+		INSERT INTO chatting_list VALUES(#{chattingNo},#{accountNo}, concat((SELECT name FROM chatting c,account a WHERE a.account_no = c.account_no and chatting_no = 1),'님의 채팅방'))
+	</insert>
 	
 	<insert id="insertChat" parameterType="ChatDto">
 		INSERT INTO chatting_chatroom VALUES(seq_chatroom.nextval,#{chattingNo},#{accountNo},default,#{chatComment},null,null)

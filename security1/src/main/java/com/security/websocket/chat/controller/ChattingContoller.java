@@ -9,14 +9,20 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.util.JWTOkens;
 import com.security.websocket.chat.dto.ChatCommentListDto;
+import com.security.websocket.chat.dto.ChatFriendsDto;
 import com.security.websocket.chat.dto.ChatListDto;
+import com.security.websocket.chat.dto.ChatMemberDto;
 import com.security.websocket.chat.dto.ChatRoomDto;
+import com.security.websocket.chat.dto.ChatRoomFriendsDto;
 import com.security.websocket.chat.service.ChatService;
+import com.security.websocket.dto.ChatDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,10 +44,39 @@ public class ChattingContoller {
 		List<ChatListDto> findByNoAll = chatService.findChatListByNo(accountNo);
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findByNoAll);
 	}
+	
+	//채팅 내용
 	@GetMapping("/chat/list/room/{chattingNo}")
 	public ResponseEntity<List<ChatCommentListDto>> chatComments(@PathVariable int chattingNo){
 		List<ChatCommentListDto> findCommentByNo = chatService.findChatCommentByNo(chattingNo);
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findCommentByNo);
+	}
+	//채팅방 멤버 
+	@GetMapping("/chat/list/room/member/{chattingNo}")
+	public ResponseEntity<List<ChatMemberDto>> chatMember(@PathVariable int chattingNo){
+		List<ChatMemberDto> findMemberByNo = chatService.findChatRoomMemberByChatNo(chattingNo);
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findMemberByNo);
+	}
+	
+	//채팅방 초대 리스트 
+	@GetMapping("/chat/list/room/friends/{chattingNo}")
+	public ResponseEntity<List<ChatFriendsDto>> chatFriends(@PathVariable String chattingNo,HttpServletRequest request){
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String accountNo = payload.get("sub").toString();
+		ChatDto dto = new ChatDto();
+		dto.setAccountNo(Integer.parseInt(accountNo));
+		dto.setChattingNo(Integer.parseInt(chattingNo));
+		
+		List<ChatFriendsDto> findChatFriendsByChatNo = chatService.findChatFriendsByChatNo(dto);
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findChatFriendsByChatNo);
+	}
+	
+	@PostMapping("/chat/list/room/friends/post")
+	public ResponseEntity<ChatRoomFriendsDto> chatRoomFriends(@RequestBody ChatRoomFriendsDto dto){
+		System.out.println(dto);
+		int num = chatService.chatRoomSave(dto);
+		return null;
 	}
 	
 	@DeleteMapping("/chat/list/room/{chattingNo}")
