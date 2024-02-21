@@ -18,8 +18,8 @@ import lombok.ToString;
 @Alias("CommentLikeDto")
 public class CommentLikeDto {
 	
-	private Long bcno;
-	private Long accountNo;
+	private String bcno;
+	private String accountNo;
 	private Date likeDate;
 
 }

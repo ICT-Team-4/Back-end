@@ -18,8 +18,8 @@ import lombok.ToString;
 @Alias("BoardDto")
 public class BoardDto {
 	
-	private Long bno;
-	private Long accountNo;
+	private String bno;
+	private String accountNo;
 	private Date postDate;
 	private String title;
 	private int hitCount;
@@ -27,6 +27,7 @@ public class BoardDto {
 	private String boardComment;
 	private String address;
 	private Date editDate;
+	private String[] boardImages;
 	//좋아요 수 가져오기 위한 변수
 	private int likes;
 	//스크랩 수 가져오기 위한 변수
