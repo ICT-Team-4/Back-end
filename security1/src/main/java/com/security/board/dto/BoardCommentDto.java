@@ -17,9 +17,9 @@ import lombok.ToString;
 @ToString
 @Alias("BoardCommentDto")
 public class BoardCommentDto {
-	private Long bcno;
-	private Long bno;
-	private Long accountNo;
+	private String bcno;
+	private String bno;
+	private String accountNo;
 	private Date postDate;
 	private String bcComment;
 	private Long replyNo;

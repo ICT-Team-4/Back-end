@@ -3,6 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 매퍼파일 -->
 <mapper namespace="com.security.board.dao.BoardMapper">
+	<resultMap id="imageResultMap" type="java.lang.String" >
+	    <result property="image" column="IMAGE"/>
+	</resultMap>
+
 	<!-- ver1 리팩토링 과정 서브쿼리 -> JOIN방식 -->
 	<!-- 전체 게시물 조회(사용자명+좋아요+스크랩) -->
 	<select id="findByAll" resultType="BoardDto">
@@ -17,8 +21,13 @@
 		ORDER BY BNO DESC
 	</select>
 	
+	<!-- 게시물에 등록된 이미지 번호 조회 -->
+	<select id="findImageByBno" resultMap="imageResultMap" parameterType="String">
+	    SELECT IMAGE FROM BOARD_IMAGE WHERE BNO=#{bno}
+	</select>
+	
 	<!-- 특정 게시물 조회 -->
-	<select id="findByNo" parameterType="Long" resultType="BoardDto">
+	<select id="findByNo" parameterType="String" resultType="BoardDto">
 		SELECT 
 			B.*,
 			(SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as NAME
@@ -36,6 +45,7 @@
 			A.NAME,
 			A.ENROLL_DATE,
 			(SELECT COUNT(B.ACCOUNT_NO) FROM BOARD B WHERE B.ACCOUNT_NO=A.ACCOUNT_NO) AS POSTCOUNT,
+			
 			(SELECT COUNT(F.ACCOUNT_NO) FROM FRIENDSHIP F WHERE F.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWING,
 			(SELECT COUNT(F.OPPONENT_NO) FROM FRIENDSHIP F WHERE F.ACCOUNT_NO = A.ACCOUNT_NO) AS FOLLOWER
 		FROM ACCOUNT A
@@ -79,9 +89,9 @@
 
 	</select>
 	
-	<insert id="saveFriend">
+	<insert id="saveFriend" parameterType="FriendshipDto">
 		INSERT INTO FRIENDSHIP(ACCOUNT_NO, OPPONENT_NO, NICKNAME, REALATION) 
-		VALUES(#{accountNo}, #{opponentNo}, #{nickName}, #{realation})
+		VALUES(#{accountNo}, #{opponentNo}, null, DEFAULT)
 	</insert>
 	
 	<!-- 특정 게시물 조회 마다 조회수 증가 -->
@@ -108,16 +118,17 @@
 	
 	<!-- 게시글 등록 -->
 	<insert id="save" parameterType="BoardDto">
-		<selectKey keyProperty="bno" order="BEFORE" resultType="Long">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="String">
 				SELECT SEQ_BOARD.NEXTVAL
 				FROM DUAL
 		</selectKey>
 		INSERT INTO BOARD(BNO, ACCOUNT_NO, POSTDATE, TITLE, HIT_COUNT, BOARD_COMMENT, ADDRESS, EDIT_DATE) 
     	VALUES(#{bno}, #{accountNo}, SYSDATE, #{title}, DEFAULT, #{boardComment}, #{address}, null)
 	</insert>
+	<!-- 게시글 등록 시 이미지 서버에 등록된 이미지 번호 등록 -->
 	<insert id="imageUpload" parameterType="BoardImageDto">
 		INSERT INTO BOARD_IMAGE(BNO, IMAGE, LINE_LOC) 
-		VALUES(SEQ_BOARD.CURRVAL, #{image}, #{lineLoc})
+		VALUES(#{bno}, #{image}, #{lineLoc})
 	</insert>
 	
 	<!-- 게시글 수정 -->
