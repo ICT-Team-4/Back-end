@@ -31,8 +31,7 @@ from api.publicData import Public
 from api.chatbot import Chatbot
 #챗이미지 생성
 from api.chatImage import ChatImage
-#유튜브
-from api.youtube import Youtube
+
 
 from api.food_detection import FoodDetection
 
@@ -71,11 +70,7 @@ api.add_resource(Chatbot,'/chatbot')
 #챗이미지 생성
 api.add_resource(ChatImage,'/chatImage')
 
-
-api.add_resource(Youtube, '/youtube')
-
 api.add_resource(FoodDetection,'/food')
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
