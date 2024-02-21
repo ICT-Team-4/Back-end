@@ -18,8 +18,10 @@ import lombok.ToString;
 @Alias("BoardLikesDto")
 public class BoardLikesDto {
 	
-	private Long bno;
+	private String bno;
 	private String accountNo;
 	private Date likeDate;
+	//눌렸는지 확인 변수
+	private String preState;
 
 }
