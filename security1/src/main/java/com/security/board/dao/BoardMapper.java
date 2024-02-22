@@ -62,6 +62,9 @@ public interface BoardMapper {
 	
 	//게시글 삭제
 	int delete(BoardDto dto);
+	
+	//게시글 스크랩
+	int saveScraps(Map<String, String> map);
 
 	
 

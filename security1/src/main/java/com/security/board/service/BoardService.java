@@ -1,6 +1,7 @@
 package com.security.board.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,24 +99,25 @@ public class BoardService {
 		return boardMapper.imageUpload(boardImageDto);
 	}
 	
+	//각 게시글에 대한 좋아요 클릭 여부 확인
+	public int CheckLike(BoardLikesDto dto) {
+		return boardMapper.findByLike(dto);
+	}
+	
 	//좋아요 버튼 클릭
 	@Transactional
-	public int like(Long bno, String accountNo) {
-
-		BoardLikesDto like = new BoardLikesDto();		
-		like.setBno(bno);
-		like.setAccountNo(accountNo);
+	public int like(BoardLikesDto dto) {
 		
 		//1. 해당 회원이 해당 게시글에 좋아요 누른 여부 확인
-		int count = boardMapper.findByLike(like);
+		int count = boardMapper.findByLike(dto);
 		
 		//2. 좋아요를 누른적이 없다면 ? insert : delete
 		//좋아요 등록 1, 취소 2
 		if(count == 0) {
-	        boardMapper.insertLike(like);
+	        boardMapper.insertLike(dto);
 	        return 1;
 	    } else {
-	        boardMapper.deleteLike(like);
+	        boardMapper.deleteLike(dto);
 	        return 2;
 	    }
 	}
@@ -133,6 +135,11 @@ public class BoardService {
 		return boardMapper.delete(dto);
 	}
 
+	//게시글 스크랩
+	@Transactional
+	public int saveScraps(Map<String, String> map) {
+		return boardMapper.saveScraps(map);
+	}
 	
 	
 }

@@ -1,27 +1,28 @@
-package com.security.board.dto;
+package com.security.websocket.chat.dto;
 
 import java.sql.Date;
 
 import org.apache.ibatis.type.Alias;
 
+import com.security.websocket.dto.ChatDto;
+
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Alias("BoardLikesDto")
-public class BoardLikesDto {
-	
-	private String bno;
+@Alias("ChatAddFriendsDto")
+public class ChatAddFriendsDto {
+	private String chattingNo;
 	private String accountNo;
-	private Date likeDate;
-	//눌렸는지 확인 변수
-	private String preState;
-
+	private int num; //배열크기
+	
 }
