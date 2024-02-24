@@ -23,6 +23,9 @@ public interface BoardMapper {
 	
 	//특정 게시물 상세 조회
 	BoardDto findByNo(String bno);
+	
+	//게시글 검색
+	List<BoardDto> findBySearchWord(Map<String, String> searchData);
 
 	//특정 사용자가 등록한 게시글 전체 조회
 	List<BoardDto> findAllByNo(String accountNo);
