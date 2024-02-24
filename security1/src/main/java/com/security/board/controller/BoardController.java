@@ -64,8 +64,6 @@ public class BoardController {
 		
 		AccountDto accountInfo = boardService.findByAccountNo(accountNo);
 		
-		System.out.println("게시글 프로필 클릭 시 사용자 정보 출력" + accountInfo);
-		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(accountInfo);
 	}
 	
@@ -90,8 +88,6 @@ public class BoardController {
 	//특정 회원의 게시글 전체 조회
 	@GetMapping("/boards/friends/{accountNo}")
 	public ResponseEntity<List<BoardDto>> boardAllListByNo(@PathVariable String accountNo) {
-		
-		System.out.println("친구의 accountNo"+accountNo);
 		
 		List<BoardDto> allListNo = boardService.findAllByNo(accountNo);
 		
@@ -118,8 +114,6 @@ public class BoardController {
 		
 		List<FriendDto> friendsInfo = boardService.findFriendByAccountNo(accountNo);
 		
-		System.out.println("정보 출력"+friendsInfo);
-		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(friendsInfo);	
 	}
 	
@@ -130,8 +124,6 @@ public class BoardController {
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String accountNo = payload.get("sub").toString();
-		
-		System.out.println(accountNo + " : " + opponentNo);
 		
 		int flag = 0;
 		int save = 0;
@@ -171,7 +163,6 @@ public class BoardController {
 		
 		boardService.boardSave(boardDto);
 		
-		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(boardDto);
 	}
 	
@@ -200,9 +191,8 @@ public class BoardController {
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String accountNo = payload.get("sub").toString();
-		System.out.println("사용자 번호 넣기 전"+dto);
+		
 		dto.setAccountNo(accountNo);
-		System.out.println("사용자 번호 넣기 후"+dto);
 		
 		String message = "";
 		int count = 0;
@@ -261,8 +251,6 @@ public class BoardController {
 		int flag = 0;
 		
 		BoardDto boardDto = boardService.findByOne(bno);
-		
-		System.out.println(String.format("게시글 작성자 번호 : %s, 로그인한 사람 번호 : %s", boardDto.getAccountNo(), accountNo));
 
 		if(!(boardDto.getAccountNo().equals(accountNo))) {
 			message = "동일한 회원이 아닙니다";
@@ -294,8 +282,6 @@ public class BoardController {
 		map.put("bno", bno);
 		map.put("accountNo", accountNo);
 		
-		System.out.println("스크랩 도전"+map);
-		
 		flag = boardService.saveScraps(map);
 		
 		if(flag == 1) {
@@ -306,7 +292,22 @@ public class BoardController {
 			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 		}
 		
-		
+	}
+	
+	//게시글 검색
+	@GetMapping("/boards/search")
+	public ResponseEntity<List<BoardDto>> searchBoard(@RequestParam String searchBy, @RequestParam String searchWord) {
+	    Map<String, String> searchData = new HashMap<>();
+	    searchData.put("searchBy", searchBy);
+	    searchData.put("searchWord", searchWord);
+	    
+	    List<BoardDto> searchList = boardService.findBySearchWord(searchData);
+	    
+	    if (searchList != null && !searchList.isEmpty()) {
+	        return ResponseEntity.ok().body(searchList);
+	    } else {
+	        return ResponseEntity.noContent().build(); // 검색 결과가 없을 때
+	    }
 	}
 	
 }
