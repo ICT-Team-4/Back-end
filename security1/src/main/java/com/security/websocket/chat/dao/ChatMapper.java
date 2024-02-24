@@ -27,7 +27,15 @@ public interface ChatMapper {
 	
 	public List<ChatFriendsDto> findChatFriendsByChatNo(ChatDto dto);
 	
+	public int chatAddRoom(String accountNo);
+	
+	public String chatAddRoomCheck();
+	
 	public int chatRoomSave(ChatRoomFriendsDto dto);
+	
+	public int chatRoomEditName(ChatListDto dto);
+	
+	public int chatMemberDelete(ChatRoomDto dto);
 	
 	public int delete(int chattingNo);
 	

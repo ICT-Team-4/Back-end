@@ -72,12 +72,29 @@
 	
 	<!-- 채팅방 인원 추가 -->
 	<insert id="chatRoomSave" parameterType="ChatRoomFriendsDto">
-		INSERT INTO chatting_list VALUES(#{chattingNo},#{accountNo}, concat((SELECT name FROM chatting c,account a WHERE a.account_no = c.account_no and chatting_no = 1),'님의 채팅방'))
+		INSERT INTO chatting_list VALUES(#{chattingNo},#{accountNo}, concat((SELECT name FROM chatting c,account a WHERE a.account_no = c.account_no and chatting_no = #{chattingNo}),'님의 채팅방'))
 	</insert>
+	
+	<!-- 채팅방 추가 -->
+	<insert id="chatAddRoom" parameterType="string">
+		INSERT INTO chatting VALUES(seq_chatting.nextval,#{accountNo},DEFAULT)
+	</insert>
+	<!-- 채팅방 일련번호 확인 -->
+	<select id="chatAddRoomCheck" resultType="String">
+		SELECT max(chatting_no) FROM chatting
+	</select>
+	
+	<update id="chatRoomEditName" parameterType="ChatListDto">
+		UPDATE chatting_list SET chatting_nick =#{chattingNick} WHERE account_no = #{accountNo} and chatting_no = #{chattingNo}
+	</update>
 	
 	<insert id="insertChat" parameterType="ChatDto">
 		INSERT INTO chatting_chatroom VALUES(seq_chatroom.nextval,#{chattingNo},#{accountNo},default,#{chatComment},null,null)
 	</insert>
+	
+	<delete id="chatMemberDelete" parameterType="ChatRoomDto">
+		DELETE chatting_list WHERE chatting_no = #{chattingNo} and account_no = #{accountNo}
+	</delete>
 	<delete id="delete">
 		DELETE chatting WHERE chatting_no = #{chattingNo}
 	</delete>

@@ -37,6 +37,7 @@ public class ChatService {
 	}
 	//채팅 초대시 친구 확인
 	public List<ChatFriendsDto> findChatFriendsByChatNo(ChatDto dto){
+		System.out.println(dto);
 		return chatMapper.findChatFriendsByChatNo(dto);
 	}
 	
@@ -45,23 +46,46 @@ public class ChatService {
 	}
 	
 	@Transactional
-	public int chatRoomSave(ChatRoomFriendsDto dto) {
+	public int chatRoomSave(ChatRoomFriendsDto dto,String king) {
+		if(dto.getChattingNo().equalsIgnoreCase("0")) {
+//			System.out.println("방초대입니다");
+			int num = chatMapper.chatAddRoom(king);
+			if(num == 0)return 0;
+			dto.setChattingNo(chatMapper.chatAddRoomCheck());
+			
+			//방장을 따로 저장하는 과정
+			String userBukkit = dto.getAccountNo();
+			dto.setAccountNo(king);
+			chatMapper.chatRoomSave(dto);
+			
+			dto.setAccountNo(userBukkit);
+		}
 		int flag = 0;
-		if(dto.getAccountNo() == null) {
+		if(dto.getFriends() != null) {
 			String[] friends = dto.getFriends();
 			for(String accountNo: friends) {
-				System.out.println(">>>"+accountNo);
+//				System.out.println(">>>"+accountNo);
 				dto.setAccountNo(accountNo);
 				chatMapper.chatRoomSave(dto);
 				flag++;
 			}
 		}else {
 			String accountNo = dto.getAccountNo();
-			System.out.println(">>>"+accountNo);
+//			System.out.println(">>>"+accountNo);
 			return chatMapper.chatRoomSave(dto);
 		}
 		
 		return flag;
+	}
+	
+	@Transactional
+	public int chatRoomEditName(ChatListDto dto) {
+		return chatMapper.chatRoomEditName(dto);
+	}
+	
+	@Transactional
+	public int chatMemberDelete(ChatRoomDto dto) {
+		return chatMapper.chatMemberDelete(dto);
 	}
 	
 	@Transactional
