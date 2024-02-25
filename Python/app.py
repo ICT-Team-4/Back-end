@@ -32,6 +32,7 @@ from api.chatbot import Chatbot
 #챗이미지 생성
 from api.chatImage import ChatImage
 
+from api.foods_recommend_api import FoodsRecommend
 
 from api.food_detection import FoodDetection
 
@@ -71,6 +72,9 @@ api.add_resource(Chatbot,'/chatbot')
 api.add_resource(ChatImage,'/chatImage')
 
 api.add_resource(FoodDetection,'/food')
+
+api.add_resource(FoodsRecommend,'/recommend/<username>')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
