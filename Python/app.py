@@ -31,7 +31,9 @@ from api.publicData import Public
 from api.chatbot import Chatbot
 #챗이미지 생성
 from api.chatImage import ChatImage
-
+#AI 운동 추천
+from api.workout_recommend import WorkoutsRecommend
+#AI 음식 추천
 from api.foods_recommend_api import FoodsRecommend
 
 from api.food_detection import FoodDetection
@@ -70,6 +72,8 @@ api.add_resource(Public,'/public')
 api.add_resource(Chatbot,'/chatbot')
 #챗이미지 생성
 api.add_resource(ChatImage,'/chatImage')
+#AI운동 추천
+api.add_resource(WorkoutsRecommend,'/workoutsRecommend/<username>')
 
 api.add_resource(FoodDetection,'/food')
 
