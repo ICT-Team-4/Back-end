@@ -58,7 +58,7 @@ class RecommendAlgorithm:
             # 3.쿼리 실행을 위한 커서객체 얻기
             cursor = conn.cursor()
             # 4.쿼리 실행
-            cursor.execute('SELECT account_no,FOOD,count(food) rating FROM diet d, calendar c WHERE d.calendar_no = c.calendar_no GROUP BY food,account_no')
+            cursor.execute('SELECT account_no,FOOD,count(food) rating FROM diet d, calendar c WHERE d.calendar_no = c.calendar_no GROUP BY food,account_no ORDER BY rating')
             # 5.패치
             ratings = cursor.fetchall()
             # cursor.execute('SELECT * FROM foods')
@@ -209,6 +209,12 @@ class RecommendAlgorithm:
     '''
 
     def recommendItems(self, userId, noRatingItems, n_top=10):
+        if len(noRatingItems) ==0:
+            ratings = self.ratings.iloc[:, 0].astype('str')
+            # 결측값 확인 및 처리
+            ratings = ratings.fillna('')
+            # topitemIds =
+            return [(ids, rating) for ids, rating in zip(self.ratings[ratings.str.contains(userId)].head(n_top)['itemId'], self.ratings[ratings.str.contains(userId)].head(n_top)['rating'])]
         # userId가 평점을 안준  아이템에 대한  평점 예측
         predictions = [self.model.predict(str(userId), str(itemId)) for itemId in noRatingItems]
         # 예측 평점을 정렬

@@ -41,8 +41,8 @@ class FoodsRecommend(Resource):
 
         recommend_items = []
         for item in topItemPreds:
-            print('추천 아이템:{} 예측 평점:{}'.format(item[0], item[1]))
-            recommend_items.append({'food':item[0],'rank':item[1]})
+            print('추천 아이템:{} 예측 평점:{}'.format(item[0], publicModel.line(item[0])))
+            recommend_items.append({'food':item[0],'rank':str(publicModel.line(item[0]))})
 
         return make_response(json.dumps({'items':recommend_items},ensure_ascii=False))
 
