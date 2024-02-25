@@ -33,6 +33,8 @@ from api.chatbot import Chatbot
 from api.chatImage import ChatImage
 #AI 운동 추천
 from api.workout_recommend import WorkoutsRecommend
+#AI 음식 추천
+from api.foods_recommend_api import FoodsRecommend
 
 from api.food_detection import FoodDetection
 
@@ -74,6 +76,9 @@ api.add_resource(ChatImage,'/chatImage')
 api.add_resource(WorkoutsRecommend,'/workoutsRecommend/<username>')
 
 api.add_resource(FoodDetection,'/food')
+
+api.add_resource(FoodsRecommend,'/recommend/<username>')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
