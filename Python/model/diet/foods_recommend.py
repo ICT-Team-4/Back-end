@@ -88,8 +88,6 @@ class RecommendAlgorithm:
             # print(publicData_model.lineArr().shape)
             items_df = pd.DataFrame(publicData_model.lineArr(),columns=['itemId'])
 
-            print(items_df)
-
             cursor.close()
             #방법1)CSV파일 사용시
             #return args[0], args[1]
@@ -183,8 +181,18 @@ class RecommendAlgorithm:
     '''
 
     def getNoRatingItem(self, userId):
+        # # 데이터 형식 확인 및 변환
+        ratings = self.ratings.iloc[:, 0].astype('str')
+
+        # 결측값 확인 및 처리
+        ratings = ratings.fillna('')
+
+        # 문자열 포함 여부 확인
+        # print('ratingItems', ratings.str.contains('81'))
+
+        ratingItems = self.ratings[ratings.str.contains(userId)].iloc[:, 1].tolist()
+
         # 특정 유저가 평점을 준 아이템들을 리스트로 저장
-        ratingItems = self.ratings[self.ratings.iloc[:, 0] == userId].iloc[:, 1].tolist()
         totalItems = self.items.iloc[:, 0].tolist()
 
         noRatingItems = [item for item in totalItems if item not in ratingItems]

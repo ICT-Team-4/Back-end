@@ -2,6 +2,8 @@ from flask_restful import Resource
 from flask import make_response
 import  json
 from model.diet.foods_recommend import RecommendAlgorithm
+import model.diet.publicData_model as  publicModel
+
 class FoodsRecommend(Resource):
 
     def __init__(self):
@@ -35,7 +37,7 @@ class FoodsRecommend(Resource):
         print(f'사용자 아이디가 "{username}"인 사람이 평점을 매기지 않은 아이템 수:{len(noRatingItems)}')#7
         # 4.사용자 아이디가 username인 사람이 평점을 하지 않은 아이템들 중에서 모델이 예측한 평점이
         #  높은 아이템들을 추천하기
-        topItemPreds = recommend.recommendItems(username, noRatingItems, 3)  # 3개 추천하기
+        topItemPreds = recommend.recommendItems(username, noRatingItems, 2)  # 3개 추천하기
 
         recommend_items = []
         for item in topItemPreds:
