@@ -35,6 +35,8 @@ from api.chatImage import ChatImage
 
 from api.food_detection import FoodDetection
 
+from api.ServiceWorker import ServiceWorker
+
 #플라스크 앱 생성
 app = Flask(__name__)
 #CORS에러 처리
@@ -71,6 +73,8 @@ api.add_resource(Chatbot,'/chatbot')
 api.add_resource(ChatImage,'/chatImage')
 
 api.add_resource(FoodDetection,'/food')
+
+api.add_resource(ServiceWorker, '/serviceWorker')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
