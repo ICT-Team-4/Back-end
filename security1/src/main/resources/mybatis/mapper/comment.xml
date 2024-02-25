@@ -5,7 +5,7 @@
 <mapper namespace="com.security.board.dao.CommentMapper">
     
     <!-- 특정 게시물에 대한 모든 댓글 조회 -->
-    <select id="findAllByNo" parameterType="Long" resultType="BoardCommentDto">
+    <select id="findAllByNo" parameterType="String" resultType="BoardCommentDto">
     	SELECT
     	 C.* ,
     	 (SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=C.ACCOUNT_NO) as NAME
@@ -28,7 +28,7 @@
     
     <!-- 댓글 등록 -->
     <insert id="insert" parameterType="BoardCommentDto">
-    	<selectKey keyProperty="bcno" order="BEFORE" resultType="Long">
+    	<selectKey keyProperty="bcno" order="BEFORE" resultType="String">
 				SELECT SEQ_BOARD_COMMENT.NEXTVAL
 				FROM DUAL
 		</selectKey>
