@@ -1,6 +1,7 @@
 package com.security.board.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,8 +64,6 @@ public class BoardController {
 		
 		AccountDto accountInfo = boardService.findByAccountNo(accountNo);
 		
-		System.out.println("게시글 프로필 클릭 시 사용자 정보 출력" + accountInfo);
-		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(accountInfo);
 	}
 	
@@ -87,8 +88,6 @@ public class BoardController {
 	//특정 회원의 게시글 전체 조회
 	@GetMapping("/boards/friends/{accountNo}")
 	public ResponseEntity<List<BoardDto>> boardAllListByNo(@PathVariable String accountNo) {
-		
-		System.out.println("친구의 accountNo"+accountNo);
 		
 		List<BoardDto> allListNo = boardService.findAllByNo(accountNo);
 		
@@ -115,8 +114,6 @@ public class BoardController {
 		
 		List<FriendDto> friendsInfo = boardService.findFriendByAccountNo(accountNo);
 		
-		System.out.println("정보 출력"+friendsInfo);
-		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(friendsInfo);	
 	}
 	
@@ -127,8 +124,6 @@ public class BoardController {
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String accountNo = payload.get("sub").toString();
-		
-		System.out.println(accountNo + " : " + opponentNo);
 		
 		int flag = 0;
 		int save = 0;
@@ -168,22 +163,41 @@ public class BoardController {
 		
 		boardService.boardSave(boardDto);
 		
-		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(boardDto);
 	}
 	
-	//좋아요
-	@PostMapping("/boards/like/{bno}")
-	public ResponseEntity<String> boardLike(@PathVariable Long bno, HttpServletRequest request) {
+	//좋아요 눌렀는지 여부 확인
+	@GetMapping("/boards/like/{bno}")
+	public ResponseEntity<Integer> checkLike(BoardLikesDto dto, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
+		
+		//누른적 있으면 1, 아니면 0
+		int state = 0;
+		
+		dto.setAccountNo(accountNo);
+		
+		state = boardService.CheckLike(dto);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(state);
+	}
+	
+	//좋아요
+	@PostMapping("/boards/like")
+	public ResponseEntity<String> boardLike(@RequestBody BoardLikesDto dto, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String accountNo = payload.get("sub").toString();
+		
+		dto.setAccountNo(accountNo);
 		
 		String message = "";
 		int count = 0;
 		
-		count= boardService.like(bno, username);
+		count= boardService.like(dto);
     
 		//프론트에서 좋아요 버튼을 어떤 값으로 온/오프 할거인지 말하고 문자열을 보낼지 숫자를 보낼지 정할 예정 일단 문자열로 응답.
 		if(count == 1) {
@@ -196,8 +210,8 @@ public class BoardController {
 	}
 	
 	//게시글 수정
-	@PutMapping("/boards/{bno}")
-	public ResponseEntity<String> boardUpdate(@PathVariable String bno ,@RequestBody BoardDto dto, HttpServletRequest request) {
+	@PutMapping("/boards")
+	public ResponseEntity<String> boardUpdate(@RequestBody BoardDto dto, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
@@ -207,7 +221,7 @@ public class BoardController {
 		int flag = 0;
 		
 		AccountDto accountDto = boardService.findByAccountNo(accountNo);
-		BoardDto boardDto = boardService.findByOne(bno);
+		BoardDto boardDto = boardService.findByOne(dto.getBno());
 		
 		if(!(accountDto.getAccountNo() == boardDto.getAccountNo())) {
 			message = "등록한 사용자가 아닙니다.";
@@ -237,22 +251,63 @@ public class BoardController {
 		int flag = 0;
 		
 		BoardDto boardDto = boardService.findByOne(bno);
-		AccountDto accountDto = boardService.findByAccountNo(accountNo);
-		
-		System.out.println(String.format("게시글 작성자 번호 : %s, 로그인한 사람 번호 : %s", boardDto.getAccountNo(), accountDto.getAccountNo()));
 
-		if(!(boardDto.getAccountNo() == accountDto.getAccountNo())) {
+		if(!(boardDto.getAccountNo().equals(accountNo))) {
 			message = "동일한 회원이 아닙니다";
 			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 		}
 
 		flag = boardService.boardDelete(boardDto);
 		
-		if(flag == 0) message = "삭제에 실패했습니다";
+		if(flag == 0) message = "실패";
 		
-		message = "삭제 성공";
+		message = "성공";
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+	}
+	
+	//게시글 스크랩
+	@PostMapping("/boards/scrap")
+	public ResponseEntity<String> scrapBoard(@RequestBody String bno, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String accountNo = payload.get("sub").toString();
+		
+		String message = "";
+		int flag = 0;
+		
+		Map<String, String> map = new HashMap();
+		
+		map.put("bno", bno);
+		map.put("accountNo", accountNo);
+		
+		flag = boardService.saveScraps(map);
+		
+		if(flag == 1) {
+			message = bno+"번의 게시글을 스크랩 하였습니다.";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		} else {
+			message = bno+"번의 게시글 스크랩에 실패 하였습니다.";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		}
+		
+	}
+	
+	//게시글 검색
+	@GetMapping("/boards/search")
+	public ResponseEntity<List<BoardDto>> searchBoard(@RequestParam String searchBy, @RequestParam String searchWord) {
+	    Map<String, String> searchData = new HashMap<>();
+	    searchData.put("searchBy", searchBy);
+	    searchData.put("searchWord", searchWord);
+	    
+	    List<BoardDto> searchList = boardService.findBySearchWord(searchData);
+	    
+	    if (searchList != null && !searchList.isEmpty()) {
+	        return ResponseEntity.ok().body(searchList);
+	    } else {
+	        return ResponseEntity.noContent().build(); // 검색 결과가 없을 때
+	    }
 	}
 	
 }

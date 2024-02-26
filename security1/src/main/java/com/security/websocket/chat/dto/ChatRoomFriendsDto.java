@@ -1,4 +1,4 @@
-package com.security.board.dto;
+package com.security.websocket.chat.dto;
 
 import java.sql.Date;
 
@@ -15,13 +15,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Alias("BoardLikesDto")
-public class BoardLikesDto {
-	
-	private String bno;
+@Alias("ChatRoomFriendsDto")
+public class ChatRoomFriendsDto {
+	private String[] friends;
+	private String chattingNo;
 	private String accountNo;
-	private Date likeDate;
-	//눌렸는지 확인 변수
-	private String preState;
-
 }

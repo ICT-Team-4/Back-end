@@ -11,9 +11,7 @@ import base64
 class Image(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        # 아래는 공통 파라미터 설정(key=value로 받기)
-        # self.upload_path= os.path.join(os.getcwd(),'uploads')
-        self.parser.add_argument('uploads')
+        self.parser.add_argument('uploads', location='form')
     def get(self,id):
         # print(id)
 
@@ -27,3 +25,12 @@ class Image(Resource):
         # print(base64_string1)
         return {'image':base64_string1.decode('utf8')}
         # return jsonify(data)  # 테이블 2개여서 성공이면 2이다
+    def put(self,id):
+        print('>>>',id)
+        args = self.parser.parse_args()
+        image = args['uploads']
+        print('adadsas',image)
+        str1 = 'C:\\Users\\user\\Upload\\' + str(id) + '.png'
+        with open(str1, "wb") as f:
+            f.write(base64.b64decode(image.encode()))
+        return '성공'
