@@ -44,6 +44,13 @@ public class BoardService {
 		
 	}
 	
+	//게시글 검색
+	public List<BoardDto> findBySearchWord(Map<String, String> searchData){
+		System.out.println("category : " + searchData.get("searchBy"));
+		System.out.println("word : " + searchData.get("searchWord"));
+		return boardMapper.findBySearchWord(searchData);
+	}
+	
 	//회원 번호로 해당 회원 게시글 목록 조회
 	public List<BoardDto> findAllByNo(String accountNo) {
 		return boardMapper.findAllByNo(accountNo);
