@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 @Alias("MypageAccountDto")
 public class MypageAccountDto {
-	private Long accountNo;
+	private String accountNo;
 	private String username;
 	private String name;
 	private char gender;
@@ -28,7 +28,7 @@ public class MypageAccountDto {
 	private String image;
 	private int height;
 	private int weight;
-	private String game_image;
+	private String gameImage;
 	private String nickname;
 	private double skeletalMuscle; //SKELETAL_MUSCLE
 	private double bodyFatMass; //BODY_FAT_MASS
