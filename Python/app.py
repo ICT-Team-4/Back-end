@@ -31,10 +31,14 @@ from api.publicData import Public
 from api.chatbot import Chatbot
 #챗이미지 생성
 from api.chatImage import ChatImage
-
+#AI 운동 추천
+from api.workout_recommend import WorkoutsRecommend
+#AI 음식 추천
 from api.foods_recommend_api import FoodsRecommend
 
 from api.food_detection import FoodDetection
+
+from api.ServiceWorker import ServiceWorker
 
 #플라스크 앱 생성
 app = Flask(__name__)
@@ -70,11 +74,14 @@ api.add_resource(Public,'/public')
 api.add_resource(Chatbot,'/chatbot')
 #챗이미지 생성
 api.add_resource(ChatImage,'/chatImage')
+#AI운동 추천
+api.add_resource(WorkoutsRecommend,'/workoutsRecommend/<username>')
 
 api.add_resource(FoodDetection,'/food')
 
-api.add_resource(FoodsRecommend,'/recommend/<username>')
+api.add_resource(ServiceWorker, '/serviceWorker')
 
+api.add_resource(FoodsRecommend,'/recommend/<username>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
