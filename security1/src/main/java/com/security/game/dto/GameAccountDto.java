@@ -18,7 +18,7 @@ import lombok.ToString;
 @Alias("GameAccountDto")
 public class GameAccountDto {
 	
-	private int accountNo;
+	private String accountNo;
 	private String gameImage;
 	private String nickname;
 
