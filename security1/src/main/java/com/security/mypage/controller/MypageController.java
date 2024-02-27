@@ -3,10 +3,13 @@ package com.security.mypage.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,7 +42,7 @@ public class MypageController {
 		
 		MypageAccountDto accountInfo = mypageService.findByNo(username);
 		
-		System.out.println(accountInfo.toString());
+		System.out.println("123:" + accountInfo.toString());
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(accountInfo);
 		  
@@ -63,4 +66,21 @@ public class MypageController {
 		return  ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findBigThreeAllByNo);
 		
 	}
+   @PutMapping("/mypages/account/{accountNo}")
+    public ResponseEntity<String> updateAccountInfo(@RequestBody MypageAccountDto accountDto, HttpServletRequest request) {
+        try {
+        	
+        	String token = request.getHeader("Authorization");
+    		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+    		String accountNo = payload.get("sub").toString();
+        	accountDto.setAccountNo(accountNo);
+            mypageService.updateAccountInfo(accountDto);
+            
+            System.out.println("업데이트 후 " + accountDto);
+            return ResponseEntity.ok("Account information updated successfully.");
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정 실패");
+        }
+    }
 }
