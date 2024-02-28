@@ -1,4 +1,7 @@
 from openai import OpenAI
+import os,base64,json,requests
+import urllib.request
+import model.image_oracledb.image_model as imagedb
 from flask_restful import Resource,reqparse
 from flask import jsonify, request
 import os,base64,json,requests
@@ -14,6 +17,7 @@ client = OpenAI(
 )
 
 class ChatImage(Resource):
+
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('accountNo',location='form')
@@ -62,6 +66,7 @@ class ChatImage(Resource):
         # 이미지 파일을 읽어서 base64 형태로 인코딩
         with open(image_path, "rb") as image_file:
             encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+
         #이미지 데이타베이스 접속
         image_url=0
         imageConn = image1.connectDatabase()
@@ -84,6 +89,7 @@ class ChatImage(Resource):
 
         # base64 인코딩된 이미지 데이터와 이미지의 이름을 JSON 형식으로 반환
         return jsonify({"image_data": encoded_image, "image_name": image_name})
+
 
 # 폴더가 존재하지 않으면 새 폴더를 생성하는 함수
 def create_folder(folder_path):
