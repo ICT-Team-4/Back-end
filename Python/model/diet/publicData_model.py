@@ -9,11 +9,8 @@ def line(name):
     df = pd.read_csv(loc, encoding='cp949')
     arr = ('식품명','영양성분함량기준량','에너지(kcal)','수분(g)','단백질(g)','지방(g)','회분(g)','탄수화물(g)')
     df1 = pd.DataFrame(df, columns=arr)
-    # print(df1)
-    # print(df1[df1['식품명']==name])
-    # print(df1[df1['식품명']==name])
-    # print(dict(zip(tuple(df1.columns),tuple(df1[df1['식품명']==name].values))))
-    return df1[df1['식품명']==name].values
+    df1.fillna(0, inplace=True)
+    return (df1[df1['식품명']==name].values)[0]
 def lineArr():
     # csv_data = np.loadtxt('amount_of_food.csv', delimiter=',')
     path = os.path.dirname(os.path.abspath(__file__))
@@ -38,5 +35,5 @@ def lineArr():
     return np.array(df['식품명'])
 
 if __name__ == '__main__':
-    # print(line('순대'))
-    print(lineArr())
+    print(line('낙지전골'))
+    # print(lineArr())

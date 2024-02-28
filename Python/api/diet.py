@@ -63,7 +63,7 @@ class Diet(Resource):
                 print('id',id)
                 # id에 해당하는 이미지 파일의 경로를 생성
                 str1 = 'C:\\Users\\user\\Upload\\' + str(id) + '.png'
-                # 이미지 파일을 열고, base64로 인코딩
+
                 with open(str1, "rb") as f:
                     image = base64.b64encode(f.read())
                     # 식품 정보와 인코딩된 이미지를 foodDiary 리스트에 추가
@@ -92,13 +92,14 @@ class Diet(Resource):
                     hTime = time0.strftime('%H')
 
                     data = str(foodDiary[i][2])
-                    pub_data = pub.line(data)[0][2:]
+                    pub_data = pub.line(data)[2:]
+                    print('pub_data',pub_data)
 
                     pub_num=0
                     if pub.line(data)[0][1].find('g') == -1:
-                        pub_num = float(pub.line(data)[0][1][:-2])
+                        pub_num = float(pub.line(data)[1][:-2])
                     else:
-                        pub_num = float(pub.line(data)[0][1][:-1])
+                        pub_num = float(pub.line(data)[1][:-1])
                     dnum = foodDiary[i][5]/pub_num
 
                     print("공공데이타 :", pub_data)  # null값 있는지 확인
