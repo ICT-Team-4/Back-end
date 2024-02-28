@@ -30,7 +30,7 @@ class Youtube(Resource):
             q=keywords,
             order="viewCount",  # 조회수
             part="snippet",  # 검색 결과에 제목,설명,썸네일,채널정보 포함
-            maxResults=50  # 최대 50개의 검색 결과를 반환
+            maxResults=2  # 최대 50개의 검색 결과를 반환
         ).execute()
 
         # 검색 결과의 각 비디오에 대해 추가 정보를 가져 온다
