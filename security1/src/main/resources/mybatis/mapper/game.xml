@@ -11,4 +11,9 @@
 		</set>
 		WHERE account_no = #{accountNo}
 	</update>
+	
+	<insert id="createGameRoom" parameterType="GameRoomDto" useGeneratedKeys="true" keyProperty="gameroomNo">
+		INSERT INTO GAMEROOM (gameroom_no)
+		VALUES (GAMEROOM_NO_SEQ.NEXTVAL)
+	</insert>
 </mapper>

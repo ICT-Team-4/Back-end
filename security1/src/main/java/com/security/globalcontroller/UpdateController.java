@@ -1,4 +1,4 @@
-package com.security.controller;
+package com.security.globalcontroller;
 
 import java.util.Map;
 
