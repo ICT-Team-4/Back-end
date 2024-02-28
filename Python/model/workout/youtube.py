@@ -3,8 +3,10 @@ from googleapiclient.discovery import build
 import pandas as pd
 import os
 
+
 DEVELOPER_KEY = "AIzaSyDSEnPCH9ejzYKrTqKNEM8lFEXhQHwyu4o"
 # DEVELOPER_KEY = os.environ.get("YOUTUBE_API")  # 환경 변수에서 YouTube API 키 값
+
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 

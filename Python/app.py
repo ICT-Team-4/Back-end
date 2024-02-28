@@ -16,28 +16,27 @@ from api.upload import Upload
 from api.ocr import Ocr
 #크롤링
 from api.crawling import Crawling
+#public
+from api.account import Account
+#공공데이터
+from api.publicData import Public
 #식단 데이타 보내기
 from api.diet import Diet
+#AI 음식 추천
+from api.foods_recommend_api import FoodsRecommend
+#음식 이미지 분류
+from api.food_detection import FoodDetection
+#캘린더-음식/운동 좋아요 기능
 from api.calendarLike import CalendarLike
 #운동 데이터 보내기
 from api.workout import Workout
-
-#public
-from api.account import Account
-
-from api.publicData import Public
-
+#AI 운동 추천
+from api.workout_recommend import WorkoutsRecommend
 #챗봇
 from api.chatbot import Chatbot
 #챗이미지 생성
 from api.chatImage import ChatImage
-#AI 운동 추천
-from api.workout_recommend import WorkoutsRecommend
-#AI 음식 추천
-from api.foods_recommend_api import FoodsRecommend
-
-from api.food_detection import FoodDetection
-
+#알림 기능
 from api.ServiceWorker import ServiceWorker
 
 from api.youtube import Youtube
@@ -64,10 +63,16 @@ api.add_resource(Ocr,'/ocr')
 api.add_resource(Crawling,'/crawling')
 #식단 데이타 보내기
 api.add_resource(Diet,'/diet/<user_id>')
+#AI음식 추천
+api.add_resource(FoodsRecommend,'/recommend/<username>')
+#음식 이미지 분류
+api.add_resource(FoodDetection,'/food')
+#켈린더-식단/운동 좋아요 기능
 api.add_resource(CalendarLike,'/calendarLike/<cal_id>')
-# api.add_resource(Diet,'/diet')
 #운동 데이터 보내기
 api.add_resource(Workout,'/workout/<user_id>')
+#AI운동 추천
+api.add_resource(WorkoutsRecommend,'/workoutsRecommend/<username>')
 #어카운트 정보 받아오기
 api.add_resource(Account,'/account/<user_id>')
 #공공데이타
@@ -76,14 +81,9 @@ api.add_resource(Public,'/public')
 api.add_resource(Chatbot,'/chatbot')
 #챗이미지 생성
 api.add_resource(ChatImage,'/chatImage')
-#AI운동 추천
-api.add_resource(WorkoutsRecommend,'/workoutsRecommend/<username>')
-
-api.add_resource(FoodDetection,'/food')
-
+#알림 기능
 api.add_resource(ServiceWorker, '/serviceWorker')
 
-api.add_resource(FoodsRecommend,'/recommend/<username>')
 
 api.add_resource(Youtube,'/youtube/<keywords>')
 

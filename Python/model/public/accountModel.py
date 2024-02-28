@@ -27,6 +27,7 @@ def selectOne(conn, data):
         except Exception as e:
             print('레코드 하나 조회시 오류:', e)
             return None
+
 def diet_calendar(conn, user_id):
     with conn.cursor() as cursor:
         try:
@@ -45,4 +46,22 @@ def workout_calendar(conn, user_id):
             return cursor.fetchall()
         except Exception as e:
             print('모든 데이터 조회시 오류:',e)
+            return None
+
+def update(conn,accountNo, image_url):
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute(f'UPDATE game_account SET game_image={image_url} WHERE account_no = {accountNo}') #문제 체크
+            conn.commit()
+            return cursor.rowcount
+        except Exception as e:
+            print('error')
+
+def select_profile(conn, accountNo):
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute(f"select * FROM game_account WHERE account_no = {accountNo}" )
+            return cursor.fetchone()
+        except Exception as e:
+            print('레코드 하나 조회시 오류:', e)
             return None

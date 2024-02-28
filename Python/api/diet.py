@@ -11,8 +11,9 @@ import base64
 
 class Diet(Resource):
     def __init__(self):
-        # print(self)
+        # reqparse.RequestParser() 객체를 생성하여 요청에서 파라미터를 파싱하는데 사용
         self.parser = reqparse.RequestParser()
+        # 공통 파라미터를 설정. form 데이터에서 'DESCRIPTION', 'MEMO', 'DIET_IMAGE', 'FOOD', 'FOOD_WEIGHT', 'END_DATE'를 파싱
         # 아래는 공통 파라미터 설정(key=value로 받기)
         self.parser.add_argument('DESCRIPTION',location='form')
         self.parser.add_argument('MEMO', location='form')
@@ -21,59 +22,69 @@ class Diet(Resource):
         self.parser.add_argument('FOOD_WEIGHT', location='form')
         self.parser.add_argument('END_DATE', location='form')
     def get(self,user_id):
+        # 요청에서 파라미터를 파싱
         args = self.parser.parse_args()
-        # print(args,'args')
         try:
             #겟 파라미터 받아오는 법(http://localhost:5000/diet/3?param1=23)
             dof = request.args.get('date')
 
+            # 식품 정보를 저장할 리스트를 초기화
             food_all=[]
+            # 요청에서 'calId' 파라미터를 추출
             cal = request.args.get('calId')
-            # print(cal, 'cal')
             if(cal != None):
+                # 오라클 데이터베이스에 연결
                 conn = oracle.diet_connectDatabase()
+                # 'calId'에 해당하는 식품 정보를 조회
                 str1 = oracle.diet_selectOne(conn, cal)
+                # 데이터베이스 연결을 종료
                 oracle.diet_close(conn)
+                # 라인 함수를 사용하여 식품 정보를 처리
                 st = pub.line(str1[3])
                 strArr = list(str1)
                 strArr.append(list(st[0]))
                 print(strArr,'str1')
+                # 조회한 식품 정보를 JSON 형식으로 반환
                 return jsonify(strArr)
 
-
-            # print(dof)
+            # 오라클 데이터베이스에 연결
             conn = oracle.diet_connectDatabase()
-            # # # print("test",conn)
+            # 사용자 ID와 날짜에 해당하는 모든 식품 정보를 조회
             food_all = oracle.diet_selectAll(conn, user_id, dof)
+            # 데이터베이스 연결을 종료
             oracle.diet_close(conn)
             print('food_all',food_all)
+            # foodDiary를 저장할 리스트를 초기화
             foodDiary = []
+            # 조회한 모든 식품 정보에 대해 반복
             for i in range(len(food_all)):
+                # 식품 정보의 4번째 요소가 None이거나 'None'이라면 id를 41로 하고, 그렇지 않으면 해당 값을 id로 설정
                 id = 41 if food_all[i][4] == None or food_all[i][4] == 'None' else food_all[i][4]
                 print('id',id)
+                # id에 해당하는 이미지 파일의 경로를 생성
                 str1 = 'C:\\Users\\user\\Upload\\' + str(id) + '.png'
-                # print('food : ', id,":",len(food_all))
-                print(str1)
 
                 with open(str1, "rb") as f:
                     image = base64.b64encode(f.read())
-                    # print(str(image)[2:-2])
-                    # food_all[i][4] = str(image)[2:-2]
+                    # 식품 정보와 인코딩된 이미지를 foodDiary 리스트에 추가
                     foodDiary.append(list(food_all[i][0:4])+list(["data:image/png;base64,"+str(image)[2:-2]])+list(food_all[i][5:]))
             print('foodDiary',foodDiary)
-
-
+            # 리액트로 보내줄 헤더를 설정
             list_ = ['chart1','foodDiary','chart2','chart3'] #리액트로 보내줄 헤더
 
-
+            # 임시 데이터를 설정
             lis = ['asdasdasd', '나이스', 'Yellow', 'Green', 'Purple', 'Orange1']
             num = [12, 19, 3, 5, 2, 3]
 
+            # 공공 데이터를 저장할 리스트를 초기화
             pub_data = []
             arr2 = ['아침','점심','저녁','간식']
             time1=[0,0,0,0]
+
+            # foodDiary에 데이터가 있다면 아래 코드를 실행
             if len(foodDiary) > 0:
-                # print('test')
+                # 식품 정보를 처리하는 코드
+                # 생략된 부분은 식품 정보를 pub_data 리스트에 추가하는 코드
                 data1 =[0,0,0,0,0,0]
                 for i in range(len(foodDiary)):
                     # print('1',foodDiary[i][3])
@@ -101,7 +112,6 @@ class Diet(Resource):
                     else:
                         time1[3] += round((pub_data[0]*dnum)+time1[3],2)
 
-
                     for k in range(len(pub_data)):
                         if(np.isnan(pub_data[k])):
                             print('k',k)
@@ -122,36 +132,45 @@ class Diet(Resource):
                 if index < len(arr2) and len(time1) != 0:
                     chart2.append({'name':arr2[index],'size':time1[index]})
 
-
+            # JSON 형식으로 응답을 반환
             return jsonify(dict(zip(list_, (j, foodDiary, chart1, chart2))))
         except:
             print("error")
 
     def post(self,user_id):
-        # print(user_id)
+        # 요청에서 파라미터를 파싱
         args = self.parser.parse_args()
-        # print(args['DIET_IMAGE'])
-        # print(type(args))
+
+        # 'DIET_IMAGE'를 파라미터에서 추출
         # imagedb
         image = args['DIET_IMAGE']
         print('image', image == '', image==None)
+        # 추출한 이미지가 None이 아니고 비어있지 않다면 아래 코드를 실행
         if image != None and image != '':
             print('image,dase64',image)
+            # 이미지 데이터베이스에 연결
             conn = imagedb.connectDatabase()
+            # 이미지 데이터베이스에 이미지 데이터를 삽입하고, 그 결과를 data에 저장
             data = imagedb.insert(conn)
+            # 이미지 파일의 경로를 생성
             str1 = 'C:\\Users\\user\\Upload\\' + str(data[0]) + '.png'
+            # 파라미터의 'DIET_IMAGE'를 삽입한 이미지 데이터의 id로 변경
             args['DIET_IMAGE'] = str(data[0])
+            # 이미지 파일을 생성하고, 파라미터에서 받은 이미지 데이터를 디코딩하여 파일에 쓴다.
             with open(str1, "bw") as f:
                 f.write(base64.b64decode(image.encode()))
-
+        # 파라미터의 모든 항목을 출력
         for t in args:
             print(t,':',args[t])
-
-
+        # 오라클 데이터베이스에 연결
         conn1 = oracle.diet_connectDatabase()
+        # 오라클 데이터베이스에 파라미터를 삽입하고, 그 결과를 data에 저장
         data = oracle.diet_insert(conn1, user_id, args)
         print('post',data)
         return data #테이블 2개여서 성공이면 2이다
+
+
+
     def put(self,user_id):
         args = self.parser.parse_args()
         # print('args',args)
@@ -166,9 +185,3 @@ class Diet(Resource):
         data = oracle.diet_delete(conn, user_id)
         print('data',data)
         return data
-    # def get(self,user_id): #사용자가 날짜를 클릭하는데 date값도 같이 받아야하는거 아닌가...?ㅠㅠ
-    #     try:
-    #         conn = oracle.diet_connectDatabase()
-    #         return make_response(json.dumps(oracle.diet_selectOne(conn,user_id),ensure_ascii=False))
-    #     except:
-    #         print("error")
