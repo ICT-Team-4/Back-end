@@ -7,6 +7,8 @@ import com.security.game.dto.GameAccountDto;
 @Mapper
 public interface GameAccountMapper {
 
-	public int update(GameAccountDto dto);
-	
+	// 계정 정보 업데이트
+	public int gameAccountUpdate(GameAccountDto accountNo);
+	public int gameAccountInsert(GameAccountDto accountDto);
+	public GameAccountDto findByAccountNo(String accountNo); 
 }

@@ -9,14 +9,8 @@ import pandas as pd
 import csv
 import cx_Oracle
 
-from model.diet import publicData_model
-
 class RecommendAlgorithm:
-    '''
-    rating_scale : (최저평점,최고평점) 예:1부터 5까지 별점을 주는 경우 (1,5)
-    itemColumn : itemCsv파일 혹은 데이타 프레임의 헤더명(컬럼명).타입은 list
-    ratingColumn : ratingCsv파일 혹은 데이타 프레임 헤더명(컬럼명).타입은 list. 디폴트는 ['userId','itemId','rating']
-    '''
+
     def __init__(self, rating_scale,itemColumn, ratingColumn=['userId', 'itemId', 'rating']):
         #방법2)데이타 프레임 사용시
         ratings,items=self.dbconnect()
@@ -33,12 +27,6 @@ class RecommendAlgorithm:
         self.train, self.test = train_test_split(data, test_size=0.1,shuffle=False)
         self.model = None
 
-    '''
-    csv파일 사용시
-    args[0]:평점 데이타 csv파일명
-    args[1]:아이템 데이타 csv파일명
-    데이타 프레임 사용시 전달하지 않는다
-    '''
     def dbconnect(self,*args):
         # 2.데이타베이스 연결
         with cx_Oracle.connect(user='FITME', password='FITME', dsn='192.168.0.15:1521/XEPDB1', encoding="UTF-8") as conn:
@@ -120,23 +108,9 @@ class RecommendAlgorithm:
         predictions = self.predict()
         self.evaluate(predictions)
 
-    '''
-    userId가 평점을 매긴 itemId들만 DataFrame로 반환
-    userId : 사용자 아이디   
-
-    self.ratings.iloc[:, 0]는 self.ratings 데이타 프레임의 0번째 컬럼 인덱스(userId컬럼)의 값을 의미
-    .iloc[:, 1]는  itemId값만 가져오기 위한 코드(self.ratings 데이타 프레임의 1번째 컬럼 인덱스(itemId컬럼)이니까)
-    '''
-
     def getRatingItems(self, userId):
         itemIds = pd.DataFrame(self.ratings[self.ratings.iloc[:, 0] == userId].iloc[:, 1])
         return itemIds
-
-    '''
-    userId가  특정 아이템에 대한 평점 부여 여부 확인
-    userId : 사용자 아이디 
-    itemId : 아이템 아이디    
-    '''
 
     def isRating(self, userId, itemId):
         itemIds = self.getRatingItems(userId)
@@ -145,19 +119,10 @@ class RecommendAlgorithm:
             return False
         return True
 
-    '''
-    특정 아이템에 대한 아이템 정보 출력    
-    itemId : 아이템 아이디   
-    '''
-
     def showItem(self, itemId):
         # 0인덱스는 itemId값
         return self.items[self.items.iloc[:, 0] == itemId]
 
-    '''
-    특정 유저가 평점을 주지 않은 아이템들을 리스트로 저장    
-    userId : 사용자 아이디 
-    '''
 
     def getNoRatingItem(self, userId):
         # # 데이터 형식 확인 및 변환
@@ -176,13 +141,6 @@ class RecommendAlgorithm:
                                                                           len(totalItems)))
 
         return noRatingItems
-
-    '''
-    예측 평점이 높은 최상위 n_top개의 추천 아이템 리스트로 반환
-    userId : 사용자 아이디     
-    noRatingItems : getNoRatingItem()함수에서 반환된 리스트
-    n_top : 추천 상위 갯수.디폴트 10개
-    '''
 
     def recommendItems(self, userId, noRatingItems, n_top=10):
         if len(noRatingItems) ==0:
