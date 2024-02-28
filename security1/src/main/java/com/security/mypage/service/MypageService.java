@@ -38,5 +38,8 @@ public class MypageService {
 		return mypageMapper.findBigThreeAllByNo(accountNo);
 	}
 	
-	
+	public void updateAccountInfo(MypageAccountDto accountDto) {
+		mypageMapper.updateAccountInfo(accountDto);
+	}
+	 
 }
