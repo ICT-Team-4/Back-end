@@ -14,7 +14,9 @@
 	</update>
 	
 
-	<!-- <insert id="createGameRoom" parameterType="GameRoomDto" useGeneratedKeys="true" keyProperty="gameroomNo">
+
+<!-- 	<insert id="createGameRoom" parameterType="GameRoomDto" useGeneratedKeys="true" keyProperty="gameroomNo">
+
 		INSERT INTO GAMEROOM (gameroom_no)
 		VALUES (GAMEROOM_NO_SEQ.NEXTVAL)
 	</insert>
@@ -27,6 +29,5 @@
 	<select id="findByAccountNo" parameterType="String" resultType="GameAccountDto">
    	 	SELECT account_no, nickname, game_image FROM GAME_ACCOUNT WHERE account_no=#{accountNo}
 	</select> -->
-
 
 </mapper>
