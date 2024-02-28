@@ -3,6 +3,7 @@ from flask import make_response
 import  json
 from model.diet.foods_recommend import RecommendAlgorithm
 import model.diet.publicData_model as  publicModel
+import model.workout.youtube as youtube
 
 class FoodsRecommend(Resource):
 
@@ -37,12 +38,16 @@ class FoodsRecommend(Resource):
         print(f'사용자 아이디가 "{username}"인 사람이 평점을 매기지 않은 아이템 수:{len(noRatingItems)}')#7
         # 4.사용자 아이디가 username인 사람이 평점을 하지 않은 아이템들 중에서 모델이 예측한 평점이
         #  높은 아이템들을 추천하기
-        topItemPreds = recommend.recommendItems(username, noRatingItems, 2)  # 3개 추천하기
+        topItemPreds = recommend.recommendItems(username, noRatingItems, 3)  # 3개 추천하기
 
         recommend_items = []
         for item in topItemPreds:
-            print('추천 아이템:{} 예측 평점:{}'.format(item[0], publicModel.line(item[0])))
-            recommend_items.append({'food':item[0],'rank':str(publicModel.line(item[0]))})
+            print('추천 아이템:{} 예측 평점:{}'.format(item[0], list(publicModel.line(item[0]))))
+            # print(youtube.youtube1(item[0]))
+            # data = youtube.youtube1(item[0])
+            # print(data)
+            # recommend_items.append({'food': item[0], 'rank': list(publicModel.line(item[0])), 'youtube' : data})
+            recommend_items.append({'food': item[0], 'rank': list(publicModel.line(item[0]))})
 
         return make_response(json.dumps({'items':recommend_items},ensure_ascii=False))
 
