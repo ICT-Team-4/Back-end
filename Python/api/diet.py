@@ -53,7 +53,7 @@ class Diet(Resource):
                 print('id',id)
                 str1 = 'C:\\Users\\user\\Upload\\' + str(id) + '.png'
                 # print('food : ', id,":",len(food_all))
-                # print(str1)
+                print(str1)
 
                 with open(str1, "rb") as f:
                     image = base64.b64encode(f.read())
@@ -81,13 +81,14 @@ class Diet(Resource):
                     hTime = time0.strftime('%H')
 
                     data = str(foodDiary[i][2])
-                    pub_data = pub.line(data)[0][2:]
+                    pub_data = pub.line(data)[2:]
+                    print('pub_data',pub_data)
 
                     pub_num=0
                     if pub.line(data)[0][1].find('g') == -1:
-                        pub_num = float(pub.line(data)[0][1][:-2])
+                        pub_num = float(pub.line(data)[1][:-2])
                     else:
-                        pub_num = float(pub.line(data)[0][1][:-1])
+                        pub_num = float(pub.line(data)[1][:-1])
                     dnum = foodDiary[i][5]/pub_num
 
                     print("공공데이타 :", pub_data)  # null값 있는지 확인

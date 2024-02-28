@@ -40,6 +40,8 @@ from api.food_detection import FoodDetection
 
 from api.ServiceWorker import ServiceWorker
 
+from api.youtube import Youtube
+
 #플라스크 앱 생성
 app = Flask(__name__)
 #CORS에러 처리
@@ -82,6 +84,9 @@ api.add_resource(FoodDetection,'/food')
 api.add_resource(ServiceWorker, '/serviceWorker')
 
 api.add_resource(FoodsRecommend,'/recommend/<username>')
+
+api.add_resource(Youtube,'/youtube/<keywords>')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
