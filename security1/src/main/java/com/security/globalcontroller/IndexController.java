@@ -1,4 +1,4 @@
-package com.security.controller;
+package com.security.globalcontroller;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
