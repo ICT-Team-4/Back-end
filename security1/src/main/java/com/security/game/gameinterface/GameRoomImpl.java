@@ -5,5 +5,5 @@ import java.util.Map;
 import com.security.game.dto.GameRoomDto;
 
 public interface GameRoomImpl {
-	Map<String, Object> createAndRedirectGameRoom(String accountNo);
+	GameRoomDto createAndRedirectGameRoom(GameRoomDto gameDto);
 }

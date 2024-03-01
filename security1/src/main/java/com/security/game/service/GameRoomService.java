@@ -23,12 +23,12 @@ public class GameRoomService implements GameRoomImpl {
     private GameAccountMapper gameAccountMapper;
 
     @Override
-    public Map<String, Object> createAndRedirectGameRoom(String accountNo) {
-    	log.info("게임 방 번호 생성 시작 - accountNo: {}", accountNo);
+    public GameRoomDto createAndRedirectGameRoom(GameRoomDto gameDto) {
+    	log.info("게임 방 번호 생성 시작 - accountNo: {}", gameDto.getAccountNo());
         int roomNumber = new Random().nextInt(9000) + 1000;
 
-        log.info("사용자 정보 조회 - accountNo: {}", accountNo);
-        GameAccountDto accountDetails = gameAccountMapper.findByAccountNo(accountNo);
+        log.info("사용자 정보 조회 - accountNo: {}", gameDto.getAccountNo());
+        GameAccountDto accountDetails = gameAccountMapper.findByAccountNo(gameDto.getAccountNo());
         
 //        Map<String, Object> roomDetails = new HashMap<>();
 //        roomDetails.put("roomNumber", roomNumber);
@@ -41,16 +41,21 @@ public class GameRoomService implements GameRoomImpl {
         if (accountDetails != null) {
             log.info("사용자 정보 조회 성공 - accountDetails: {}", accountDetails);
         } else {
-            log.warn("사용자 정보 조회 실패 - accountNo: {}", accountNo);
+            log.warn("사용자 정보 조회 실패 - accountNo: {}", gameDto.getAccountNo());
         }
         
         Map<String, Object> roomDetails = new HashMap<>();
-        roomDetails.put("roomNumber", roomNumber);
-        roomDetails.put("account_no", accountDetails.getAccountNo());
-        roomDetails.put("nickname", accountDetails.getNickname());
-        roomDetails.put("game_image", accountDetails.getGameImage());
+        GameRoomDto dto = new GameRoomDto();
+        dto.setAccountNo(gameDto.getAccountNo());
+        dto.setAccountNo(gameDto.getGameMode());
+        dto.setGameroomNo(roomNumber);
+//        
+//        roomDetails.put("roomNumber", roomNumber);
+//        roomDetails.put("account_no", accountDetails.getAccountNo());
+//        roomDetails.put("nickname", accountDetails.getNickname());
+//        roomDetails.put("game_image", accountDetails.getGameImage());
 
-        log.info("게임 방 생성 완료 서비스 - roomDetails: {}", roomDetails);
-        return roomDetails;
+        log.info("게임 방 생성 완료 서비스 - dto: {}", dto);
+        return dto;
     }
 }
