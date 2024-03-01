@@ -24,6 +24,8 @@ public interface MypageMapper {
 	//3대 운동 증가 추이(횟수?)
 	public List<MypageWorkBigThreeDto> findBigThreeAllByNo(int accountNo);
 	
+	public List<MypageWorkBigThreeDto> findWorkAllByNo(int accountNo);
+	
 	// 계정 정보 업데이트
 	public int updateAccountInfo(MypageAccountDto accountDto);
 }

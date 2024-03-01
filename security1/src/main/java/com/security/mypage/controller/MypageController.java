@@ -62,7 +62,15 @@ public class MypageController {
 	}
 	@GetMapping("/mypages/workBigThree/{accountNo}")
 	public ResponseEntity<List<MypageWorkBigThreeDto>> bigThreeInfo(@PathVariable int accountNo){
+		
 		List<MypageWorkBigThreeDto> findBigThreeAllByNo = mypageService.findBigThreeAllByNo(accountNo);
+		return  ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findBigThreeAllByNo);
+		
+	}
+	@GetMapping("/mypages/work/{accountNo}")
+	public ResponseEntity<List<MypageWorkBigThreeDto>> workInfo(@PathVariable int accountNo){
+		//dto내용이 bigThreeInfo와 같아서 사용
+		List<MypageWorkBigThreeDto> findBigThreeAllByNo = mypageService.findWorkAllByNo(accountNo);
 		return  ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(findBigThreeAllByNo);
 		
 	}

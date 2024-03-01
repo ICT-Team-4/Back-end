@@ -38,6 +38,8 @@ from api.chatbot import Chatbot
 from api.chatImage import ChatImage
 #알림 기능
 from api.ServiceWorker import ServiceWorker
+#찍먹
+from api.crawling import Crawling
 
 from api.youtube import Youtube
 

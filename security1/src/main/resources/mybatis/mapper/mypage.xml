@@ -74,12 +74,20 @@
 		ORDER BY TRUNC(end_postdate)
 	</select>
 	<select id="findBigThreeAllByNo">
-		select CATEGORY,SUM(weight) weight,end_postdate
+		select CATEGORY,SUM(weight) weight,SUM(COUNTS) COUNTS,TRUNC(end_postdate) end_postdate
 		from workout w,calendar c
 		WHERE w.calendar_no = c.calendar_no
 		    and (category='벤치프레스' or category='데드리프트' or category='스쿼트')
 		    and account_no = #{accountNo}
-		GROUP BY CATEGORY,end_postdate
+		GROUP BY CATEGORY, TRUNC(end_postdate)
+		ORDER BY TRUNC(end_postdate)
+	</select>
+	<select id="findWorkAllByNo">
+		select CATEGORY,SUM(weight) weight,SUM(COUNTS) counts,TRUNC(end_postdate) end_postdate
+		from workout w,calendar c
+		WHERE w.calendar_no = c.calendar_no
+		    and account_no = #{accountNo}
+		GROUP BY CATEGORY,TRUNC(end_postdate)
 		ORDER BY TRUNC(end_postdate)
 	</select>
 	<update id="updateAccountInfo" parameterType="MypageAccountDto">
