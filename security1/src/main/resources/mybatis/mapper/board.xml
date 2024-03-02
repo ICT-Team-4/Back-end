@@ -18,24 +18,26 @@
 			(SELECT COUNT(BNO) FROM BOARD_SCRAPS S WHERE S.BNO=B.BNO) AS SCRAPS,
 			(SELECT COUNT(BC_COMMENT) FROM BOARD_COMMENT C WHERE C.BNO=B.BNO) AS BCCOMMENT
 		FROM BOARD B
-		ORDER BY BNO DESC
+		ORDER BY POSTDATE DESC
 	</select>
 	
 	<!-- 게시글 검색 -->
 	<select id="findBySearchWord" resultType="BoardDto" parameterType="Map">
-	    SELECT * 
-	    FROM BOARD
+	    SELECT 
+	    	B.*,
+			(SELECT A.IMAGE FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as IMAGE,
+			(SELECT A.NAME FROM ACCOUNT A WHERE A.ACCOUNT_NO=B.ACCOUNT_NO) as NAME,
+			(SELECT COUNT(BNO) FROM BOARD_LIKES L WHERE L.BNO=B.BNO) AS LIKES,
+			(SELECT COUNT(BNO) FROM BOARD_SCRAPS S WHERE S.BNO=B.BNO) AS SCRAPS,
+			(SELECT COUNT(BC_COMMENT) FROM BOARD_COMMENT C WHERE C.BNO=B.BNO) AS BCCOMMENT 
+	    FROM BOARD B
 	    <where>
 	        <choose>
-	            <when test="searchBy == 'title'">
-	                <if test="searchWord != null">
-	                    TITLE LIKE CONCAT('%', #{searchWord}|| '%')
-	                </if>
+	            <when test="searchBy == 'title' and searchWord != null">
+	                TITLE LIKE CONCAT('%', #{searchWord}|| '%')
 	            </when>
-	            <when test="searchBy == 'hashtag'">
-	                <if test="searchWord != null">
-	                    BOARD_CATEGORY LIKE CONCAT('%', #{searchWord}|| '%')
-	                </if>
+	            <when test="searchBy == 'hashtag' and searchWord != null">
+	                BOARD_CATEGORY LIKE CONCAT('%', #{searchWord}|| '%')
 	            </when>
 	        </choose>
 	    </where>
@@ -169,5 +171,15 @@
 	<!-- 게시글 스크랩 -->
 	<insert id="saveScraps" parameterType="Map">
 		INSERT INTO BOARD_SCRAPS VALUES(#{accountNo}, #{bno})
+	</insert>
+	
+	<!-- 사용자 번호로 게시글 신고 여부 조화 -->
+	<select id="findReportByNo" parameterType="BoardReportDto" resultType="int">
+		SELECT COUNT(ACCOUNT_NO) FROM BOARD_REPORTS WHERE ACCOUNT_NO=#{accountNo} AND BNO=#{bno}
+	</select>
+	
+	<!-- 게시글 신고 등록 -->
+	<insert id="saveReport" parameterType="BoardReportDto">
+		INSERT INTO BOARD_REPORTS VALUES(#{bno}, #{accountNo}, #{reportComment}, SYSDATE)
 	</insert>
 </mapper>
