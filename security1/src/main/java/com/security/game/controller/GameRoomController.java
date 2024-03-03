@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.security.game.config.SessionBean;
 import com.security.game.dto.GameRoomDto;
 import com.security.game.service.GameRoomService;
 import com.security.util.JWTOkens;
@@ -35,15 +36,16 @@ public class GameRoomController {
 	
 //	@Autowired
     private GameRoomService gameRoomService;
+    private final SessionBean sessionBean;
     
     @Autowired
     public GameRoomController(GameRoomService gameRoomService) {
     	this.gameRoomService = gameRoomService;
+    	this.sessionBean = SessionBean.getInstance();
     }
 
     @PostMapping("/game/createRoom/{mode}")
     public ResponseEntity<GameRoomDto> createGameRoom(@PathVariable String mode, HttpServletRequest request) {
-
         String token = request.getHeader("Authorization");
         Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
         String accountNo = payload.get("sub").toString();
@@ -52,14 +54,11 @@ public class GameRoomController {
         dto.setAccountNo(accountNo);
         dto.setGameMode(mode);
 
-        System.out.println("accountNo : " + accountNo + " , mode : " + mode);
-
-        // 게임룸 생성 및 리다이렉션 (서비스 호출 전에 세션 로직 제거)
+        // 게임룸 생성
         GameRoomDto roomDetails = gameRoomService.createAndRedirectGameRoom(dto);
 
-        // 세션에 게임룸 정보 저장 (서비스 호출 이후 세션 로직 배치)
-        HttpSession session = request.getSession();
-        Map<Integer, List<GameRoomDto>> gameRooms = (Map<Integer, List<GameRoomDto>>) session.getAttribute("MapListGame");
+        // 세션에 게임룸 정보 저장
+        Map<Integer, List<GameRoomDto>> gameRooms = sessionBean.getGameRooms();
         if (gameRooms == null) {
             gameRooms = new HashMap<>();
         }
@@ -69,7 +68,7 @@ public class GameRoomController {
             gameRooms.put(roomId, new ArrayList<>());
         }
         gameRooms.get(roomId).add(roomDetails);
-        session.setAttribute("MapListGame", gameRooms);
+        sessionBean.setGameRooms(gameRooms);
 
         return ResponseEntity.ok(roomDetails);
     }
@@ -78,7 +77,8 @@ public class GameRoomController {
     //게임룸 리스트 받아오기
     @GetMapping("/gameRooms")
     public Map<Integer, List<GameRoomDto>> getGameRooms(Map<String, Object> model) {
-        Map<Integer, List<GameRoomDto>> gameRooms = (Map<Integer, List<GameRoomDto>>) model.get("MapListGame");
+        Map<Integer, List<GameRoomDto>> gameRooms = sessionBean.getGameRooms();
+        System.out.println("세션 확인"+gameRooms);
 
         if (gameRooms == null) {
             gameRooms = new HashMap<>();
