@@ -47,7 +47,7 @@ public class GameRoomService implements GameRoomImpl {
         Map<String, Object> roomDetails = new HashMap<>();
         GameRoomDto dto = new GameRoomDto();
         dto.setAccountNo(gameDto.getAccountNo());
-        dto.setAccountNo(gameDto.getGameMode());
+        dto.setGameMode(gameDto.getGameMode());
         dto.setGameroomNo(roomNumber);
 //        
 //        roomDetails.put("roomNumber", roomNumber);
