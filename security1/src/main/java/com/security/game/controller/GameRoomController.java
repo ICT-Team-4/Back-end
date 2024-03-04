@@ -78,7 +78,6 @@ public class GameRoomController {
     @GetMapping("/gameRooms")
     public Map<Integer, List<GameRoomDto>> getGameRooms(Map<String, Object> model) {
         Map<Integer, List<GameRoomDto>> gameRooms = sessionBean.getGameRooms();
-        System.out.println("세션 확인"+gameRooms);
 
         if (gameRooms == null) {
             gameRooms = new HashMap<>();
