@@ -84,4 +84,10 @@ public class UserService {
 	      }
 	  }
 	  
+	  //회원가입시 접속여부 테이블에 회원 정보 등록 - 조동훈
+	  @Transactional
+	  public void saveStatus(Long accountNo) {
+		  usermapper.saveStatus(accountNo);
+	  }
+	  
 }
