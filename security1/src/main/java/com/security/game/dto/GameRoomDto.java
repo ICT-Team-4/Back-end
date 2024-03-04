@@ -19,5 +19,6 @@ public class GameRoomDto {
 	
 	private String accountNo;
 	private String gameMode;
+	private String roomName;
 	private int gameroomNo;
 }

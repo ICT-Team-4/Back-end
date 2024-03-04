@@ -18,6 +18,19 @@ class Workout(Resource):
         self.parser.add_argument('WEIGHT', location='form')
         self.parser.add_argument('END_DATE', location='form')
     def get(self,user_id):
+        # print('Received request:', request.url)
+        # action = request.args.get('action')
+        # print('action : ',action)
+        #
+        # if action == 'count':
+        #     # 운동 count 데이터를 반환하는 분기
+        #     conn = oracle.workout_connectDatabase()
+        #     counts = oracle.workout_counts(conn, user_id)
+        #     oracle.workout_close(conn)
+        #     counts_dict = {row[0]: row[1] for row in counts}
+        #     return jsonify(counts_dict)
+        # else:
+
         # 요청에서 파라미터를 파싱
         # args = self.parser.parse_args()
 

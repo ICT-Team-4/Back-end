@@ -24,8 +24,15 @@ public class SessionBean implements Serializable {
 	private static final SessionBean INSTANCE = new SessionBean();
 	
     private Map<Integer, List<GameRoomDto>> gameRooms = new HashMap<>();
+    private Map<Integer, List<String>> gameRoomsUsers = new HashMap<>();
     
     public static SessionBean getInstance() {
         return INSTANCE;
+    }
+    public Map<Integer, List<String>> getGameRoomsUsers() {
+        return gameRoomsUsers;
+    }
+    public void setGameRoomsUsers(Map<Integer, List<String>> gameRoomsUsers) {
+        this.gameRoomsUsers = gameRoomsUsers;
     }
 }
