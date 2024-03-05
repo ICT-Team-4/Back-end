@@ -131,6 +131,13 @@
 		    <version>3.2.2</version>
 		</dependency>
 
+		<!-- Azure Web PubSub 라이브러리 -->
+		<dependency>
+		    <groupId>com.azure</groupId>
+		    <artifactId>azure-messaging-webpubsub</artifactId>
+		    <version>1.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
