@@ -40,7 +40,7 @@ from api.chatbot import Chatbot
 from api.chatImage import ChatImage
 #알림 기능
 from api.ServiceWorker import ServiceWorker
-
+#youtube
 from api.youtube import Youtube
 
 #플라스크 앱 생성
@@ -87,7 +87,6 @@ api.add_resource(Chatbot,'/chatbot')
 api.add_resource(ChatImage,'/chatImage')
 #알림 기능
 api.add_resource(ServiceWorker, '/serviceWorker')
-
 
 api.add_resource(Youtube,'/youtube/<keywords>')
 
