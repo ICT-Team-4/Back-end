@@ -20,6 +20,7 @@ public class MypageWorkBigThreeDto {
 	
 	private String category;
 	private int weight;
+	private int counts;
 	private Date endPostdate;
 
 }

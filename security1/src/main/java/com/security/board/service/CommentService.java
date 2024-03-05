@@ -9,6 +9,7 @@ import com.security.board.dao.CommentMapper;
 import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardCommentDto;
 import com.security.board.dto.CommentLikeDto;
+import com.security.board.dto.CommentReportDto;
 
 @Service
 public class CommentService {
@@ -30,29 +31,28 @@ public class CommentService {
 	}
 	
 	//사용자 정보 조회
-	public AccountDto findByUsername(String username) {
-		return commentMapper.findByUsername(username);
+	public AccountDto findByUsername(String accountNo) {
+		return commentMapper.findByUsername(accountNo);
+	}
+	
+	//좋아요 누른지 확인
+	public int CheckCommentLike(CommentLikeDto dto) {
+		return commentMapper.findByCommentLike(dto);
 	}
 	
 	//댓글 좋아요
 	@Transactional
-	public int commentLike(String bcno, String username) {
+	public int commentLike(CommentLikeDto dto) {
 		
-		String accountNo = commentMapper.findByUsername(username).getAccountNo();
-		
-		CommentLikeDto clike = new CommentLikeDto();
-		clike.setBcno(bcno);
-		clike.setAccountNo(accountNo);
-		
-		int count = commentMapper.findByCommentLike(clike);
+		int count = commentMapper.findByCommentLike(dto);
 		
 		//2. 좋아요를 누른적이 없다면 ? insert : delete
 		//좋아요 등록 1, 취소 2
 		if(count == 0) {
-			commentMapper.insertCommentLike(clike);
+			commentMapper.insertCommentLike(dto);
 	        return 1;
 	    } else {
-	    	commentMapper.deleteCommentLike(clike);
+	    	commentMapper.deleteCommentLike(dto);
 	        return 2;
 	    }
 	}
@@ -72,7 +72,20 @@ public class CommentService {
 	//댓글 수정
 	@Transactional
 	public int commentUpdate(BoardCommentDto dto) {
-		return commentUpdate(dto);
+		return commentMapper.update(dto);
+	}
+	
+	//댓글 신고 등록
+	@Transactional
+	public int saveReport(CommentReportDto dto) {
+		
+		int check = commentMapper.findReportByNo(dto);
+		
+		if(check == 1) {
+			return 0;
+		} else {
+			return commentMapper.saveReport(dto);
+		}
 	}
 
 }

@@ -25,8 +25,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true) // secured 어노테이션 활성화,
-                                                                    // preAuthorize, postAuthorize
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
+                                                                   
 public class SecurityConfig {
 
 

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardCommentDto;
 import com.security.board.dto.CommentLikeDto;
+import com.security.board.dto.CommentReportDto;
 
 @Mapper
 public interface CommentMapper {
@@ -18,7 +19,7 @@ public interface CommentMapper {
 	BoardCommentDto findByOne(String bcno);
 	
 	//로그인한 사용자 정보 조회
-	AccountDto findByUsername(String username);
+	AccountDto findByUsername(String accountNo);
 	
 	//댓글 등록
 	int insert(BoardCommentDto dto);
@@ -37,4 +38,10 @@ public interface CommentMapper {
 	
 	//좋아요 삭제
 	int deleteCommentLike(CommentLikeDto dto);
+	
+	//댓글 신고 여부 조회
+	int findReportByNo(CommentReportDto dto);
+	
+	//댓글 신고
+	int saveReport(CommentReportDto dto);
 }

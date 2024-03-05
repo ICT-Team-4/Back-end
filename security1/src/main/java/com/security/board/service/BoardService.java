@@ -11,6 +11,7 @@ import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardDto;
 import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
+import com.security.board.dto.BoardReportDto;
 import com.security.board.dto.FriendDto;
 import com.security.board.dto.FriendshipDto;
 
@@ -146,6 +147,19 @@ public class BoardService {
 	@Transactional
 	public int saveScraps(Map<String, String> map) {
 		return boardMapper.saveScraps(map);
+	}
+	
+	//게시글 신고 등록
+	@Transactional
+	public int saveReport(BoardReportDto dto) {
+		
+		int check = boardMapper.findReportByNo(dto);
+		
+		if(check == 1) {
+			return 0;
+		} else {
+			return boardMapper.saveReport(dto);
+		}
 	}
 	
 	

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 매퍼파일 -->
+<mapper namespace="com.security.notification.dao.NotificationMapper">
+	
+	<update id="updateStatus" parameterType="String">
+		UPDATE ONLINE_STATUS SET STATUS='O' WHERE ACCOUNT_NO=#{accountNo}
+	</update>
+	
+	<update id="updateStatusOff" parameterType="String">
+		UPDATE ONLINE_STATUS SET STATUS='X' WHERE ACCOUNT_NO=#{accountNo}
+	</update>
+	
+</mapper>
