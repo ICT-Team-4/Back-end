@@ -13,7 +13,7 @@ public class WebSocketRTCConfig implements WebSocketMessageBrokerConfigurer{
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/rtc")
-                .setAllowedOrigins("*")
+        		.setAllowedOriginPatterns("*")
                 .withSockJS();
     }
     
