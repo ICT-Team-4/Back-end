@@ -1,3 +1,6 @@
+# https://surpriselib.com/
+# pip install scikit-surprise
+# pip install cx_Oracle
 from surprise import SVD
 from surprise import Dataset, Reader
 from surprise import accuracy
@@ -39,6 +42,9 @@ class RecommendAlgorithm:
             # 5.패치
             workouts = cursor.fetchall()
 
+            #방법2)데이타 프레임 사용시
+            #userId,itemId,rating 평점 데이타 프레임
+
             ratings_df = pd.DataFrame({
                 "userId": [rating[0] for rating in ratings],
                 "itemId": [rating[1] for rating in ratings],
@@ -49,9 +55,10 @@ class RecommendAlgorithm:
                 "itemId": [item[0] for item in workouts],
             })
 
+
             cursor.close()
 
-            #데이터 프레임 사용시
+            #방법2)데이터 프레임 사용시
             return ratings_df,items_df
     #csv파일 사용시
     def makeCSV(self,items,path):
@@ -78,6 +85,7 @@ class RecommendAlgorithm:
     # 모델 생성
     def createModel(self):
         self.model = SVD()
+
 
     # 훈련
     def fit(self):
