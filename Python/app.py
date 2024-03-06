@@ -34,6 +34,8 @@ from api.food_detection import FoodDetection
 from api.calendarLike import CalendarLike
 #운동 데이터 보내기
 from api.workout import Workout
+#운동 COUNT
+from api.workoutCounts import WorkoutCounts
 #AI 운동 추천
 from api.workout_recommend import WorkoutsRecommend
 #챗봇
@@ -77,6 +79,8 @@ api.add_resource(FoodDetection,'/food')
 api.add_resource(CalendarLike,'/calendarLike/<cal_id>')
 #운동 데이터 보내기
 api.add_resource(Workout,'/workout/<user_id>')
+#운동 COUNT
+api.add_resource(WorkoutCounts,'/workout/<user_id>/counts')
 #AI운동 추천
 api.add_resource(WorkoutsRecommend,'/workoutsRecommend/<username>')
 #어카운트 정보 받아오기

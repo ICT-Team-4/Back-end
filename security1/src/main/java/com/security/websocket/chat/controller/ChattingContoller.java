@@ -67,12 +67,10 @@ public class ChattingContoller {
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String accountNo = payload.get("sub").toString();
 		
-		System.out.println(">>>"+chattingNo);
 		ChatRoomDto dto = new ChatRoomDto();
 		
 		dto.setAccountNo(Integer.parseInt(accountNo));
 		dto.setChattingNo(chattingNo);
-//		 = chatService.findChatByNo(chattingNo);
 		int num = chatService.chatMemberDelete(dto);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(String.valueOf(num));	
@@ -97,7 +95,6 @@ public class ChattingContoller {
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String accountNo = payload.get("sub").toString();
 		
-		System.out.println(dto);
 		int num = chatService.chatRoomSave(dto,accountNo);
 		return null;
 	}
@@ -111,7 +108,6 @@ public class ChattingContoller {
 		String accountNo = payload.get("sub").toString();
 		dto.setAccountNo(Integer.parseInt(accountNo));
 		
-		System.out.println(">>>"+dto);
 		int num = chatService.chatRoomEditName(dto);
 		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(String.valueOf(num));
@@ -125,7 +121,6 @@ public class ChattingContoller {
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
 		String accountNo = payload.get("sub").toString();
 		
-		System.out.println(">>>"+chattingNo);
 		
 		ChatRoomDto dto = chatService.findChatByNo(chattingNo);
 		if(!accountNo.equalsIgnoreCase(String.valueOf(dto.getAccountNo()))) {

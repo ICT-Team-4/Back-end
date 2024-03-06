@@ -34,7 +34,6 @@ public class ChatController {
 	
     @MessageMapping("/chat")
     public void sendMessage(ChatDto dto, SimpMessageHeaderAccessor accessor) {
-    	System.out.println(dto.toString());
     	
     	service.insert(dto);
 
