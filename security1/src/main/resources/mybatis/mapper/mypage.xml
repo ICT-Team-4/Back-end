@@ -46,8 +46,6 @@
 			, SKELETAL_MUSCLE
 			, BODY_FAT_MASS
 			, BODY_FAT_PERCENTAGE
-			, ABDOMINAL_FAT_RATE
-			, BASAL_METABOLIC_RATE
 		FROM account a
 		LEFT JOIN game_account g ON a.account_no = g.account_no
 		LEFT JOIN inbody i ON a.account_no = i.account_no
