@@ -52,7 +52,7 @@ class RecommendAlgorithm:
     '''
     def dbconnect(self,*args):
         # 2.데이타베이스 연결
-        with cx_Oracle.connect(user='FITME', password='FITME', dsn='192.168.0.15:1521/XEPDB1', encoding="UTF-8") as conn:
+        with cx_Oracle.connect(user='FITME', password='FITME', dsn='192.168.0.53:1521/XEPDB1', encoding="UTF-8") as conn:
             print(f'value:{conn},type:{type(conn)}')
 
             # 3.쿼리 실행을 위한 커서객체 얻기
