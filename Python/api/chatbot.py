@@ -27,14 +27,11 @@ class Chatbot(Resource):
         while True:
             # 메세지 받기
             content = request.json['message']
-            print('받은 메세지:', content)
             # AI 챗봇에 메시지를 전달하고, 챗봇의 응답을 받아옴
             response = chatbot(content, messages=messages)
-            print('받은 응답메세지', response)
             messages = response['messages']
             if response['status'] == 'SUCCESS':
                 answer = response['messages'][len(messages) - 1]['content']
-                print(f'챗봇:{answer}')
                 return jsonify({"answer": answer})
             else:
                 print(messages)

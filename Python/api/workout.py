@@ -18,27 +18,9 @@ class Workout(Resource):
         self.parser.add_argument('WEIGHT', location='form')
         self.parser.add_argument('END_DATE', location='form')
     def get(self,user_id):
-        # print('Received request:', request.url)
-        # action = request.args.get('action')
-        # print('action : ',action)
-        #
-        # if action == 'count':
-        #     # 운동 count 데이터를 반환하는 분기
-        #     conn = oracle.workout_connectDatabase()
-        #     counts = oracle.workout_counts(conn, user_id)
-        #     oracle.workout_close(conn)
-        #     counts_dict = {row[0]: row[1] for row in counts}
-        #     return jsonify(counts_dict)
-        # else:
-
-        # 요청에서 파라미터를 파싱
-        # args = self.parser.parse_args()
-
         try:
             # 요청에서 'date' 파라미터를 추출
             dof = request.args.get('date')
-            #workout_all=[]
-            # 요청에서 'calId' 파라미터를 추출
             cal = request.args.get('calId')
 
             if(cal != None):
@@ -62,13 +44,11 @@ class Workout(Resource):
             for i in range(len(workout_all)):
                 # 운동 정보에 해당하는 이미지 파일의 경로를 생성
                 str1 = 'C:\\Users\\user\\Upload\\' + workout_all[i][3] + '.png'
-                print('str1에 뭐가 찍히고 있는거지?? : ',str1)
                 # 이미지 파일을 열고, base64로 인코딩
                 with open(str1, "rb") as f:
                     image = base64.b64encode(f.read())
                     # 운동 정보와 인코딩된 이미지를 workDiary 리스트에 추가
                     workDiary.append(list(workout_all[i])+list(["data:image/png;base64," + str(image)[2:-2]]))
-
             # 리액트로 보내줄 헤더를 설정
             list_ = ['chart1','workout','chart2','chart3']
             # 임시 데이터를 설정
