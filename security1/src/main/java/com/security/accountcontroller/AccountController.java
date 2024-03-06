@@ -62,8 +62,6 @@ public class AccountController {
 	          dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
 	          userService.insertMember(dto);
-	          //접속 여부 데이블에 정보 저장 - 조동훈
-	          userService.saveStatus(dto.getAccountNo());
 
 	          return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
 
