@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 // value={매퍼 인터페이스들의 패키지 나열},sqlSessionFactoryRef는 SqlSessionFactory빈의 아이디 설정
 
 @Configuration
-@MapperScan(value = {"com.security.model", "com.security.board.dao","com.security.foodwork.dao","com.security.mypage.dao","com.security.game.dao","com.security.websocket.chat.dao", "com.security.notification.dao"}, sqlSessionFactoryRef ="sqlSessionFactory" )
+@MapperScan(value = {"com.security.model", "com.security.board.dao","com.security.foodwork.dao","com.security.mypage.dao","com.security.game.dao","com.security.websocket.chat.dao"}, sqlSessionFactoryRef ="sqlSessionFactory" )
 public class MybatisConfig {
 	//https://mybatis.org/spring/ko/factorybean.html
 	

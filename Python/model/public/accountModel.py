@@ -4,6 +4,7 @@ import os
 
 def connectDatabase():  # 데이타베이스 연결
     config = ConfigParser()
+    # print(os.path.abspath('.'))
     # 데이터 절대경로 찾아주기
     path = os.path.dirname(os.path.abspath(__file__))
     # print(path)
@@ -59,8 +60,7 @@ def update(conn,accountNo, image_url):
 def select_profile(conn, accountNo):
     with conn.cursor() as cursor:
         try:
-            sql = f"select * FROM game_account WHERE account_no = {accountNo}"
-            cursor.execute(sql)
+            cursor.execute(f"select * FROM game_account WHERE account_no = {accountNo}" )
             return cursor.fetchone()
         except Exception as e:
             print('레코드 하나 조회시 오류:', e)
