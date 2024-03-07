@@ -1,8 +1,10 @@
 from openai import OpenAI
+import os,base64,json,requests
 import urllib.request
+import model.image_oracledb.image_model as imagedb
 from flask_restful import Resource,reqparse
 from flask import jsonify, request
-import os,base64
+import os,base64,json,requests
 import urllib.request
 import model.public.accountModel as accountdb
 from model.image_oracledb import image_model as image1
@@ -30,28 +32,17 @@ class ChatImage(Resource):
 
         # 이미지 데이터베이스 접속 및 이미지 정보 조회
         conn = accountdb.connectDatabase()
+
         # account_no를 기준으로 이미지 정보 조회
-        accountNo = accountdb.select_profile(conn,account_no)
+        image_url = accountdb.select_profile(conn,account_no)
         # 데이터베이스 연결 종료
         accountdb.close(conn)
-
-        if not accountNo:
+        if not image_url:
             return jsonify({"error": "이미지 정보 조회 실패"}), 404
 
-        # 이미지 데이타베이스 접속
-        imageUrl = 0
-        imageConn = image1.connectDatabase()
-        imageUrl = image1.select(imageConn,accountNo[1])
-        image1.close(imageConn)
-
-        image_url = 'C:\\Users\\user\\Upload\\' + str(imageUrl[0]) + '.png'
-
-        # 이미지 파일을 열고, base64로 인코딩
-        with open(image_url, "rb") as f:
-            image = base64.b64encode(f.read())
-
-        return jsonify(list(["data:image/png;base64," + str(image)[2:-2]]))
-
+        return jsonify({
+            "image_url" : image_url
+        })
 
     def post(self):
         # 요청 본문에서 메시지를 가져 온다.
@@ -87,6 +78,9 @@ class ChatImage(Resource):
             f.write(base64.b64decode(encoded_image.encode()))
 
         # 메시지를 바탕으로 이미지를 생성
+        print('받은 메세지:', prompt)
+        print('어카운트 넘버:', accountNo)
+        print('받은 이미지 정보:', image_url[0])
         # 이미지 정보를 데이터베이스에 저장
         conn = accountdb.connectDatabase()
         # 이미지 데이터베이스에 저장

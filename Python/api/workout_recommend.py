@@ -1,7 +1,7 @@
-import json
-import model.workout.youtube as youtube
 from flask_restful import Resource,reqparse
 from flask import make_response
+import json
+
 from model.workout.recommend import RecommendAlgorithm
 
 class WorkoutsRecommend(Resource):
@@ -41,3 +41,12 @@ class WorkoutsRecommend(Resource):
             recommend_items.append({'category': item[0]})
 
         return make_response(json.dumps({'items': recommend_items}, ensure_ascii=False))
+
+
+
+
+
+
+
+
+
