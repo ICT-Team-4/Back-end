@@ -52,7 +52,6 @@ class ChatImage(Resource):
 
         return jsonify(list(["data:image/png;base64," + str(image)[2:-2]]))
 
-
     def post(self):
         # 요청 본문에서 메시지를 가져 온다.
         # args = self.parser.parse_args()
