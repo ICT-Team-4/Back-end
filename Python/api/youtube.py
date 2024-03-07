@@ -2,20 +2,20 @@ from flask_restful import Resource
 from flask import jsonify
 from googleapiclient.discovery import build
 import pandas as pd
-import os
 
 
 
 class Youtube(Resource):
 
     def __init__(self):
-        DEVELOPER_KEY = os.environ.get("YOUTUBE_API")  # 환경 변수에서 YouTube API 키 값
+        DEVELOPER_KEY = "AIzaSyBBPUYgqj_TslrUU4_s9yVg7Ook-Ik3xEQ"
+        # DEVELOPER_KEY = os.environ.get("YOUTUBE_API")  # 환경 변수에서 YouTube API 키 값
         YOUTUBE_API_SERVICE_NAME = "youtube"
         YOUTUBE_API_VERSION = "v3"
 
         # YouTube API 클라이언트를 생성
         self.youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
-        #데이타 프레임 사용시
+        #방법2)데이타 프레임 사용시
         self.ratings = None
         self.items = None
 
@@ -23,8 +23,9 @@ class Youtube(Resource):
         data = []
         print('keywords',keywords)
         # 각 키워드에 대해 YouTube 검색을 실행
-
-        # YouTube 검색 요청을 생성하고 실행
+        # for query in keywords:
+        #     print('query',query)
+            # YouTube 검색 요청을 생성하고 실행
         search_response = self.youtube.search().list(
             q=keywords,
             order="viewCount",  # 조회수
@@ -58,12 +59,23 @@ class Youtube(Resource):
 
         # 최종 결과 데이터를 DataFrame으로 변환
         df = pd.DataFrame(data)
+        print(df)
         # 조회수를 정수로 변환
         df['viewCount'] = df['viewCount'].astype(int)
 
         # 각 키워드별로 'viewCount'를 기준으로 내림차순으로 정렬하고 상위 5개의 결과만 선택
         df = df.groupby('key').apply(lambda x: x.sort_values('viewCount', ascending=False).head(2)).reset_index(
             drop=True)
+        print(df)
 
         # DataFrame을 JSON 형태로 변환하여 반환
         return jsonify(df.to_dict(orient='records'))
+
+
+
+
+
+
+
+
+

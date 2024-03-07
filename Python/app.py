@@ -44,12 +44,10 @@ from api.chatbot import Chatbot
 from api.chatImage import ChatImage
 #알림 기능
 from api.ServiceWorker import ServiceWorker
-#youtube
-from api.youtube import Youtube
 #찍먹
 from api.crawling import Crawling
 
-
+from api.youtube import Youtube
 
 #플라스크 앱 생성
 app = Flask(__name__)
@@ -60,7 +58,7 @@ CORS(app)
 UPLOAD_ROOT=os.getcwd()
 app.config['UPLOAD_FOLDER']=os.path.join(UPLOAD_ROOT, 'uploads')
 #최대 파일 업로드 용량 1M로 설정
-app.config['MAX_CONTENT_LENGTH']= 1* 1024 * 1024
+app.config['MAX_CONTENT_LENGTH']= 16* 1024 * 1024
 #플라스크 앱(app)을 인자로 하여 Api객체 생성:URI 주소 즉 자원의 주소와 클래스를 매핑해서 요청을
 #라우팅 즉 @app.route('/todos/<todo_id>')와 같다
 api = Api(app)
@@ -95,6 +93,7 @@ api.add_resource(Chatbot,'/chatbot')
 api.add_resource(ChatImage,'/chatImage')
 #알림 기능
 api.add_resource(ServiceWorker, '/serviceWorker')
+
 
 api.add_resource(Youtube,'/youtube/<keywords>')
 
