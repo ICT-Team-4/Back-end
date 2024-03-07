@@ -30,4 +30,7 @@ public interface UserMapper {
   
   void updatePasswordByUsername(Map<String, Object> parameters);
   
+  //회원가입시 접속여부 테이블에 회원 정보 등록 - 조동훈
+  int saveStatus(Long accountNo);
+  
 }

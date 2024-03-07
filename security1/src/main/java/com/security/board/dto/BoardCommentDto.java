@@ -24,7 +24,6 @@ public class BoardCommentDto {
 	private String bcComment;
 	private Long replyNo;
 	private Date editDate;
-	
 	//댓글을 작성한 사용자 이름
 	private String name;
 }

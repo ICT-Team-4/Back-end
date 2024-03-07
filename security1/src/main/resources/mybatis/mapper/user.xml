@@ -91,5 +91,8 @@
 	  WHERE USERNAME = #{username}
 	</update>
 	
-	
+	<!-- 회원가입시 접속여부 테이블에 회원 정보 등록 - 조동훈 -->
+	<insert id="saveStatus" parameterType="Long">
+		INSERT INTO ONLINE_STATUS VALUES(#{accountNo}, DEFAULT)
+	</insert>
 </mapper>

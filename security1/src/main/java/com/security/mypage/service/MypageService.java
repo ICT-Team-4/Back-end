@@ -38,6 +38,10 @@ public class MypageService {
 		return mypageMapper.findBigThreeAllByNo(accountNo);
 	}
 	
+	public List<MypageWorkBigThreeDto> findWorkAllByNo(int accountNo){
+		return mypageMapper.findWorkAllByNo(accountNo);
+	}
+	
 	public void updateAccountInfo(MypageAccountDto accountDto) {
 		mypageMapper.updateAccountInfo(accountDto);
 	}

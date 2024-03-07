@@ -9,6 +9,10 @@ from flask_restful import Api
 from flask_cors import CORS
 import os
 
+#스케줄러
+from apscheduler.schedulers.background import BackgroundScheduler
+import api.scheduleApp as schedule
+
 #내가 만든 RESTFul API서비스용 클래스 모듈들
 from api.upload import Upload
 
@@ -42,6 +46,10 @@ from api.chatImage import ChatImage
 from api.ServiceWorker import ServiceWorker
 #youtube
 from api.youtube import Youtube
+#찍먹
+from api.crawling import Crawling
+
+
 
 #플라스크 앱 생성
 app = Flask(__name__)
@@ -90,6 +98,12 @@ api.add_resource(ServiceWorker, '/serviceWorker')
 
 api.add_resource(Youtube,'/youtube/<keywords>')
 
+# Flask 앱이 시작될 때 스케줄러 초기화
+scheduler = BackgroundScheduler()
+scheduler.start()
+
+# 스케줄링할 작업 추가
+scheduler.add_job(schedule.message, 'interval', hours=1)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)

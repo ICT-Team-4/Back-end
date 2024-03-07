@@ -9,6 +9,7 @@ import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardDto;
 import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
+import com.security.board.dto.BoardReportDto;
 import com.security.board.dto.FriendDto;
 import com.security.board.dto.FriendshipDto;
 
@@ -69,6 +70,11 @@ public interface BoardMapper {
 	//게시글 스크랩
 	int saveScraps(Map<String, String> map);
 
+	//게시글 신고 여부 조회
+	int findReportByNo(BoardReportDto dto);
+	
+	//게시글 신고
+	int saveReport(BoardReportDto dto);
 	
 
 }

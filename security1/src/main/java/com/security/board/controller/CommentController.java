@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardCommentDto;
+import com.security.board.dto.CommentLikeDto;
+import com.security.board.dto.CommentReportDto;
 import com.security.board.service.CommentService;
 import com.security.util.JWTOkens;
 
@@ -68,20 +70,22 @@ private CommentService commentService;
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 		
 		String message = "";
 		int flag = 0;
 		
-		AccountDto accountDto = commentService.findByUsername(username);
-		BoardCommentDto commentDto = commentService.commentOne(bcno);
+		BoardCommentDto dto = commentService.commentOne(bcno);
+		System.out.println("삭제 할려고 하는 bcno" + bcno);
+		System.out.println("삭제 할려고 하는 dto" + dto);
 		
-		if(!(accountDto.getAccountNo() == commentDto.getAccountNo())) {
+		
+		if(!(accountNo.equals(dto.getAccountNo()))) {
 			message = "댓글을 작성한 사용자가 아닙니다";
 			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 		}
 		
-		flag = commentService.commentDelete(bcno);
+		flag = commentService.commentDelete(dto.getBcno());
 		
 		if(flag == 0) {
 			message = "삭제에 실패했습니다";
@@ -89,54 +93,82 @@ private CommentService commentService;
 		}
 		
 		message = "삭제에 성공했습니다";
-		
 		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 	}
 	
 	
 	//댓글 수정
-	@PutMapping("/comments/{bcno}")
-	public ResponseEntity<String> commentUpdate(@PathVariable String bcno, HttpServletRequest request) {
+	@PutMapping("/comments")
+	public ResponseEntity<String> commentUpdate(@RequestBody BoardCommentDto dto, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
 		
 		String message = "";
 		int flag = 0;
 		
-		AccountDto accountDto = commentService.findByUsername(username);
-		BoardCommentDto commentOne = commentService.commentOne(bcno);
+		BoardCommentDto commentDto = new BoardCommentDto();
 		
-		if(!(accountDto.getAccountNo() == commentOne.getAccountNo())) {
+		commentDto.setBcComment(dto.getBcComment());
+		commentDto.setBcno(dto.getBcno());
+		
+		System.out.println(commentDto);
+		
+		System.out.println("같아? : " + accountNo.equals(dto.getAccountNo()));
+		if(!(accountNo.equals(dto.getAccountNo()))) {
 			message = "댓글을 등록한 회원이 아닙니다.";
 			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
-		}
-		
-		flag = commentService.commentUpdate(commentOne);
-		
-		if(flag == 0) {
-			message = "수정에 실패했습니다.";
+		} else {
+			flag = commentService.commentUpdate(commentDto);
+			
+			if(flag == 0) {
+				message = "수정에 실패했습니다.";
+				return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+			}
+			
+			message = commentDto.getBcno() + "번 수정에 성공하였습니다";
+			
 			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 		}
-		
-		message = bcno + "번 수정에 성공하였습니다";
-		
-		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
 	}
 	
-	//댓글 좋아요
-	@PostMapping("/comments/like/{bcno}")
-	public ResponseEntity<String> commentLike(@PathVariable String bcno, HttpServletRequest request) {
+	//좋아요 누른 여부 확인
+	@GetMapping("/comments/like/{bcno}")
+	public ResponseEntity<Integer> checkCommentLike(CommentLikeDto dto, HttpServletRequest request) {
 		
 		String token = request.getHeader("Authorization");
 		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
-		String username = payload.get("sub").toString();
+		String accountNo = payload.get("sub").toString();
+		
+		//누른적 있으면 1, 아니면 0
+		int state = 0;
+		
+		dto.setAccountNo(accountNo);
+		
+		System.out.println(dto);
+		
+		state = commentService.CheckCommentLike(dto);
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(state);
+	}
+	
+	//댓글 좋아요
+	@PostMapping("/comments/like")
+	public ResponseEntity<String> commentLike(@RequestBody CommentLikeDto dto, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String accountNo = payload.get("sub").toString();
 		
 		String message = "";
 		int count = 0;
 		
-		count = commentService.commentLike(bcno, username);
+		dto.setAccountNo(accountNo);
+		
+		System.out.println(dto);
+		
+		count = commentService.commentLike(dto);
 		
 		if(count == 1) {
 			message = "댓글 좋아요";
@@ -148,5 +180,29 @@ private CommentService commentService;
 		
 	}
 	
+	//댓글 신고
+	@PostMapping("/comment/reports")
+	public ResponseEntity<String> commentReport(@RequestBody CommentReportDto dto, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String accountNo = payload.get("sub").toString();
+		
+		dto.setAccountNo(accountNo);
+		
+		int flag = 0;
+		String message = "";
+		
+		flag = commentService.saveReport(dto);
+		
+		if(flag == 0) {
+			message = "이미 신고한 댓글 입니다!";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		}
+		
+		message="신고 성공~!";
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+	}
 	
 }

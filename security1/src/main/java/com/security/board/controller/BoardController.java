@@ -24,6 +24,7 @@ import com.security.board.dto.AccountDto;
 import com.security.board.dto.BoardDto;
 import com.security.board.dto.BoardImageDto;
 import com.security.board.dto.BoardLikesDto;
+import com.security.board.dto.BoardReportDto;
 import com.security.board.dto.FriendDto;
 import com.security.board.dto.FriendshipDto;
 import com.security.board.service.BoardService;
@@ -301,6 +302,8 @@ public class BoardController {
 	    searchData.put("searchBy", searchBy);
 	    searchData.put("searchWord", searchWord);
 	    
+	    System.out.println("검색 시 데이터 : " + searchData);
+	    
 	    List<BoardDto> searchList = boardService.findBySearchWord(searchData);
 	    
 	    if (searchList != null && !searchList.isEmpty()) {
@@ -308,6 +311,32 @@ public class BoardController {
 	    } else {
 	        return ResponseEntity.noContent().build(); // 검색 결과가 없을 때
 	    }
+	}
+	
+	//게시글 신고
+	@PostMapping("/boards/reports")
+	public ResponseEntity<String> boardReport(@RequestBody BoardReportDto dto, HttpServletRequest request) {
+		
+		String token = request.getHeader("Authorization");
+		Map<String, Object> payload = JWTOkens.getTokenPayloads(token);
+		String accountNo = payload.get("sub").toString();
+		
+		int flag = 0;
+		String message = "";
+		
+		dto.setAccountNo(accountNo);
+		
+		flag = boardService.saveReport(dto);
+		
+		if(flag == 0) {
+			message = "이미 신고한 게시글 입니다!";
+			return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		}
+		
+		message="게시글 신고 성공~!";
+		
+		return ResponseEntity.ok().header("Content-Type", "application/json; charset=UTF-8").body(message);
+		
 	}
 	
 }
