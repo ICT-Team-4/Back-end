@@ -112,7 +112,7 @@ def workout_update(conn,cal_id,list_):
             print('데이터 수정시 오류:', e)
             return 0
 
-def workout_counts(conn, user_id):
+def workout_counts(conn,user_id):
     with conn.cursor() as cursor:
         try:
             cursor.execute(
