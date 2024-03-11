@@ -40,9 +40,19 @@ class ChatImage(Resource):
         if not image_url:
             return jsonify({"error": "이미지 정보 조회 실패"}), 404
 
-        return jsonify({
-            "image_url" : image_url
-        })
+        # 이미지 데이타베이스 접속
+        imageUrl = 0
+        imageConn = image1.connectDatabase()
+        imageUrl = image1.select(imageConn,accountNo[1])
+        image1.close(imageConn)
+
+        image_url = 'C:\\Users\\user\\Upload\\' + str(imageUrl[0]) + '.png'
+
+        # 이미지 파일을 열고, base64로 인코딩
+        with open(image_url, "rb") as f:
+            image = base64.b64encode(f.read())
+
+        return jsonify(list(["data:image/png;base64," + str(image)[2:-2]]))
 
     def post(self):
         # 요청 본문에서 메시지를 가져 온다.
