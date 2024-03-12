@@ -129,3 +129,14 @@ def workout_update(conn,cal_id,list_):
             # conn.rollback()
             print('데이터 수정시 오류:', e)
             return 0
+
+def workout_counts(conn,user_id):
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute(
+                f"SELECT CATEGORY, COUNT(*) as count FROM workout w JOIN calendar c ON w.calendar_no = c.calendar_no WHERE c.account_no = {user_id} GROUP BY CATEGORY")
+            return cursor.fetchall()
+        except Exception as e:
+            print('운동 count 집계 오류:', e)
+            return []
+
