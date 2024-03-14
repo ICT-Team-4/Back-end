@@ -48,6 +48,9 @@ from api.ServiceWorker import ServiceWorker
 from api.crawling import Crawling
 
 from api.youtube import Youtube
+from model.medical_check.diabetes_check import PredictDiabetes
+# 고혈압 예측
+from model.medical_check.hypertensionPrediction import HypertensionPrediction
 
 #플라스크 앱 생성
 app = Flask(__name__)
@@ -93,8 +96,11 @@ api.add_resource(Chatbot,'/chatbot')
 api.add_resource(ChatImage,'/chatImage')
 #알림 기능
 api.add_resource(ServiceWorker, '/serviceWorker')
-
-
+#고혈압 예측
+api.add_resource(HypertensionPrediction, '/hypertension')
+#당뇨병 예측
+api.add_resource(PredictDiabetes, '/diabetes')
+#유튜브 추천
 api.add_resource(Youtube,'/youtube/<keywords>')
 
 # Flask 앱이 시작될 때 스케줄러 초기화
@@ -105,4 +111,4 @@ scheduler.start()
 scheduler.add_job(schedule.message, 'interval', hours=1)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0', debug=True)
