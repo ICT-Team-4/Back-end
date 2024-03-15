@@ -20,6 +20,8 @@ from api.upload import Upload
 from api.ocr import Ocr
 #크롤링
 from api.crawling import Crawling
+#미트리 크롤링
+from api.crawlingshop import CrawlingShop
 #public
 from api.account import Account
 #공공데이터
@@ -70,6 +72,8 @@ api.add_resource(Upload,'/fileupload')
 
 #OCR
 api.add_resource(Ocr,'/ocr')
+#크롤링 미트리
+api.add_resource(CrawlingShop,'/crawlingShop')
 #크롤링 네이버 구글
 api.add_resource(Crawling,'/crawling')
 #식단 데이타 보내기
