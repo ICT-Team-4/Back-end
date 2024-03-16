@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.board.dto.AccountDto;
 import com.security.foodwork.dto.AccountFoodWorkDto;
 import com.security.foodwork.service.FoodWorkService;
 import com.security.util.JWTOkens;
